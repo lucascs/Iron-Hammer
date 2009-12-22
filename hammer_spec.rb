@@ -1,5 +1,6 @@
 require 'hammer'
 require 'spec'
+require 'windows_utils'
 
 describe Hammer do
 
@@ -47,7 +48,8 @@ describe Hammer do
     
     it "should assume the default path to .net framework when it is not informed" do
         @basic_hammer.dot_net_path.should(
-            be_eql File.join(ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5"))
+            be_eql WindowsUtils::patheticalize(
+                ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5"))
     end
     
     it "should assume the provided path to .net framework when it is informed" do
@@ -66,7 +68,7 @@ describe Hammer do
     
     it "should provide a proper build command line" do
         @fully_set_hammer.build.should(
-            be_eql "#{File.join @dot_net_path, 'msbuild.exe'} " + 
+            be_eql "#{WindowsUtils::patheticalize @dot_net_path, 'msbuild.exe'} " + 
                 "/p:Configuration=#{@configuration} #{@solution}.sln /t:Rebuild")
     end
     
@@ -90,7 +92,7 @@ describe Hammer do
     
     it "should point to the default path to visual studio tools when none is provided" do
         @basic_hammer.visual_studio_path.should(
-            be_eql File.join(
+            be_eql WindowsUtils::patheticalize(
                 ENV["PROGRAMFILES"], "Microsoft Visual Studio 2008", "Common7", "IDE")) 
     end
     
@@ -108,10 +110,11 @@ describe Hammer do
         end
         
         @fully_set_hammer.test.should(
-            be_eql File.join(
+            be_eql WindowsUtils::patheticalize(
                 @visual_studio_path, 
                 "mstest.exe /testcontainer:" + 
-                File.join(@test_project, "bin", @configuration, @test_dll) +
-                " /resultsfile:#{File.join 'TestResults', 'TestResults.trx'} " + details))
+                WindowsUtils::patheticalize(@test_project, "bin", @configuration, @test_dll) +
+                " /resultsfile:#{WindowsUtils::patheticalize 'TestResults', 'TestResults.trx'} " + 
+                details))
     end
 end

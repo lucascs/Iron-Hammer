@@ -1,3 +1,5 @@
+require 'windows_utils'
+
 class Hammer
 
     attr_accessor :dot_net_path
@@ -9,9 +11,9 @@ class Hammer
     attr_accessor :test_dll
     attr_accessor :visual_studio_path
     
-    DefaultDotNetPath = File.join(
+    DefaultDotNetPath = WindowsUtils::patheticalize(
         ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5")
-    DefaultVisualStudioPath = File.join(
+    DefaultVisualStudioPath = WindowsUtils::patheticalize(
         ENV["ProgramFiles"], "Microsoft Visual Studio 2008", "Common7", "IDE")
     DefaultConfiguration = "Release"
     DefaultTestConfig = "LocalTestRun.testrunconfig"
@@ -32,19 +34,19 @@ class Hammer
     end
 
     def msbuild
-        File.join(@dot_net_path, 'msbuild.exe')
+        WindowsUtils::patheticalize(@dot_net_path, 'msbuild.exe')
     end
     
     def mstest
-        File.join(@visual_studio_path, 'mstest.exe')
+        WindowsUtils::patheticalize(@visual_studio_path, 'mstest.exe')
     end
     
     def test_container
-        File.join(@test_project, "bin", @configuration, @test_dll)
+        WindowsUtils::patheticalize(@test_project, "bin", @configuration, @test_dll)
     end
     
     def results_file
-        File.join("TestResults", "TestResults.trx")
+        WindowsUtils::patheticalize("TestResults", "TestResults.trx")
     end
     
     def details
