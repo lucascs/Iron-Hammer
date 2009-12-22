@@ -12,7 +12,7 @@ class Hammer
     DefaultDotNetPath = File.join(
         ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5")
     DefaultVisualStudioPath = File.join(
-        ENV["PROGRAMFILES"], "Microsoft Visual Studio 2008", "Common7", "IDE")
+        ENV["ProgramFiles"], "Microsoft Visual Studio 2008", "Common7", "IDE")
     DefaultConfiguration = "Release"
     DefaultTestConfig = "LocalTestRun.testrunconfig"
 
@@ -48,12 +48,9 @@ class Hammer
     end
     
     def details
-        buffer = ""
-        ["duration", "errorstacktrace", "errormessage", "outcometext"].each do |detail|
-            buffer << "/detail:#{detail} "
+        ["duration", "errorstacktrace", "errormessage", "outcometext"].inject("") do |base, detail|
+            base << "/detail:#{detail} "
         end
-        
-        buffer
     end
     
     def build
