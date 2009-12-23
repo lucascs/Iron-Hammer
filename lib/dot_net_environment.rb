@@ -5,12 +5,12 @@ class DotNetEnvironment
     attr_accessor :framework_path  
     attr_accessor :visual_studio_path  
 
-    DefaultFrameworkPath = WindowsUtils::patheticalize(
+    DefaultFrameworkPath    = WindowsUtils::patheticalize(
         ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5")
     DefaultVisualStudioPath = WindowsUtils::patheticalize(
         ENV["ProgramFiles"], "Microsoft Visual Studio 2008", "Common7", "IDE")
 
-    def initialize params
+    def initialize params={}
         @framework_path       = params[:framework_path]     || DefaultFrameworkPath
         @visual_studio_path   = params[:visual_studio_path] || DefaultVisualStudioPath
     end

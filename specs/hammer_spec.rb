@@ -44,18 +44,6 @@ describe Hammer do
         hammer.test_project.should(be_eql "TestProject") 
     end
     
-    it "should assume the default path to .net framework when it is not informed" do
-        @basic_hammer.dot_net_environment.framework_path.should(
-            be_eql WindowsUtils::patheticalize(
-                ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5"))
-    end
-    
-    it "should assume the provided path to .net framework when it is informed" do
-        Hammer.new(:project => "MyProject", :dot_net_path => "path").
-            dot_net_environment.framework_path.should(
-            be_eql "path")
-    end
-    
     it "should assume the default configuration when it is not informed" do
         @basic_hammer.configuration.should(be_eql "Release")
     end
@@ -88,17 +76,6 @@ describe Hammer do
     it "should allow the customization of the test dll" do
         Hammer.new(:project => "MyProject", :test_dll => "MyTests.dll").
             test_dll.should(be_eql "MyTests.dll")
-    end
-    
-    it "should point to the default path to visual studio tools when none is provided" do
-        @basic_hammer.dot_net_environment.visual_studio_path.should(
-            be_eql WindowsUtils::patheticalize(
-                ENV["PROGRAMFILES"], "Microsoft Visual Studio 2008", "Common7", "IDE")) 
-    end
-    
-    it "should point to the provided path to visual studio tools when it is informed" do
-        Hammer.new(:project => "MyProject", :visual_studio_path => "PathToVisual").
-            dot_net_environment.visual_studio_path.should(be_eql "PathToVisual") 
     end
     
     it "should provide a proper command line to run tests" do
