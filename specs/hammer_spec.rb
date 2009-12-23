@@ -44,23 +44,20 @@ describe Hammer do
     end
     
     it "should provide a proper build command line" do
-        msbuild = WindowsUtils::patheticalize @dot_net_path, 'msbuild.exe'
+        msbuild = [@dot_net_path, 'msbuild.exe'].patheticalize
     
         @fully_set_hammer.build.should(
             be_eql "#{msbuild} /p:Configuration=#{@configuration} #{@solution}.sln /t:Rebuild")
     end
     
     it "should provide a proper command line to run tests" do
-        details = ""
-        ["duration", "errorstacktrace", "errormessage", "outcometext"].collect do |detail|
-            "/detail:#{detail} "
-        end.each do |detail|
-            details << detail
+        details = ["duration", "errorstacktrace", "errormessage", "outcometext"].inject("") do |buffer, detail|
+            buffer << "/detail:#{detail} "
         end
         
-        test_dll = WindowsUtils::patheticalize @test_project, "bin", @configuration, @test_dll
-        results_file = WindowsUtils::patheticalize 'TestResults', 'TestResults.trx'
-        mstest = WindowsUtils::patheticalize @visual_studio_path, "mstest.exe"
+        test_dll        = [@test_project, "bin", @configuration, @test_dll].patheticalize
+        results_file    = ['TestResults', 'TestResults.trx'].patheticalize
+        mstest          = [@visual_studio_path, "mstest.exe"].patheticalize
         
         @fully_set_hammer.test.should(
             be_eql "#{mstest} /testcontainer:#{test_dll}.dll /resultsfile:#{results_file} #{details}")

@@ -5,10 +5,8 @@ class DotNetEnvironment
     attr_accessor :framework_path  
     attr_accessor :visual_studio_path  
 
-    DefaultFrameworkPath    = WindowsUtils::patheticalize(
-        ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5")
-    DefaultVisualStudioPath = WindowsUtils::patheticalize(
-        ENV["ProgramFiles"], "Microsoft Visual Studio 2008", "Common7", "IDE")
+    DefaultFrameworkPath    = [ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5"].patheticalize
+    DefaultVisualStudioPath = [ENV["ProgramFiles"], "Microsoft Visual Studio 2008", "Common7", "IDE"].patheticalize
 
     def initialize params={}
         @framework_path       = params[:framework_path]     || DefaultFrameworkPath
@@ -16,11 +14,11 @@ class DotNetEnvironment
     end
 
     def msbuild
-        WindowsUtils::patheticalize(@framework_path, 'msbuild.exe')
+        [@framework_path, 'msbuild.exe'].patheticalize
     end
     
     def mstest
-        WindowsUtils::patheticalize(@visual_studio_path, 'mstest.exe')
+        [@visual_studio_path, 'mstest.exe'].patheticalize
     end
     
 end

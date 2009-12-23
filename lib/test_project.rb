@@ -1,3 +1,5 @@
+require File.dirname(__FILE__) + '/windows_utils'
+
 class TestProject
 
     attr_accessor :config
@@ -13,11 +15,11 @@ class TestProject
     end
 
     def container configuration
-        WindowsUtils::patheticalize(@name, "bin", configuration, @dll)
+        [@name, "bin", configuration, @dll].patheticalize
     end
     
     def results_file
-        WindowsUtils::patheticalize("TestResults", "TestResults.trx")
+        ["TestResults", "TestResults.trx"].patheticalize
     end
     
 end

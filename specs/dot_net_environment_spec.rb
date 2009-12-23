@@ -8,8 +8,7 @@ describe DotNetEnvironment do
 
     it "should assume the default path to .net framework when it is not informed" do
         @basic_environment.framework_path.should(
-            be_eql WindowsUtils::patheticalize(
-                ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5"))
+            be_eql [ENV["SystemRoot"], "Microsoft.NET", "Framework", "v3.5"].patheticalize)
     end
     
     it "should assume the provided path to .net framework when it is informed" do
@@ -19,8 +18,7 @@ describe DotNetEnvironment do
     
     it "should point to the default path to visual studio tools when none is provided" do
         @basic_environment.visual_studio_path.should(
-            be_eql WindowsUtils::patheticalize(
-                ENV["ProgramFiles"], "Microsoft Visual Studio 2008", "Common7", "IDE")) 
+            be_eql [ENV["ProgramFiles"], "Microsoft Visual Studio 2008", "Common7", "IDE"].patheticalize) 
     end
     
     it "should point to the provided path to visual studio tools when it is informed" do

@@ -12,7 +12,7 @@ describe Project do
 
     it "should provide a path to the binaries given a configuration" do
         Project.new(:name => "MyProject").path_to_binaries("myConf").should(
-            be_eql WindowsUtils::patheticalize("MyProject", "bin", "myConf"))
+            be_eql ["MyProject", "bin", "myConf"].patheticalize)
     end
     
     it "should not provide a path to the binaries given an empty configuration" do

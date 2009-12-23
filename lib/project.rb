@@ -12,7 +12,7 @@ class Project
     def path_to_binaries configuration
         raise(ArgumentError.new "must provide a valid configuration") if 
             configuration.nil? || configuration.empty?
-        WindowsUtils::patheticalize @name, "bin", configuration
+        [@name, "bin", configuration].patheticalize
     end
 
 end
