@@ -15,4 +15,12 @@ class DotNetEnvironment
         @visual_studio_path   = params[:visual_studio_path] || DefaultVisualStudioPath
     end
 
+    def msbuild
+        WindowsUtils::patheticalize(@framework_path, 'msbuild.exe')
+    end
+    
+    def mstest
+        WindowsUtils::patheticalize(@visual_studio_path, 'mstest.exe')
+    end
+    
 end

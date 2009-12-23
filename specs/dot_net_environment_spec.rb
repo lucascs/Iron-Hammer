@@ -27,4 +27,14 @@ describe DotNetEnvironment do
         DotNetEnvironment.new(:visual_studio_path => "PathToVisual").
             visual_studio_path.should(be_eql "PathToVisual") 
     end
+    
+    it "should provide a path to the msbuild binary based on the framework path" do
+        DotNetEnvironment.new(:framework_path => "path\\to\\framework").msbuild.should(
+            be_eql "path\\to\\framework\\msbuild.exe")
+    end
+    
+    it "should provide a path to the mstest binary based on the visual studio path" do
+        DotNetEnvironment.new(:visual_studio_path => "path\\to\\vs").mstest.should(
+            be_eql "path\\to\\vs\\mstest.exe")
+    end
 end
