@@ -1,10 +1,12 @@
 require 'windows_utils'
+require 'project'
+require 'solution'
 
 class Hammer
 
     attr_accessor :dot_net_path
-    attr_accessor :project
     attr_accessor :solution
+    attr_accessor :project
     attr_accessor :configuration
     attr_accessor :test_project
     attr_accessor :test_config
@@ -19,18 +21,18 @@ class Hammer
     DefaultTestConfig = "LocalTestRun.testrunconfig"
 
     def initialize params
-        @project            = params[:project]            || params[:solution]    || 
+        project             = params[:project]            || params[:solution]    || 
             raise(ArgumentError.new "must provide either a project or solution name")
-        @solution           = params[:solution]           || params[:project]     || 
+        solution           = params[:solution]           || params[:project]     || 
             raise(ArgumentError.new "must provide either a project or solution name")
         @dot_net_path       = params[:dot_net_path]       || DefaultDotNetPath
         @configuration      = params[:configuration]      || DefaultConfiguration
-        
-        @test_project       = params[:test_project]       || "#{@project}.Tests"
         @test_config        = params[:test_config]        || DefaultTestConfig
-        @test_dll           = params[:test_dll]           || "#{@test_project}.dll"
         @visual_studio_path = params[:visual_studio_path] || DefaultVisualStudioPath
-        @solution = "#{@solution}.sln"
+        @solution           = Solution.new  :name => solution
+        @project            = Project.new   :name => project
+        @test_project       = params[:test_project]       || "#{@project.name}.Tests"
+        @test_dll           = params[:test_dll]           || "#{@test_project}.dll"
     end
 
     def msbuild
@@ -56,7 +58,7 @@ class Hammer
     end
     
     def build
-        "#{msbuild} /p:Configuration=#{@configuration} #{@solution} /t:Rebuild"
+        "#{msbuild} /p:Configuration=#{@configuration} #{@solution.solution} /t:Rebuild"
     end
     
     def test

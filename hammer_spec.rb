@@ -22,16 +22,16 @@ describe Hammer do
     end
 
     it "should consider solution and project name to be the same when only one of them is informed" do
-        Hammer.new(:project => "MyProject").project.should(be_eql "MyProject")
-        Hammer.new(:project => "MyProject").solution.should(be_eql "MyProject.sln")
-        Hammer.new(:solution => "MySolution").solution.should(be_eql "MySolution.sln")
-        Hammer.new(:solution => "MySolution").project.should(be_eql "MySolution")
+        Hammer.new(:project => "MyProject").project.name.should(be_eql "MyProject")
+        Hammer.new(:project => "MyProject").solution.name.should(be_eql "MyProject")
+        Hammer.new(:solution => "MySolution").solution.name.should(be_eql "MySolution")
+        Hammer.new(:solution => "MySolution").project.name.should(be_eql "MySolution")
     end
     
     it "should consider solution and project name to be different when both are informed" do
         hammer = Hammer.new :project => "MyProject", :solution => "MySolution"
-        hammer.project.should(be_eql "MyProject")
-        hammer.solution.should(be_eql "MySolution.sln")
+        hammer.project.name.should(be_eql "MyProject")
+        hammer.solution.name.should(be_eql "MySolution")
     end
     
     it "should consider the test project to assume a default name when its name is not informed" do
@@ -67,9 +67,10 @@ describe Hammer do
     end
     
     it "should provide a proper build command line" do
+        msbuild = WindowsUtils::patheticalize @dot_net_path, 'msbuild.exe'
+    
         @fully_set_hammer.build.should(
-            be_eql "#{WindowsUtils::patheticalize @dot_net_path, 'msbuild.exe'} " + 
-                "/p:Configuration=#{@configuration} #{@solution}.sln /t:Rebuild")
+            be_eql "#{msbuild} /p:Configuration=#{@configuration} #{@solution}.sln /t:Rebuild")
     end
     
     it "should point to the default testrun config when it is not provided" do
@@ -109,12 +110,11 @@ describe Hammer do
             details << detail
         end
         
+        test_dll = WindowsUtils::patheticalize @test_project, "bin", @configuration, @test_dll
+        results_file = WindowsUtils::patheticalize 'TestResults', 'TestResults.trx'
+        mstest = WindowsUtils::patheticalize @visual_studio_path, "mstest.exe"
+        
         @fully_set_hammer.test.should(
-            be_eql WindowsUtils::patheticalize(
-                @visual_studio_path, 
-                "mstest.exe /testcontainer:" + 
-                WindowsUtils::patheticalize(@test_project, "bin", @configuration, @test_dll) +
-                " /resultsfile:#{WindowsUtils::patheticalize 'TestResults', 'TestResults.trx'} " + 
-                details))
+            be_eql "#{mstest} /testcontainer:#{test_dll} /resultsfile:#{results_file} #{details}")
     end
 end
