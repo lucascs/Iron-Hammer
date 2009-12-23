@@ -1,51 +1,50 @@
 require File.dirname(__FILE__) + '/windows_utils'
 require File.dirname(__FILE__) + '/project'
 require File.dirname(__FILE__) + '/solution'
+require File.dirname(__FILE__) + '/test_project'
 
 class Hammer
 
     attr_accessor :solution
     attr_accessor :project
     attr_accessor :dot_net_environment
-    attr_accessor :configuration
     attr_accessor :test_project
-    attr_accessor :test_config
-    attr_accessor :test_dll
+    attr_accessor :configuration
     
     DefaultConfiguration = "Release"
-    DefaultTestConfig = "LocalTestRun.testrunconfig"
 
     def initialize params
         @solution           = Solution.new  :name => params[:solution]  || params[:project]
         @project            = Project.new   :name => params[:project]   || params[:solution]
-        @configuration      = params[:configuration]      || DefaultConfiguration
-        @test_config        = params[:test_config]        || DefaultTestConfig
-        @test_project       = params[:test_project]       || "#{@project.name}.Tests"
-        @test_dll           = params[:test_dll]           || "#{@test_project}.dll"
-        @dot_net_environment = DotNetEnvironment.new(
-            params.merge(:framework_path => params[:dot_net_path]))
+        @configuration      = params[:configuration] || DefaultConfiguration
+        
+        @test_project       = TestProject.new params.merge(
+            :name   => params[:test_project],
+            :dll    => params[:test_dll],
+            :config => params[:test_config])
+            
+        @dot_net_environment = DotNetEnvironment.new params.merge(
+            :framework_path => params[:dot_net_path])
     end
 
-    def test_container
-        WindowsUtils::patheticalize(@test_project, "bin", @configuration, @test_dll)
-    end
-    
-    def results_file
-        WindowsUtils::patheticalize("TestResults", "TestResults.trx")
-    end
-    
     def details
-        ["duration", "errorstacktrace", "errormessage", "outcometext"].inject("") do |base, detail|
-            base << "/detail:#{detail} "
+        ["duration", "errorstacktrace", "errormessage", "outcometext"].inject("") do |buffer, detail|
+            buffer << "/detail:#{detail} "
         end
     end
     
     def build
-        "#{@dot_net_environment.msbuild} /p:Configuration=#{@configuration} #{@solution.solution} /t:Rebuild"
+        msbuild       = @dot_net_environment.msbuild 
+        configuration = @configuration
+        solution      = @solution.solution
+        "#{msbuild} /p:Configuration=#{configuration} #{solution} /t:Rebuild"
     end
     
     def test
-        "#{@dot_net_environment.mstest} /testcontainer:#{test_container} /resultsfile:#{results_file} #{details}"
+        container = @test_project.container @configuration
+        results   = @test_project.results_file
+        mstest    = @dot_net_environment.mstest
+        "#{mstest} /testcontainer:#{container} /resultsfile:#{results} #{details}"
     end
 
 end
