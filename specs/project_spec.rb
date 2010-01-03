@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/spec_helper.rb'
+require File.dirname(__FILE__) + '/helpers/spec_helper.rb'
 
 describe Project do
 
@@ -20,4 +20,6 @@ describe Project do
             raise_error ArgumentError)
     end
     
+    it "should provide a list of every single file that will be packaged for delivery" do
+    end
 end

@@ -15,4 +15,8 @@ class Project
         [@name, "bin", configuration].patheticalize
     end
 
-end
+    def files_to_deliver
+        
+    end
+    
+end unless defined? Project

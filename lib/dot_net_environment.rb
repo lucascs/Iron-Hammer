@@ -21,4 +21,4 @@ class DotNetEnvironment
         [@visual_studio_path, 'mstest.exe'].patheticalize
     end
     
-end
+end unless defined? DotNetEnvironment

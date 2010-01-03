@@ -7,4 +7,4 @@ class WebProject < Project
         [@name, "bin"].patheticalize
     end
 
-end
+end unless defined? WebProject

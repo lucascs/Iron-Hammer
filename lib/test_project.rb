@@ -22,4 +22,4 @@ class TestProject
         ["TestResults", "TestResults.trx"].patheticalize
     end
     
-end
+end unless defined? TestProject

@@ -49,5 +49,5 @@ class Hammer
         "#{mstest} /testcontainer:#{container} /resultsfile:#{results} #{details}"
     end
 
-end
+end unless defined? Hammer
 

@@ -10,4 +10,4 @@ class Solution
         "#{@name}.sln"
     end
 
-end
+end unless defined? Solution
