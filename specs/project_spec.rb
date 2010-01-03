@@ -21,7 +21,7 @@ describe Project do
     end
     
     describe "when listing files for the delivery package" do
-        before :each do 
+        before :all do 
             TempHelper::cleanup
             TempHelper::touch '', 'myProject.dll'
             TempHelper::touch '', 'myProject.pdb'
