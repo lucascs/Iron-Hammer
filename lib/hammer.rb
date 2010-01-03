@@ -2,6 +2,7 @@ require File.dirname(__FILE__) + '/windows_utils'
 require File.dirname(__FILE__) + '/project'
 require File.dirname(__FILE__) + '/solution'
 require File.dirname(__FILE__) + '/test_project'
+require File.dirname(__FILE__) + '/dot_net_environment'
 
 class Hammer
 
