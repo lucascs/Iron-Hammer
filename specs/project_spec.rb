@@ -31,52 +31,41 @@ describe Project do
             TempHelper::touch '', 'maiProject.foo'
             TempHelper::touch '', 'maiProject.exe'
             TempHelper::touch '', 'maiProjecto.exe'
+            TempHelper::touch '', 'maiProjecto.config'
             TempHelper::touch '', 'mycon.config'
             
             @temp = TempHelper::TempFolder
             @project = Project.new :name => "MyProject"
+            @project.should_receive(:path_to_binaries).with('release').and_return(@temp)
+            @files_to_deliver = @project.@files_to_deliver('release')
         end 
         
         it "should return a list" do
-            @project.should_receive(:path_to_binaries).with('release').and_return(@temp)
-            
-            files_to_deliver = @project.files_to_deliver('release')
-            files_to_deliver.should_not be_nil
-            files_to_deliver.should_not be_empty
+            @files_to_deliver.should_not be_nil
+            @files_to_deliver.be_an_instance_of Array
+            @files_to_deliver.should_not be_empty
         end
-        
     
         it "should include all .dll's on the list" do
-            @project.should_receive(:path_to_binaries).with('release').and_return(@temp)
-            
-            files_to_deliver = @project.files_to_deliver('release')
-            files_to_deliver.should(include File.join(@temp, 'myProject.dll'))
-            files_to_deliver.should(include File.join(@temp, 'maiProject.dll'))
+            @files_to_deliver.should(include File.join(@temp, 'myProject.dll'))
+            @files_to_deliver.should(include File.join(@temp, 'maiProject.dll'))
         end
         
         it "should include all .exe's on the list" do
-            @project.should_receive(:path_to_binaries).with('release').and_return(@temp)
-            
-            files_to_deliver = @project.files_to_deliver('release')
-            files_to_deliver.should(include File.join(@temp, 'maiProject.exe'))
-            files_to_deliver.should(include File.join(@temp, 'maiProjecto.exe'))
+            @files_to_deliver.should(include File.join(@temp, 'maiProject.exe'))
+            @files_to_deliver.should(include File.join(@temp, 'maiProjecto.exe'))
         end
         
         it "should include all .config's on the list" do
-            @project.should_receive(:path_to_binaries).with('release').and_return(@temp)
-            
-            files_to_deliver = @project.files_to_deliver('release')
-            files_to_deliver.should(include File.join(@temp, 'mycon.config'))
+            @files_to_deliver.should(include File.join(@temp, 'maiProjecto.config'))
+            @files_to_deliver.should(include File.join(@temp, 'mycon.config'))
         end
         
         it "should not include anything else on the list" do
-            @project.should_receive(:path_to_binaries).with('release').and_return(@temp)
-            
-            files_to_deliver = @project.files_to_deliver('release')
-            files_to_deliver.should_not(include File.join(@temp, 'myProject.pdb'))
-            files_to_deliver.should_not(include File.join(@temp, 'myProject.foo'))
-            files_to_deliver.should_not(include File.join(@temp, 'maiProject.pdb'))
-            files_to_deliver.should_not(include File.join(@temp, 'maiProject.foo'))
+            @files_to_deliver.should_not(include File.join(@temp, 'myProject.pdb'))
+            @files_to_deliver.should_not(include File.join(@temp, 'myProject.foo'))
+            @files_to_deliver.should_not(include File.join(@temp, 'maiProject.pdb'))
+            @files_to_deliver.should_not(include File.join(@temp, 'maiProject.foo'))
         end
     end
 end
