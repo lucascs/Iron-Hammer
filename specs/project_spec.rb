@@ -37,12 +37,12 @@ describe Project do
             @temp = TempHelper::TempFolder
             @project = Project.new :name => "MyProject"
             @project.should_receive(:path_to_binaries).with('release').and_return(@temp)
-            @files_to_deliver = @project.@files_to_deliver('release')
+            @files_to_deliver = @project.files_to_deliver('release')
         end 
         
         it "should return a list" do
             @files_to_deliver.should_not be_nil
-            @files_to_deliver.be_an_instance_of Array
+            @files_to_deliver.should(be_an_instance_of Array)
             @files_to_deliver.should_not be_empty
         end
     
