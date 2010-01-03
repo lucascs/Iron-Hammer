@@ -1,6 +1,10 @@
 require File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
 
 describe Project do
+    
+    before :each do 
+        TempHelper::cleanup
+    end
 
     it "should setup the project with the given argument" do
         Project.new(:name => "MyProject").name.should(be_eql "MyProject")
