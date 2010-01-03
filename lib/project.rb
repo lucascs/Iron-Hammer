@@ -4,6 +4,8 @@ class Project
 
     attr_accessor :name
     
+    FilesToDeliver = '*.{dll,exe,config}'
+    
     def initialize params
         @name = params[:name] || 
             raise(ArgumentError.new "must provide a project name")
@@ -15,8 +17,8 @@ class Project
         [@name, "bin", configuration].patheticalize
     end
 
-    def files_to_deliver
-        
+    def files_to_deliver configuration
+        Dir[File.join(path_to_binaries(configuration), FilesToDeliver)]
     end
     
 end unless defined? Project
