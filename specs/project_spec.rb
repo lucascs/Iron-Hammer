@@ -2,8 +2,12 @@ require File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
 
 describe Project do
     
+    before :each do
+        @project = Project.new(:name => "MyProject")
+    end
+    
     it "should setup the project with the given argument" do
-        Project.new(:name => "MyProject").name.should(be_eql "MyProject")
+        @project.name.should(be_eql "MyProject")
     end
     
     it "should not allow the creation of a project without a name" do
@@ -11,13 +15,20 @@ describe Project do
     end
 
     it "should provide a path to the binaries given a configuration" do
-        Project.new(:name => "MyProject").path_to_binaries("myConf").should(
+        @project.should(respond_to :path_to_binaries)
+        @project.path_to_binaries("myConf").should(
             be_eql ["MyProject", "bin", "myConf"].patheticalize)
     end
     
     it "should not provide a path to the binaries given an empty configuration" do
-        lambda { Project.new(:name => "MyProject").path_to_binaries("") }.should(
+        @project.should(respond_to :path_to_binaries)
+        lambda { @project.path_to_binaries("") }.should(
             raise_error ArgumentError)
+    end
+    
+    it "should provide a path to the delivery package directory" do 
+        @project.should(respond_to :path_to_delivery_directory)
+        @project.path_to_delivery_directory.should(be_eql "delivery")
     end
     
     describe "when listing files for the delivery package" do

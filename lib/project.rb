@@ -21,4 +21,8 @@ class Project
         Dir[File.join(path_to_binaries(configuration), FilesToDeliver)]
     end
     
+    def path_to_delivery_directory
+        'delivery'
+    end
+    
 end unless defined? Project
