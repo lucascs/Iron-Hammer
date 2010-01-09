@@ -1,22 +1,23 @@
 require File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
 
 describe Package do
-  it 'should be succesfully created given a base path' do
-    package = Package.new 'path/to/package/root'
-  end
-  
   it 'should allow access to the root folder' do
-    package = Package.new 'path/to/package/root'
+    package = Package.new :root => 'path/to/package/root', :deliverables => ['a', 'b']
     package.should respond_to(:root)
     package.root.should be_eql('path/to/package/root')
   end
   
-  it 'should raise an error if no base path is informed' do
+  it 'should raise an error if no list of deliverables is given' do
     lambda { Package.new }.should raise_error(ArgumentError)
   end
+  
+  it 'should raise an error if an empty list of deliverables is given' do
+    lambda { Package.new(:deliverables => []) }.should raise_error(ArgumentError)
+  end
 
-  it 'should receive a list of deliverables' do
-    package = Package.new 'path', list = [Deliverable.create 'path', 'file']
+  it 'should receive a list of deliverables and provide access to it' do
+    package = Package.new :deliverables => list = [Deliverable.create 'path', 'file']
+    package.should respond_to(:deliverables)
     package.deliverables.should be_eql(list)
   end
   
@@ -25,7 +26,7 @@ describe Package do
       TempHelper::cleanup
       
       @package_root = 'package_root' 
-      @package = Package.new @package_root.inside_temp_dir
+      @package = Package.new :root => @package_root.inside_temp_dir, :deliverables => ['a', 'b']
       
       @bin    = @package_root + '/bin'
       @doc    = @package_root + '/doc'

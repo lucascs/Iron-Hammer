@@ -4,9 +4,13 @@ class Package
   attr_accessor :root
   attr_accessor :deliverables
   
-  def initialize path_to_root, deliverables=[]
-    @root = path_to_root  
-    @deliverables = deliverables
+  DEFAULT_DELIVERY_DESTINATION = 'delivery'
+  
+  def initialize params={}
+    @root         = params[:root] || DEFAULT_DELIVERY_DESTINATION
+    @deliverables = params[:deliverables]
+    raise(ArgumentError.new "must provide a list of deliverables") unless 
+      @deliverables && !@deliverables.empty?
   end
   
   def package file='package.zip'
