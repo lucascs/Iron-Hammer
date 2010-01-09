@@ -6,7 +6,7 @@ class Deliverable
   
   def initialize params={}
     @actual_path = params[:actual_path] || raise(ArgumentError.new "must provide an actual_path")
-    @actual_name = params[:actual_name] || raise(ArgumentError.new "must provide a actual_name")
+    @actual_name = params[:actual_name] || raise(ArgumentError.new "must provide an actual_name")
     @path_on_package = params[:path_on_package] || @actual_path
     @name_on_package = params[:name_on_package] || @actual_name.split('/').last    
   end

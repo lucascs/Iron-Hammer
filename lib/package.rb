@@ -8,12 +8,10 @@ class Package
   end
   
   def package file='package.zip'
-    previous_dir = Dir.pwd
-		Dir.chdir @root
-		zip_current_working_folder_into_this file
-  	Dir.chdir previous_dir
+		Dir.chdir(@root) { zip_current_working_folder_into_this file }
   end
   
+  private 
   def zip_current_working_folder_into_this package_name
     Zip::ZipFile::open(package_name, true) do |zip_file|
 			Dir[File.join('**', '*')].each do |file|
