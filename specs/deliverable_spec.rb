@@ -11,9 +11,12 @@ describe Deliverable do
       @deliverable.actual_path.should be_eql(@path)
     end
     
-    it "should assume that the file will have the same path and name on the package" do
+    it "should assume that the file will have the same name on the package" do
       @deliverable.name_on_package.should be_eql(@name)
-      @deliverable.path_on_package.should be_eql(@path)
+    end
+    
+    it "should assume that the file will be located on the package root" do
+      @deliverable.path_on_package.should be_eql('')
     end
   end
   

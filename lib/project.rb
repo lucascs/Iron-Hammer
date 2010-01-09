@@ -19,12 +19,11 @@ class Project
   def files_to_deliver configuration
     bin = path_to_binaries(configuration)
     Dir[File.join(bin, FILES_TO_DELIVER)].collect do |file|
-      Deliverable.create bin, file.split('/').last
+      Deliverable.new :path_on_package => '', :actual_path => bin, :actual_name => file.split('/').last
     end
   end
   
   def path_to_delivery_directory
     'delivery'
   end
-  
 end unless defined? Project
