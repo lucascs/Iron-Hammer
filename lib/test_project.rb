@@ -5,7 +5,7 @@ class TestProject
   attr_accessor :dll
   attr_accessor :name
     
-  DEFAULT_TEST_CONFIG = "LocalTestRun.testrunconfig"
+  DEFAULT_TEST_CONFIG = 'LocalTestRun.testrunconfig'
     
   def initialize params
     @name   = params[:name]     || "#{ params[:project] || params[:solution] }.Tests"
@@ -14,10 +14,10 @@ class TestProject
   end
 
   def container configuration
-    [@name, "bin", configuration, @dll].patheticalize
+    [@name, 'bin', configuration, @dll].patheticalize
   end
   
   def results_file
-    ["TestResults", "TestResults.trx"].patheticalize
+    ['TestResults', 'TestResults.trx'].patheticalize
   end
 end unless defined? TestProject
