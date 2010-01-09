@@ -1,7 +1,5 @@
 require File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
 
-puts File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
-
 describe DotNetEnvironment do
     
     before :each do

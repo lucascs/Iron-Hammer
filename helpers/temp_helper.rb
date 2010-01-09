@@ -19,6 +19,6 @@ end unless defined? TempHelper
 
 class String
     def inside_temp_dir
-        TempHelper::TempFolder + self
+      File.join TempHelper::TempFolder, self
     end
 end
