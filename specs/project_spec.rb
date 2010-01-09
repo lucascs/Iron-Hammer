@@ -23,13 +23,8 @@ describe Project do
     lambda { @project.path_to_binaries('') }.should raise_error(ArgumentError)
   end
   
-  it 'should provide a path to the delivery package directory' do 
-    @project.should(respond_to :path_to_delivery_directory)
-    @project.path_to_delivery_directory.should be_eql('delivery')
-  end
-  
   describe 'when listing files for the delivery package' do
-    before :all do 
+    before :each do 
       TempHelper::cleanup
       
       ['myProject.dll', 'myProject.pdb', 'myProject.foo', 'maiProject.dll', 'maiProject.foo', 'maiProjecto.config',
@@ -68,5 +63,34 @@ describe Project do
       @deliverables.should_not include(Deliverable.create @temp, 'maiProject.pdb')
       @deliverables.should_not include(Deliverable.create @temp, 'maiProject.foo')
     end
+  end
+  
+  describe 'creating a package' do
+    before :each do 
+      @project = Project.new :name => 'MyProject'
+    end
+    
+    it 'should provide a method that sets it up' do
+      @project.should respond_to(:package)
+    end
+    
+    it 'should fail when given no configuration' do
+      lambda { @project.package }.should raise_error(ArgumentError)
+    end
+    
+    it 'should fail when given a nil configuration' do
+      lambda { @project.package(nil) }.should raise_error(ArgumentError)
+    end
+    
+    it 'should fail when given an empty configuration' do
+      lambda { @project.package('') }.should raise_error(ArgumentError)
+    end
+    
+    it 'should work when given a valid configuration' do
+      @project.should_receive(:deliverables).with('configuration').and_return(deliverables = [0, 1, 2, 3])
+      package = @project.package 'configuration'
+      package.root.should be_eql('delivery')
+      package.deliverables.should be_eql(deliverables)
+    end 
   end
 end
