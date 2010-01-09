@@ -14,6 +14,11 @@ describe Package do
   it 'should raise an error if no base path is informed' do
     lambda { Package.new }.should raise_error(ArgumentError)
   end
+
+  it 'should receive a list of deliverables' do
+    package = Package.new 'path', list = [Deliverable.create 'path', 'file']
+    package.deliverables.should be_eql(list)
+  end
   
   describe 'packaging action' do
     before :each do

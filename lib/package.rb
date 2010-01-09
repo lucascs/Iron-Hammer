@@ -2,9 +2,11 @@ require 'zip/zipfilesystem'
 
 class Package
   attr_accessor :root
+  attr_accessor :deliverables
   
-  def initialize path_to_root
+  def initialize path_to_root, deliverables=[]
     @root = path_to_root  
+    @deliverables = deliverables
   end
   
   def package file='package.zip'
