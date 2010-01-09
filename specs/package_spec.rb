@@ -22,15 +22,15 @@ describe Package do
       @package_root = 'package_root' 
       @package = Package.new @package_root.inside_temp_dir
       
-      @bin = @package_root + '/bin'
-      @doc = @package_root + '/doc'
+      @bin    = @package_root + '/bin'
+      @doc    = @package_root + '/doc'
       @config = @package_root + '/config'
-      @vi = @package_root
+      @vi     = @package_root
       
-      @binaries = ['MACSkeptic.Iron.Hammer.dll', 'MACSkeptic.Iron.Hammer.exe']
-      @documents = ['MACSkeptic.Iron.Hammer.txt', 'Readme.txt']
-      @configuration = ['MACSkeptic.Iron.Hammer.config', 'MACSkeptic.Iron.Hammer.exe.config']
-      @version_info = ['Version.info']
+      @binaries       = ['MACSkeptic.Iron.Hammer.dll', 'MACSkeptic.Iron.Hammer.exe']
+      @documents      = ['MACSkeptic.Iron.Hammer.txt', 'Readme.txt']
+      @configuration  = ['MACSkeptic.Iron.Hammer.config', 'MACSkeptic.Iron.Hammer.exe.config']
+      @version_info   = ['Version.info']
       
       @binaries.each { |bin| TempHelper::touch @bin, bin }
       @documents.each { |doc| TempHelper::touch @doc, doc }
