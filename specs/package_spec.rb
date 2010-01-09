@@ -1,21 +1,21 @@
 require File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
 
 describe Package do
-  it "should be succesfully created given a base path" do
+  it 'should be succesfully created given a base path' do
     package = Package.new 'path/to/package/root'
   end
   
-  it "should allow access to the root folder" do
+  it 'should allow access to the root folder' do
     package = Package.new 'path/to/package/root'
     package.should respond_to(:root)
     package.root.should be_eql('path/to/package/root')
   end
   
-  it "should raise an error if no base path is informed" do
+  it 'should raise an error if no base path is informed' do
     lambda { Package.new }.should raise_error(ArgumentError)
   end
   
-  describe "packaging action" do
+  describe 'packaging action' do
     before :each do
       TempHelper::cleanup
       
@@ -38,11 +38,11 @@ describe Package do
       @version_info.each { |vi| TempHelper::touch @vi, vi }
     end  
     
-    it "should have a package method" do
+    it 'should have a package method' do
       @package.should respond_to(:package)
     end
     
-    it "should create a zip with all the contents of the package" do
+    it 'should create a zip with all the contents of the package' do
       expected_zip_package = File.join @package.root, 'package.zip'
       
       @package.package
@@ -57,7 +57,7 @@ describe Package do
       end
     end
     
-    it "shouldn't screw with the current directory" do
+    it 'should not screw with the current directory' do
       expected_zip_package = File.join @package.root, 'package.zip'
       
       original_directory = Dir.pwd
@@ -67,7 +67,7 @@ describe Package do
       Dir.pwd.should be_eql(original_directory)
     end
     
-    it "should allow for customization of the package name/path" do
+    it 'should allow for customization of the package name/path' do
       default_zip_package = File.join @package.root, 'package.zip'
       
       @package.package expected_zip_package = 'customized_package.zip'.inside_temp_dir
