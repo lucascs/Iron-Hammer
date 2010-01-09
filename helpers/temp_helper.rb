@@ -1,8 +1,8 @@
 module TempHelper
-    TempFolder = File.dirname(__FILE__) + '/../temp/'
+    TEMP_FOLDER = File.dirname(__FILE__) + '/../temp/'
     
     def self.cleanup
-        FileUtils.rm_rf TempFolder
+        FileUtils.rm_rf TEMP_FOLDER
         md ''
     end
 
@@ -19,6 +19,6 @@ end unless defined? TempHelper
 
 class String
     def inside_temp_dir
-      File.join TempHelper::TempFolder, self
+      File.join TempHelper::TEMP_FOLDER, self
     end
 end

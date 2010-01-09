@@ -31,7 +31,8 @@ describe DotNetEnvironment do
   end
 
   it 'should provide a path to the mstest binary based on the visual studio path' do
-    DotNetEnvironment.new(:visual_studio_path => 'path\\to\\vs').
-      mstest.should be_eql(['path', 'to', 'vs', 'mstest.exe'].patheticalize)
+    path_to_vs = ['path', 'to', 'vs'].patheticalize
+    DotNetEnvironment.new(:visual_studio_path => path_to_vs).
+      mstest.should be_eql([path_to_vs, 'mstest.exe'].patheticalize)
   end
 end
