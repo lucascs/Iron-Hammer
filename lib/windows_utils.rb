@@ -1,6 +1,6 @@
 module WindowsUtils
   def self.patheticalize *params
-    return params if params.nil? || params.empty? || params.length == 1
+    return '' if params.nil? || params.empty?
     params[1..-1].inject(String.new params[0]) { |a, b| a << "\\#{b}" }
   end
 end unless defined? WindowsUtils
