@@ -3,6 +3,7 @@ require File.dirname(__FILE__) + '/deliverable'
 
 class Project
   attr_accessor :name
+  
   FILES_TO_DELIVER = '*.{dll,exe,config}'
   
   def initialize params
@@ -16,7 +17,7 @@ class Project
     [@name, "bin", configuration].patheticalize
   end
 
-  def files_to_deliver configuration
+  def deliverables configuration
     bin = path_to_binaries(configuration)
     Dir[File.join(bin, FILES_TO_DELIVER)].collect do |file|
       Deliverable.new(
