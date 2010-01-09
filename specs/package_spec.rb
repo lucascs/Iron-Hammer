@@ -26,22 +26,41 @@ describe Package do
       TempHelper::cleanup
       
       @package_root = 'package_root' 
-      @package = Package.new :root => @package_root.inside_temp_dir, :deliverables => ['a', 'b']
+      @original_root = 'original/solution/root'
       
-      @bin    = @package_root + '/bin'
-      @doc    = @package_root + '/doc'
-      @config = @package_root + '/config'
-      @vi     = @package_root
+      
+      @bin    = @original_root + '/bin'
+      @doc    = @original_root + '/doc'
+      @config = @original_root + '/config'
+      @vi     = @original_root
       
       @binaries       = ['MACSkeptic.Iron.Hammer.dll', 'MACSkeptic.Iron.Hammer.exe']
       @documents      = ['MACSkeptic.Iron.Hammer.txt', 'Readme.txt']
       @configuration  = ['MACSkeptic.Iron.Hammer.config', 'MACSkeptic.Iron.Hammer.exe.config']
       @version_info   = ['Version.info']
+      @deliverables   = []
       
-      @binaries.each { |bin| TempHelper::touch @bin, bin }
-      @documents.each { |doc| TempHelper::touch @doc, doc }
-      @configuration.each { |config| TempHelper::touch @config, config }
-      @version_info.each { |vi| TempHelper::touch @vi, vi }
+      @binaries.each do |f| 
+        @deliverables << Deliverable.new(:actual_name => f, :actual_path => @bin, :package_path => 'bin_bin')
+        TempHelper::touch @bin, f 
+      end
+      
+      @documents.each do |f| 
+        @deliverables << Deliverable.new(:actual_name => f, :actual_path => @doc, :package_path => 'doc')
+        TempHelper::touch @doc, f 
+      end
+      
+      @configuration.each do |f| 
+        @deliverables << Deliverable.new(:actual_name => f, :actual_path => @config, :package_path => 'bin_bin')
+        TempHelper::touch @config, f
+      end
+      
+      @version_info.each do |f|
+        @deliverables << Deliverable.new(:actual_name => f, :actual_path => @vi, :package_path => 'version/info')
+        TempHelper::touch @vi, f
+      end
+      
+      @package = Package.new :root => @package_root.inside_temp_dir, :deliverables => @deliverables
     end  
     
     it 'should have a package method' do
@@ -49,6 +68,7 @@ describe Package do
     end
     
     it 'should create a zip with all the contents of the package' do
+      pending("implement this")
       expected_zip_package = File.join @package.root, 'package.zip'
       
       @package.package
@@ -56,14 +76,15 @@ describe Package do
       File.exists?(expected_zip_package).should be_true
       
       Zip::ZipFile::open(expected_zip_package, true) do |zip_file| 
-        @binaries.each { |bin| zip_file.find_entry('bin/' + bin).should_not be_nil }
+        @binaries.each { |bin| zip_file.find_entry('bin_bin/' + bin).should_not be_nil }
         @documents.each { |doc| zip_file.find_entry('doc/' + doc).should_not be_nil }
-        @configuration.each { |config| zip_file.find_entry('config/' + config).should_not be_nil }
-        @version_info.each { |vi| zip_file.find_entry(vi).should_not be_nil }
+        @configuration.each { |config| zip_file.find_entry('bin_bin/' + config).should_not be_nil }
+        @version_info.each { |vi| zip_file.find_entry('version/info/' + vi).should_not be_nil }
       end
     end
     
     it 'should not screw with the current directory' do
+      pending("implement this")
       expected_zip_package = File.join @package.root, 'package.zip'
       
       original_directory = Dir.pwd
@@ -74,6 +95,7 @@ describe Package do
     end
     
     it 'should allow for customization of the package name/path' do
+      pending("implement this")
       default_zip_package = File.join @package.root, 'package.zip'
       
       @package.package expected_zip_package = 'customized_package.zip'.inside_temp_dir
