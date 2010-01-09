@@ -81,11 +81,11 @@ describe Package do
     end  
     
     it 'should have a package method' do
-      @package.should respond_to(:package)
+      @package.should respond_to('pack!')
     end
     
     it 'should move everything to the package root folder, respecting the renamings defined on the deliverables' do
-      @package.package
+      @package.pack!
       
       package_root = @package_root.inside_temp_dir
       @deliverables.each do |deliverable|
@@ -97,7 +97,7 @@ describe Package do
     it 'should create a zip with all the contents of the package' do
       expected_zip_package = File.join @package.root, 'package.zip'
       
-      @package.package
+      @package.pack!
       
       File.exists?(expected_zip_package).should be_true
       
@@ -113,7 +113,7 @@ describe Package do
       
       original_directory = Dir.pwd
       
-      @package.package
+      @package.pack!
       
       Dir.pwd.should be_eql(original_directory)
     end
@@ -121,7 +121,7 @@ describe Package do
     it 'should allow for customization of the package name/path' do
       default_zip_package = File.join @package.root, 'package.zip'
       
-      @package.package expected_zip_package = 'customized_package.zip'.inside_temp_dir
+      @package.pack! expected_zip_package = 'customized_package.zip'.inside_temp_dir
       
       File.exists?(default_zip_package).should be_false
       File.exists?(expected_zip_package).should be_true
