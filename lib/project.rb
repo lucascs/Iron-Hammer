@@ -18,7 +18,10 @@ class Project
     end
 
     def files_to_deliver configuration
-        Dir[File.join(path_to_binaries(configuration), FilesToDeliver)]
+        bin = path_to_binaries(configuration)
+        Dir[File.join(bin, FilesToDeliver)].collect do |file|
+          Deliverable.create bin, file.split('/').last
+        end
     end
     
     def path_to_delivery_directory

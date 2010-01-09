@@ -58,25 +58,25 @@ describe Project do
         end
     
         it "should include all .dll's on the list" do
-            @files_to_deliver.should(include File.join(@temp, 'myProject.dll'))
-            @files_to_deliver.should(include File.join(@temp, 'maiProject.dll'))
+            @files_to_deliver.should include(Deliverable.create @temp, 'myProject.dll')
+            @files_to_deliver.should include(Deliverable.create @temp, 'maiProject.dll')
         end
         
         it "should include all .exe's on the list" do
-            @files_to_deliver.should(include File.join(@temp, 'maiProject.exe'))
-            @files_to_deliver.should(include File.join(@temp, 'maiProjecto.exe'))
+            @files_to_deliver.should include(Deliverable.create @temp, 'maiProject.exe')
+            @files_to_deliver.should include(Deliverable.create @temp, 'maiProjecto.exe')
         end
         
         it "should include all .config's on the list" do
-            @files_to_deliver.should(include File.join(@temp, 'maiProjecto.config'))
-            @files_to_deliver.should(include File.join(@temp, 'mycon.config'))
+            @files_to_deliver.should include(Deliverable.create @temp, 'maiProjecto.config')
+            @files_to_deliver.should include(Deliverable.create @temp, 'mycon.config')
         end
         
         it "should not include anything else on the list" do
-            @files_to_deliver.should_not(include File.join(@temp, 'myProject.pdb'))
-            @files_to_deliver.should_not(include File.join(@temp, 'myProject.foo'))
-            @files_to_deliver.should_not(include File.join(@temp, 'maiProject.pdb'))
-            @files_to_deliver.should_not(include File.join(@temp, 'maiProject.foo'))
+            @files_to_deliver.should_not include(Deliverable.create @temp, 'myProject.pdb')
+            @files_to_deliver.should_not include(Deliverable.create @temp, 'myProject.foo')
+            @files_to_deliver.should_not include(Deliverable.create @temp, 'maiProject.pdb')
+            @files_to_deliver.should_not include(Deliverable.create @temp, 'maiProject.foo')
         end
     end
 end
