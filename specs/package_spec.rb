@@ -41,22 +41,39 @@ describe Package do
       @deliverables   = []
       
       @binaries.each do |f| 
-        @deliverables << Deliverable.new(:actual_name => f, :actual_path => @bin, :package_path => 'bin_bin')
+        @deliverables << Deliverable.new(
+          :actual_name => f, 
+          :actual_path => @bin.inside_temp_dir, 
+          :path_on_package => 'bin_bin'
+        )
         TempHelper::touch @bin, f 
       end
       
       @documents.each do |f| 
-        @deliverables << Deliverable.new(:actual_name => f, :actual_path => @doc, :package_path => 'doc')
+        @deliverables << Deliverable.new(
+          :actual_name => f, 
+          :actual_path => @doc.inside_temp_dir, 
+          :path_on_package => 'doc'
+        )
         TempHelper::touch @doc, f 
       end
       
       @configuration.each do |f| 
-        @deliverables << Deliverable.new(:actual_name => f, :actual_path => @config, :package_path => 'bin_bin')
+        @deliverables << Deliverable.new(
+          :actual_name => f, 
+          :actual_path => @config.inside_temp_dir, 
+          :path_on_package => 'bin_bin'
+        )
         TempHelper::touch @config, f
       end
       
       @version_info.each do |f|
-        @deliverables << Deliverable.new(:actual_name => f, :actual_path => @vi, :package_path => 'version/info')
+        @deliverables << Deliverable.new(
+          :actual_name => f, 
+          :actual_path => @vi.inside_temp_dir, 
+          :path_on_package => 'version/info',
+          :name_on_package => 'veeeeeersion'
+        )
         TempHelper::touch @vi, f
       end
       
@@ -67,8 +84,17 @@ describe Package do
       @package.should respond_to(:package)
     end
     
+    it 'should move everything to the package root folder, respecting the renamings defined on the deliverables' do
+      @package.package
+      
+      package_root = @package_root.inside_temp_dir
+      @deliverables.each do |deliverable|
+        file = File.join package_root, deliverable.path_on_package, deliverable.name_on_package
+        File.exists?(file).should be_true  
+      end
+    end
+    
     it 'should create a zip with all the contents of the package' do
-      pending("implement this")
       expected_zip_package = File.join @package.root, 'package.zip'
       
       @package.package
@@ -76,15 +102,13 @@ describe Package do
       File.exists?(expected_zip_package).should be_true
       
       Zip::ZipFile::open(expected_zip_package, true) do |zip_file| 
-        @binaries.each { |bin| zip_file.find_entry('bin_bin/' + bin).should_not be_nil }
-        @documents.each { |doc| zip_file.find_entry('doc/' + doc).should_not be_nil }
-        @configuration.each { |config| zip_file.find_entry('bin_bin/' + config).should_not be_nil }
-        @version_info.each { |vi| zip_file.find_entry('version/info/' + vi).should_not be_nil }
+        @deliverables.each do |deliverable| 
+          zip_file.find_entry(File.join deliverable.path_on_package, deliverable.name_on_package).should_not be_nil
+        end
       end
     end
     
     it 'should not screw with the current directory' do
-      pending("implement this")
       expected_zip_package = File.join @package.root, 'package.zip'
       
       original_directory = Dir.pwd
@@ -95,7 +119,6 @@ describe Package do
     end
     
     it 'should allow for customization of the package name/path' do
-      pending("implement this")
       default_zip_package = File.join @package.root, 'package.zip'
       
       @package.package expected_zip_package = 'customized_package.zip'.inside_temp_dir
