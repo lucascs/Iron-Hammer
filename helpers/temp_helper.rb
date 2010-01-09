@@ -12,7 +12,7 @@ module TempHelper
     
     def self.touch path, file
         md path
-        FileUtils.touch file.inside_temp_dir
+        FileUtils.touch File.join(path.inside_temp_dir, file)
     end
     
 end unless defined? TempHelper

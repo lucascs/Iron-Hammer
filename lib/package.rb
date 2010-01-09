@@ -4,4 +4,8 @@ class Package
   def initialize path_to_root
     @root = path_to_root  
   end
+  
+  def package
+  
+  end
 end unless defined? Package
