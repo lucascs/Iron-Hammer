@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/windows_utils'
+require File.dirname(__FILE__) + '/deliverable'
 
 class Project
 

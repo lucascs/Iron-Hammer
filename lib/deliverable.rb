@@ -5,16 +5,15 @@ class Deliverable
   attr_accessor :name_on_package
   
   def initialize params={}
-    @actual_path = params[:actual_path]  || raise(ArgumentError.new "must provide an actual_path")
-    @actual_name = params[:actual_name]     || raise(ArgumentError.new "must provide a actual_name")
-    @path_on_package = params[:path_on_package] || @actual_path.split('/').last
+    @actual_path = params[:actual_path] || raise(ArgumentError.new "must provide an actual_path")
+    @actual_name = params[:actual_name] || raise(ArgumentError.new "must provide a actual_name")
+    @path_on_package = params[:path_on_package] || @actual_path
     @name_on_package = params[:name_on_package] || @actual_name.split('/').last    
   end
   
   def self.create actual_path, actual_name
     Deliverable.new :actual_path => actual_path, :actual_name => actual_name
   end
-  
   
   def == other
     other.class == Deliverable
