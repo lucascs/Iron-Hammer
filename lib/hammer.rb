@@ -1,6 +1,5 @@
 require File.dirname(__FILE__) + '/windows_utils'
 require File.dirname(__FILE__) + '/project'
-require File.dirname(__FILE__) + '/web_project'
 require File.dirname(__FILE__) + '/solution'
 require File.dirname(__FILE__) + '/test_project'
 require File.dirname(__FILE__) + '/dot_net_environment'
@@ -15,8 +14,8 @@ class Hammer
   DEFAULT_CONFIGURATION = 'Release'
 
   def initialize params={}
-    @solution       = Solution.new   :name => params[:solution]  || params[:project]
-    @project        = WebProject.new :name => params[:project]   || params[:solution]
+    @solution       = Solution.new  :name => params[:solution]  || params[:project]
+    @project        = Project.new   :name => params[:project]   || params[:solution]
     @configuration  = params[:configuration] || DEFAULT_CONFIGURATION
     
     @test_project   = TestProject.new params.merge(

@@ -1,8 +1,8 @@
 require File.dirname(__FILE__) + '/project'
 require File.dirname(__FILE__) + '/windows_utils'
 
-class WebProject < Project
+class AspNetProject < Project
   def path_to_binaries
     [@name, "bin"].patheticalize
   end
-end unless defined? WebProject
+end unless defined? AspNetProject

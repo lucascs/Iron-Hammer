@@ -7,7 +7,7 @@ class SolutionFile
   STOP_TRIGGER = /^Global/
 
   def initialize projects=[]
-    @projects = projects;
+    @projects = projects
   end
   
   def self.parse lines

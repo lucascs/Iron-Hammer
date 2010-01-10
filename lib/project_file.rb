@@ -1,14 +1,19 @@
 require 'rexml/document'
 require File.dirname(__FILE__) + '/project_types'
+require File.dirname(__FILE__) + '/the_filer'
 
 class ProjectFile
   attr_accessor :type
 
-  GUID_EVALUATION_ORDER = [:asp_net_mvc, :wcf, :asp_net, :test]
+  GUID_EVALUATION_ORDER = [:asp_net_mvc, :asp_net, :test]
   GUID_PATH = '//Project/PropertyGroup/ProjectTypeGuids'
 
   def initialize params={}
     @type = params[:type] || :dll
+  end
+  
+  def self.type_of *path
+    self.parse(TheFiler::read_file(*path)).type
   end
 
   def self.parse xml

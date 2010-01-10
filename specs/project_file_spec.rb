@@ -9,6 +9,18 @@ describe ProjectFile do
     ProjectFile.should respond_to(:parse)
   end
   
+  it 'should provide a method to directly get the type of a project from a file' do
+    ProjectFile.should respond_to(:type_of)
+    TheFiler::write!(
+      :path => path = TempHelper::TEMP_FOLDER,
+      :name => name = 'dll.csproj',
+      :content => content = ProjectFileData::dll
+    )
+    TheFiler.should_receive(:read_file).with(path, name).and_return(content)
+    ProjectFile.should_receive(:parse).with(content).and_return(ProjectFile.new :type => :dll)
+    ProjectFile.type_of(path, name).should be_eql(:dll)
+  end
+  
   it 'should provid an accessor for the type' do
     ProjectFile.new.should respond_to(:type)
   end
@@ -39,5 +51,11 @@ describe ProjectFile do
     project_file = ProjectFile.parse(ProjectFileData::dll)
     project_file.should_not be_nil
     project_file.type.should be_eql(:dll)
+  end
+  
+  it 'should correctly parse wcf projects' do
+    project_file = ProjectFile.parse(ProjectFileData::wcf)
+    project_file.should_not be_nil
+    project_file.type.should be_eql(:asp_net)
   end
 end

@@ -4,6 +4,7 @@ require File.dirname(__FILE__) + '/package'
 
 class Project
   attr_accessor :name
+  attr_accessor :path
   
   FILES_TO_DELIVER = '*.{dll,exe,config}'
   DEFAULT_DELIVERY_DIRECTORY = 'delivery'
@@ -11,6 +12,7 @@ class Project
   def initialize params={}
     @name = params[:name] || 
       raise(ArgumentError.new 'must provide a project name')
+    @path = params[:path]
   end
   
   def path_to_binaries configuration=nil
