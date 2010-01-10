@@ -1,4 +1,5 @@
 require File.dirname(__FILE__) + '/zipper'
+require File.dirname(__FILE__) + '/the_filer'
 
 class Package
   attr_accessor :root
@@ -22,12 +23,8 @@ class Package
   def organize_deliverables_for_packaging
     @deliverables.each do |deliverable|
       source = File.join deliverable.actual_path, deliverable.actual_name
-
-      destination_path = File.join @root, deliverable.path_on_package
-      destination = File.join destination_path, deliverable.name_on_package
-      
-      FileUtils.mkpath destination_path unless File.exists?(destination_path)
-      FileUtils.cp source, destination
+      destination = File.join @root, deliverable.path_on_package, deliverable.name_on_package
+      TheFiler::copy source, destination
     end
   end
 end unless defined? Package
