@@ -24,7 +24,7 @@ class Package
     @deliverables.each do |deliverable|
       source = File.join deliverable.actual_path, deliverable.actual_name
       destination = File.join @root, deliverable.path_on_package, deliverable.name_on_package
-      TheFiler::copy source, destination
+      TheFiler::copy! source, destination
     end
   end
 end unless defined? Package

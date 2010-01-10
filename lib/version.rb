@@ -30,6 +30,6 @@ class Version
   end
   
   def create! path, name='version.yaml'
-    TheFiler::write path, name, to_yaml
+    TheFiler::write! path, name, to_yaml
   end
 end unless defined? Version
