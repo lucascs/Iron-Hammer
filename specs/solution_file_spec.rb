@@ -6,7 +6,7 @@ describe SolutionFile do
     TheFiler::write!(
       TempHelper::TEMP_FOLDER, 
       @solution_file_name = 'my.sln', 
-      @solution_file_content = SolutionFileData::SAMPLE
+      @solution_file_content = SolutionFileData::multiproject
     )
   end
   
