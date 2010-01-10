@@ -18,9 +18,9 @@ describe Project do
     @project.path_to_binaries('myConf').should be_eql(['MyProject', 'bin', 'myConf'].patheticalize)
   end
   
-  it 'should not provide a path to the binaries given an empty configuration' do
+  it 'should consider Release as the default configuration when not given a specific one' do
     @project.should(respond_to :path_to_binaries)
-    lambda { @project.path_to_binaries('') }.should raise_error(ArgumentError)
+    @project.path_to_binaries('').should be_eql(['MyProject', 'bin', 'Release'].patheticalize)
   end
   
   describe 'when listing files for the delivery package' do
@@ -74,21 +74,24 @@ describe Project do
       @project.should respond_to(:package)
     end
     
-    it 'should fail when given no configuration' do
-      lambda { @project.package }.should raise_error(ArgumentError)
+    it 'should not fail when given no configuration' do
+      @project.should_receive(:deliverables).with(nil).and_return(deliverables = [0, 1, 2, 3])
+      lambda { @project.package }.should_not raise_error
     end
     
-    it 'should fail when given a nil configuration' do
-      lambda { @project.package(nil) }.should raise_error(ArgumentError)
+    it 'should not fail when given a nil configuration' do
+      @project.should_receive(:deliverables).with(nil).and_return(deliverables = [0, 1, 2, 3])
+      lambda { @project.package(:configuration => nil) }.should_not raise_error
     end
     
-    it 'should fail when given an empty configuration' do
-      lambda { @project.package('') }.should raise_error(ArgumentError)
+    it 'should not fail when given an empty configuration' do
+      @project.should_receive(:deliverables).with('').and_return(deliverables = [0, 1, 2, 3])
+      lambda { @project.package(:configuration => '') }.should_not raise_error
     end
     
     it 'should work when given a valid configuration' do
       @project.should_receive(:deliverables).with('configuration').and_return(deliverables = [0, 1, 2, 3])
-      package = @project.package 'configuration'
+      package = @project.package(:configuration => 'configuration')
       package.root.should be_eql('delivery')
       package.deliverables.should be_eql(deliverables)
     end 

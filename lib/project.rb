@@ -7,16 +7,15 @@ class Project
   
   FILES_TO_DELIVER = '*.{dll,exe,config}'
   DEFAULT_DELIVERY_DIRECTORY = 'delivery'
-  
+
   def initialize params={}
     @name = params[:name] || 
       raise(ArgumentError.new 'must provide a project name')
   end
   
   def path_to_binaries configuration=nil
-    raise(ArgumentError.new 'must provide a valid configuration') if 
-      configuration.nil? || configuration.empty?
-    [@name, "bin", configuration].patheticalize
+    config = (configuration && !configuration.empty? && configuration) || Hammer::DEFAULT_CONFIGURATION
+    [@name, 'bin', config].patheticalize
   end
 
   def deliverables configuration=nil
@@ -30,9 +29,8 @@ class Project
     end
   end
   
-  def package configuration=nil
-    raise(ArgumentError.new 'must provide a valid configuration') if 
-      configuration.nil? || configuration.empty?
-    Package.new :root => DEFAULT_DELIVERY_DIRECTORY, :deliverables => deliverables(configuration)
+  def package params={}
+    package_root = params[:root] || params[:target] || params[:package_root] || DEFAULT_DELIVERY_DIRECTORY
+    Package.new :root => package_root, :deliverables => deliverables(params[:configuration])
   end
 end unless defined? Project

@@ -14,7 +14,7 @@ class Hammer
   
   DEFAULT_CONFIGURATION = 'Release'
 
-  def initialize params
+  def initialize params={}
     @solution       = Solution.new   :name => params[:solution]  || params[:project]
     @project        = WebProject.new :name => params[:project]   || params[:solution]
     @configuration  = params[:configuration] || DEFAULT_CONFIGURATION
