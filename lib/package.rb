@@ -1,4 +1,4 @@
-require File.dirname(__FILE__) + '/zip_utils'
+require File.dirname(__FILE__) + '/zipper'
 
 class Package
   attr_accessor :root
@@ -15,7 +15,7 @@ class Package
   
   def pack! file='package.zip'
     organize_deliverables_for_packaging
-		Dir.chdir(@root) { ZipUtils::zip_current_working_folder_into_this file }
+		Dir.chdir(@root) { Zipper::zip_current_working_folder_into_this file }
   end
   
   private 
