@@ -21,11 +21,11 @@ class Package
   private 
   def zip_current_working_folder_into_this package_name
     Zip::ZipFile::open(package_name, true) do |zip_file|
-			Dir[File.join('**', '*')].each do |file|
-				zip_file.add(file, file)
-			end
-		end
-	end
+      Dir[File.join('**', '*')].each do |file|
+        zip_file.add(file, file)
+      end
+    end
+  end
 	
   def organize_deliverables_for_packaging
     @deliverables.each do |deliverable|
