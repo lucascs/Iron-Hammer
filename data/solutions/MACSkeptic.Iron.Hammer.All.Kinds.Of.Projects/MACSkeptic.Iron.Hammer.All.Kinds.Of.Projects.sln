@@ -1,0 +1,44 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MACSkeptic.Iron.Hammer.Asp.Net.Mvc", "MACSkeptic.Iron.Hammer.Asp.Net.Mvc\MACSkeptic.Iron.Hammer.Asp.Net.Mvc.csproj", "{1A440A16-FF53-4260-AA79-7102EB86B047}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MACSkeptic.Iron.Hammer.Asp.Net.Mvc.Tests", "MACSkeptic.Iron.Hammer.Asp.Net.Mvc.Tests\MACSkeptic.Iron.Hammer.Asp.Net.Mvc.Tests.csproj", "{8DFF0869-A0B0-450E-B401-A96717DD6641}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MACSkeptic.Iron.Hammer.Asp.Net", "MACSkeptic.Iron.Hammer.Asp.Net\MACSkeptic.Iron.Hammer.Asp.Net.csproj", "{48497BD3-BAE8-40F2-828F-539822D9C29E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MACSkeptic.Iron.Hammer.Dll", "MACSkeptic.Iron.Hammer.Dll\MACSkeptic.Iron.Hammer.Dll.csproj", "{301F019A-2514-4465-A4A9-277D93F3D780}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MACSkeptic.Iron.Hammer.WCF", "MACSkeptic.Iron.Hammer.WCF\MACSkeptic.Iron.Hammer.WCF.csproj", "{2AD01F63-89B6-4182-A17E-F60A4CD90427}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{1A440A16-FF53-4260-AA79-7102EB86B047}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1A440A16-FF53-4260-AA79-7102EB86B047}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1A440A16-FF53-4260-AA79-7102EB86B047}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1A440A16-FF53-4260-AA79-7102EB86B047}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8DFF0869-A0B0-450E-B401-A96717DD6641}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8DFF0869-A0B0-450E-B401-A96717DD6641}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8DFF0869-A0B0-450E-B401-A96717DD6641}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8DFF0869-A0B0-450E-B401-A96717DD6641}.Release|Any CPU.Build.0 = Release|Any CPU
+		{48497BD3-BAE8-40F2-828F-539822D9C29E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{48497BD3-BAE8-40F2-828F-539822D9C29E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{48497BD3-BAE8-40F2-828F-539822D9C29E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{48497BD3-BAE8-40F2-828F-539822D9C29E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{301F019A-2514-4465-A4A9-277D93F3D780}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{301F019A-2514-4465-A4A9-277D93F3D780}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{301F019A-2514-4465-A4A9-277D93F3D780}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{301F019A-2514-4465-A4A9-277D93F3D780}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2AD01F63-89B6-4182-A17E-F60A4CD90427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2AD01F63-89B6-4182-A17E-F60A4CD90427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2AD01F63-89B6-4182-A17E-F60A4CD90427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2AD01F63-89B6-4182-A17E-F60A4CD90427}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
