@@ -11,7 +11,10 @@ describe SolutionFile do
   end
   
   it 'should be able to read the solution file, creating a hash of projects' do
-    projects = SolutionFile.parse TheFiler::read_lines(TempHelper::TEMP_FOLDER, @solution_file_name)
+    SolutionFile.should respond_to(:parse)
+    solution_file = SolutionFile.parse TheFiler::read_lines(TempHelper::TEMP_FOLDER, @solution_file_name)
+    solution_file.should respond_to(:projects)
+    projects = solution_file.projects
     projects.should have(2).elements
     projects.should include(:name => 'Matchers', :path => 'Matchers', :csproj => 'Matchers.csproj')
     projects.should include(:name => 'Tests', :path => 'Tests', :csproj => 'Tests.csproj')

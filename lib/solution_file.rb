@@ -1,8 +1,14 @@
 require File.dirname(__FILE__) + '/the_filer'
 
 class SolutionFile
+  attr_accessor :projects
+
   NAME_PATH_CSPROJ = /.* = \"(.+)\"\, \"(.+)\\(.+)\", .*/
   STOP_TRIGGER = /^Global/
+
+  def initialize projects=[]
+    @projects = projects;
+  end
   
   def self.parse lines
     projects = []
@@ -12,6 +18,6 @@ class SolutionFile
         projects << { :name => name, :path => path, :csproj => csproj }
       end
     end
-    projects
+    SolutionFile.new projects
   end
 end unless defined? SolutionFile
