@@ -4,9 +4,9 @@ describe SolutionFile do
   before :each do
     TempHelper::cleanup
     TheFiler::write!(
-      TempHelper::TEMP_FOLDER, 
-      @solution_file_name = 'my.sln', 
-      @solution_file_content = SolutionFileData::multiproject
+      :path => TempHelper::TEMP_FOLDER, 
+      :name => @solution_file_name = 'my.sln', 
+      :content => @solution_file_content = SolutionFileData::multiproject
     )
   end
   

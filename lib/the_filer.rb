@@ -4,9 +4,9 @@ module TheFiler
     FileUtils.cp source, destination
   end
   
-  def self.write! path, name, content
-    TheFiler::create_path! path
-    File.open(File.join(path, name), 'w') { |file| file.write(content) }
+  def self.write! params={}
+    TheFiler::create_path! path = params[:path]
+    File.open(File.join(path, name = params[:name]), 'w') { |file| file.write(content = params[:content]) }
   end
   
   def self.read *path
