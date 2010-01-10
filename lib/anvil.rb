@@ -1,9 +1,7 @@
 require File.dirname(__FILE__) + '/solution'
 require File.dirname(__FILE__) + '/solution_file'
 require File.dirname(__FILE__) + '/the_filer'
-require File.dirname(__FILE__) + '/dll_project'
-require File.dirname(__FILE__) + '/asp_net_mvc_project'
-require File.dirname(__FILE__) + '/asp_net_project'
+require File.dirname(__FILE__) + '/project_factory'
 
 class Anvil
   attr_accessor :solution
@@ -17,14 +15,9 @@ class Anvil
   def load_projects_from_solution
     @projects = @projects || []
     @solution.file.projects.each do |p|
-      name = p[:name]
-      xml = TheFiler::read_file @solution.path, path = p[:path], csproj = p[:csproj]
-      @projects << project = (case ProjectFile.parse(xml).type
-        when :dll: DllProject.new(:name => name, :path => path)
-        when :test: TestProject.new(:name => name, :path => path)
-        when :asp_net: AspNetProject.new(:name => name, :path => path)
-        when :asp_net_mvc: AspNetMvcProject.new(:name => name, :path => path)
-      end)
+      @projects << ProjectFactory::create(p.merge(
+        :type => ProjectFile.type_of(@solution.path, path = p[:path], csproj = p[:csproj])
+      ))
     end
   end
 
