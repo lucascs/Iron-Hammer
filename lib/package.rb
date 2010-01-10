@@ -32,7 +32,7 @@ class Package
       source = File.join deliverable.actual_path, deliverable.actual_name
       destination_path = File.join @root, deliverable.path_on_package
       destination = File.join destination_path, deliverable.name_on_package
-      FileUtils.mkpath destination_path
+      FileUtils.mkpath destination_path unless File.exists?(destination_path)
       FileUtils.cp source, destination
     end
   end
