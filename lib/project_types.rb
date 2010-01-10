@@ -1,6 +1,6 @@
 require File.dirname(__FILE__) + '/project_type_guids'
 
-class ProjectTypes
+module ProjectTypes
   TYPES = ProjectTypeGuids::constants.inject({}) { |b, c| b.merge(ProjectTypeGuids::const_get(c) => c.downcase.to_sym) }
   GUIDS = TYPES.inject({}) { |buffer, tuple| buffer.merge(tuple.pop.to_sym => tuple.join.to_s) }
   
