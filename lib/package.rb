@@ -1,4 +1,4 @@
-require 'zip/zipfilesystem'
+require File.dirname(__FILE__) + '/zip_utils'
 
 class Package
   attr_accessor :root
@@ -15,23 +15,17 @@ class Package
   
   def pack! file='package.zip'
     organize_deliverables_for_packaging
-		Dir.chdir(@root) { zip_current_working_folder_into_this file }
+		Dir.chdir(@root) { ZipUtils::zip_current_working_folder_into_this file }
   end
   
   private 
-  def zip_current_working_folder_into_this package_name
-    Zip::ZipFile::open(package_name, true) do |zip_file|
-      Dir[File.join('**', '*')].each do |file|
-        zip_file.add(file, file)
-      end
-    end
-  end
-	
   def organize_deliverables_for_packaging
     @deliverables.each do |deliverable|
       source = File.join deliverable.actual_path, deliverable.actual_name
+
       destination_path = File.join @root, deliverable.path_on_package
       destination = File.join destination_path, deliverable.name_on_package
+      
       FileUtils.mkpath destination_path unless File.exists?(destination_path)
       FileUtils.cp source, destination
     end
