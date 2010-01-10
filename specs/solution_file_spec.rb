@@ -16,5 +16,4 @@ describe SolutionFile do
     projects.should include(:name => 'Matchers', :path => 'Matchers', :csproj => 'Matchers.csproj')
     projects.should include(:name => 'Tests', :path => 'Tests', :csproj => 'Tests.csproj')
   end
-
 end
