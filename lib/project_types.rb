@@ -5,7 +5,7 @@ module ProjectTypes
   GUIDS = TYPES.inject({}) { |buffer, tuple| buffer.merge(tuple.pop.to_sym => tuple.join.to_s) }
   
   def self.type_of guid
-    TYPES[guid.to_s]
+    TYPES[guid.to_s.upcase]
   end
   
   def self.guid_for type

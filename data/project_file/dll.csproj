@@ -5,13 +5,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{972A6F44-04B9-4800-B29D-84752AF0444C}</ProjectGuid>
+    <ProjectGuid>{A3E34041-DECC-4549-9CB5-29CC95E239AE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Matchers</RootNamespace>
-    <AssemblyName>Matchers</AssemblyName>
+    <RootNamespace>Codevil.MACSkeptic.TestingWithCSharp.BankSystem</RootNamespace>
+    <AssemblyName>Codevil.MACSkeptic.TestingWithCSharp.BankSystem</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <StartupObject>
+    </StartupObject>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,7 +33,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -46,8 +47,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assert.cs" />
+    <Compile Include="Entities\Account.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Repositories\DatabaseRepository.cs" />
+    <Compile Include="Repositories\IRepository.cs" />
+    <Compile Include="Services\TransactionsService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Codevil.MACSkeptic.TestingWithCSharp.Database\Codevil.MACSkeptic.TestingWithCSharp.Database.csproj">
+      <Project>{B9C545F3-76F7-4FBC-8670-1335926284D0}</Project>
+      <Name>Codevil.MACSkeptic.TestingWithCSharp.Database</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -57,4 +67,4 @@
   <Target Name="AfterBuild">
   </Target>
   -->
-</Project>  
+</Project>
