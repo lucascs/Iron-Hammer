@@ -11,7 +11,7 @@ describe ProjectFactory do
     end
     
     it 'should create correctly a dll project' do 
-      project = ProjectFactory::create({:type => :dll}.merge @params)
+      project = ProjectFactory::create(@params.merge :type => :dll)
       project.should_not be_nil
       project.should be_an_instance_of(DllProject)
       project.name.should be_eql(@params[:name])
@@ -19,7 +19,7 @@ describe ProjectFactory do
     end
     
     it 'should create correctly a asp_net project' do 
-      project = ProjectFactory::create({:type => :asp_net}.merge @params)
+      project = ProjectFactory::create(@params.merge :type => :asp_net)
       project.should_not be_nil
       project.should be_an_instance_of(AspNetProject)
       project.name.should be_eql(@params[:name])
@@ -27,7 +27,7 @@ describe ProjectFactory do
     end
     
     it 'should create correctly a asp_net_mvc project' do 
-      project = ProjectFactory::create({:type => :asp_net_mvc}.merge @params)
+      project = ProjectFactory::create(@params.merge :type => :asp_net_mvc)
       project.should_not be_nil
       project.should be_an_instance_of(AspNetMvcProject)
       project.name.should be_eql(@params[:name])
@@ -35,7 +35,7 @@ describe ProjectFactory do
     end
     
     it 'should create correctly a test project' do 
-      project = ProjectFactory::create({:type => :test}.merge @params)
+      project = ProjectFactory::create(@params.merge :type => :test)
       project.should_not be_nil
       project.should be_an_instance_of(TestProject)
       project.name.should be_eql(@params[:name])
