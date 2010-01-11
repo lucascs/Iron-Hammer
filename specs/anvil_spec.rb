@@ -1,11 +1,6 @@
 require File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
 
 describe Anvil do
-  before :each do
-    TempHelper::cleanup
-    @solution_root = SolutionData::all_kinds_of_projects_to_temp_dir
-  end
-
   it 'should provide an accessor for the solution loaded' do
     Anvil.new.should respond_to(:solution)
   end
@@ -16,8 +11,7 @@ describe Anvil do
 
   describe 'loading from a path' do
     before :each do
-      TempHelper::cleanup
-      @solution_root = SolutionData::all_kinds_of_projects_to_temp_dir
+      @solution_root = 'solution/dummy/root'
       @solution_name = 'MACSkeptic.Iron.Hammer.All.Kinds.Of.Projects'
     end
     
@@ -26,9 +20,10 @@ describe Anvil do
     end
 
     it 'should scan the directory for *.sln files and return the anvil with a solution loaded' do
-      TheFiler::should_receive(:read_lines).with("#{@solution_root}/#{@solution_name}.sln").and_return(list = [1, 2])
-      SolutionFile.should_receive(:parse).with(list).and_return(file = 'ThisIsAFile')
-      
+      sln = 'solution/dummy/root/MACSkeptic.Iron.Hammer.All.Kinds.Of.Projects.sln'
+      Dir.should_receive('[]').with(File.join @solution_root, '*.sln').and_return(entries = [sln])
+      SolutionFile.should_receive(:parse_file).with(sln).and_return(file = 'FFF')
+
       anvil = Anvil.load @solution_root
       anvil.solution.should_not be_nil
       anvil.solution.should be_an_instance_of(Solution)
@@ -38,8 +33,7 @@ describe Anvil do
   end
   
   describe 'loading the projects from the solution' do
-    before :each do
-      TempHelper::cleanup
+    before :all do #awesomeness
       @anvil = Anvil.new(
         :solution => Solution.new(
           :name => @solution_name = 'MACSkeptic.Iron.Hammer.All.Kinds.Of.Projects',
@@ -60,18 +54,26 @@ describe Anvil do
     end
 
     it 'should load all the projects belonging to the solution' do
+      @project_hashes.each do |p|
+        ProjectFile.should_receive(:type_of).with(@solution_root, p[:path], p[:csproj]).and_return(case p[:name]
+          when @asp_net: :asp_net
+          when @asp_net_mvc: :asp_net_mvc
+          when @tests: :test
+          when @dll: :dll
+          when @wcf: :asp_net
+        end)
+      end
+      
       @anvil.load_projects_from_solution
+
       @anvil.projects.should_not be_nil
       @anvil.projects.should be_an_instance_of(Array)
       @anvil.projects.should have(@project_names.length).elements
-      asp_net_mvc_projects = @anvil.projects.select { |p| p.class == AspNetMvcProject }
-      asp_net_projects = @anvil.projects.select { |p| p.class == AspNetProject }
-      test_projects = @anvil.projects.select { |p| p.class == TestProject }
-      dll_projects = @anvil.projects.select { |p| p.class == DllProject }
-      asp_net_mvc_projects.should have(1).elements
-      asp_net_projects.should have(2).elements
-      test_projects.should have(1).elements
-      dll_projects.should have(1).elements
+      
+      (@anvil.projects.select { |p| p.class == AspNetMvcProject }).should have(1).asp_net_mvc_project
+      (@anvil.projects.select { |p| p.class == AspNetProject }).should have(2).asp_net_projects
+      (@anvil.projects.select { |p| p.class == TestProject }).should have(1).test_project
+      (@anvil.projects.select { |p| p.class == DllProject }).should have(1).dll_project
     end
   end
 end

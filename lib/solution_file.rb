@@ -20,4 +20,8 @@ class SolutionFile
     end
     SolutionFile.new projects
   end
+  
+  def self.parse_file *path
+    self.parse TheFiler::read_lines(*path) 
+  end
 end unless defined? SolutionFile

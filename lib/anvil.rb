@@ -28,7 +28,7 @@ class Anvil
       Anvil.new(
         :solution => Solution.new(
           :name => entries.first.split('/').pop.sub('.sln', ''),
-          :file => SolutionFile.parse(TheFiler::read_lines entries.first)
+          :file => SolutionFile.parse_file(entries.first)
         )
       ) 
     end
