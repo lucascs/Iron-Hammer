@@ -1,22 +1,15 @@
 require File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
 
 describe ProjectFile do
-  before :each do
-    TempHelper::cleanup
-  end
-  
   it 'should provide a method to parse xml' do 
     ProjectFile.should respond_to(:parse)
   end
   
   it 'should provide a method to directly get the type of a project from a file' do
     ProjectFile.should respond_to(:type_of)
-    TheFiler::write!(
-      :path => path = TempHelper::TEMP_FOLDER,
-      :name => name = 'dll.csproj',
-      :content => content = ProjectFileData::dll
-    )
-    TheFiler.should_receive(:read_file).with(path, name).and_return(content)
+    TheFiler::should_receive(:read_file).
+      with(path = TempHelper::TEMP_FOLDER, name = 'dll.csproj').
+      and_return(content = 'content')
     ProjectFile.should_receive(:parse).with(content).and_return(ProjectFile.new :type => :dll)
     ProjectFile.type_of(path, name).should be_eql(:dll)
   end
