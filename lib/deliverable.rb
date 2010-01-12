@@ -17,6 +17,6 @@ class Deliverable
   
   def == other
     other.class == Deliverable &&
-      instance_variables.inject(true) { |x, current| x && (send(prop = current.sub('@','')) == other.send(prop)) }
+      instance_variables.inject(true) { |x, current| x && (send(prop = current.to_s.sub('@','')) == other.send(prop)) }
   end
 end unless defined? Deliverable

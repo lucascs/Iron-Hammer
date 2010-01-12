@@ -16,7 +16,7 @@ describe Package do
   end
 
   it 'should receive a list of deliverables and provide access to it' do
-    package = Package.new :deliverables => list = [Deliverable.create 'path', 'file']
+    package = Package.new :deliverables => list = [Deliverable.create('path', 'file')]
     package.should respond_to(:deliverables)
     package.deliverables.should be_eql(list)
   end

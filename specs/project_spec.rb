@@ -43,8 +43,8 @@ describe Project do
     end
   
     it 'should include all *.dll on the list' do
-      @deliverables.should include(Deliverable.create @temp, 'myProject.dll')
-      @deliverables.should include(Deliverable.create @temp, 'maiProject.dll')
+      @deliverables.should include(Deliverable.create(@temp, 'myProject.dll'))
+      @deliverables.should include(Deliverable.create(@temp, 'maiProject.dll'))
     end
     
     it 'should include all *.exe on the list' do
