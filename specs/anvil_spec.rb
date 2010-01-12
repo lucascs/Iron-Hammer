@@ -56,11 +56,16 @@ describe Anvil do
     it 'should load all the projects belonging to the solution' do
       @project_hashes.each do |p|
         ProjectFile.should_receive(:type_of).with(@solution_root, p[:path], p[:csproj]).and_return(case p[:name]
-          when @asp_net: :asp_net
-          when @asp_net_mvc: :asp_net_mvc
-          when @tests: :test
-          when @dll: :dll
-          when @wcf: :asp_net
+          when @asp_net
+            :asp_net
+          when @asp_net_mvc
+            :asp_net_mvc
+          when @tests
+            :test
+          when @dll
+            :dll
+          when @wcf
+            :asp_net
         end)
       end
       
