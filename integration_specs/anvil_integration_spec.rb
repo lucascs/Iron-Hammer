@@ -86,30 +86,43 @@ describe Anvil, ' - full stack integration'  do
       it 'should properly load the asp_net projects' do
         asp_net_projects = @projects.select { |p| p.class == AspNetProject }
         asp_net_projects.should have(2).projects
-        asp_net_project = asp_net_projects.first
-        asp_net_project.name.should be_eql(@asp_net)
-        asp_net_project.path.should be_eql(@asp_net)
+        
+        truly_asp_net_projects = asp_net_projects.select { |p| p.name == @asp_net }
+        truly_asp_net_projects.should have(1).project
+        truly_asp_net_project = truly_asp_net_projects.first
+        truly_asp_net_project.name.should be_eql(@asp_net)
+        truly_asp_net_project.path.should be_eql(@asp_net)
+        
+        wcf_projects = asp_net_projects.select { |p| p.name == @wcf }
+        wcf_projects.should have(1).project
+        wcf_project = wcf_projects.first
+        wcf_project.name.should be_eql(@wcf)
+        wcf_project.path.should be_eql(@wcf)
       end
       
+      it 'should properly load the asp_net_mvc projects' do
+        asp_net_mvc_projects = @projects.select { |p| p.class == AspNetMvcProject }
+        asp_net_mvc_projects.should have(1).projects
+        asp_net_mvc_project = asp_net_mvc_projects.first
+        asp_net_mvc_project.name.should be_eql(@asp_net_mvc)
+        asp_net_mvc_project.path.should be_eql(@asp_net_mvc)
+      end
       
+      it 'should properly load the test projects' do
+        test_projects = @projects.select { |p| p.class == TestProject }
+        test_projects.should have(1).projects
+        test_project = test_projects.first
+        test_project.name.should be_eql(@test)
+        test_project.path.should be_eql(@test)
+      end
+      
+      it 'should properly load the dll projects' do
+        dll_projects = @projects.select { |p| p.class == DllProject }
+        dll_projects.should have(1).projects
+        dll_project = dll_projects.first
+        dll_project.name.should be_eql(@dll)
+        dll_project.path.should be_eql(@dll)
+      end
     end
   end
-#    end
-      
-#      
-#      
-#      asp_net_mvc_projects = anvil.projects.select { |p| p.class == AspNetMvcProject }
-#      asp_net_projects = anvil.projects.select { |p| p.class == AspNetProject }
-#      test_projects = anvil.projects.select { |p| p.class == TestProject }
-#      dll_projects = anvil.projects.select { |p| p.class == DllProject }
-#      
-#      asp_net_mvc_projects.should have(1).asp_net_mvc_project
-#      asp_net_projects.should have(2).asp_net_projects
-#      test_projects.should have(1).test_project
-#      dll_projects.should have(1).dll_project
-#      
-#      asp_net_mvc_project = asp_net_mvc_projects.first
-#      asp_net_mvc_project.name.should be_eql(asp_net_mvc)
-#      asp_net_mvc_project.path.should be_eql(File.join(asp_net_mvc, asp_net_mvc))
-#      asp_net_mvc_project.csproj.should be_eql(asp_net_mvc + '.csproj')
 end
