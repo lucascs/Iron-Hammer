@@ -1,7 +1,6 @@
 require File.dirname(__FILE__) + '/solution'
 require File.dirname(__FILE__) + '/solution_file'
 require File.dirname(__FILE__) + '/the_filer'
-require File.dirname(__FILE__) + '/project_factory'
 
 class Anvil
   attr_accessor :solution
