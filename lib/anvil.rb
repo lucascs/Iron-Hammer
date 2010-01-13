@@ -15,9 +15,7 @@ class Anvil
   def load_projects_from_solution
     @projects = @projects || []
     @solution.file.projects.each do |p|
-      @projects << ProjectFactory::create(p.merge(
-        :type => ProjectFile.type_of(@solution.path, path = p[:path], csproj = p[:csproj])
-      ))
+      @projects << ProjectFile.type_of(@solution.path, path = p[:path], csproj = p[:csproj]).send(:new, p)
     end
   end
 

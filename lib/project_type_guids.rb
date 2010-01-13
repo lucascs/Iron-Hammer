@@ -1,5 +1,0 @@
-module ProjectTypeGuids
-  TEST        = '{3AC096D0-A1C2-E12C-1390-A8335801FDAB}'
-  ASP_NET_MVC = '{603C0E0B-DB56-11DC-BE95-000D561079B0}'
-  ASP_NET     = '{349C5851-65DF-11DA-9384-00065B846F21}'
-end unless defined? ProjectTypeGuids

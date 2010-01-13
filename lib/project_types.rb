@@ -1,14 +1,22 @@
-require File.dirname(__FILE__) + '/project_type_guids'
+require File.dirname(__FILE__) + '/asp_net_project'
+require File.dirname(__FILE__) + '/asp_net_mvc_project'
+require File.dirname(__FILE__) + '/test_project'
+require File.dirname(__FILE__) + '/dll_project'
 
 module ProjectTypes
-  TYPES = ProjectTypeGuids::constants.inject({}) { |b, c| b.merge(ProjectTypeGuids::const_get(c) => c.downcase.to_sym) }
-  GUIDS = TYPES.inject({}) { |buffer, tuple| buffer.merge(tuple.pop.to_sym => tuple.join.to_s) }
+  GUIDS = {
+    TestProject => '{3AC096D0-A1C2-E12C-1390-A8335801FDAB}',
+    AspNetMvcProject => '{603C0E0B-DB56-11DC-BE95-000D561079B0}',
+    AspNetProject => '{349C5851-65DF-11DA-9384-00065B846F21}'
+  }
+
+  TYPES = GUIDS.inject({}) { |buffer, tuple| buffer.merge(tuple.pop => tuple.first) }
   
   def self.type_of guid
     TYPES[guid.to_s.upcase]
   end
   
   def self.guid_for type
-    GUIDS[type.to_sym]
+    GUIDS[type]
   end
 end unless defined? ProjectTypes
