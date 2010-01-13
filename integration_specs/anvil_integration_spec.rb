@@ -2,7 +2,7 @@ require File.dirname(__FILE__) + '/../helpers/spec_helper.rb'
 
 describe Anvil, ' - full stack integration'  do
   describe 'loading a solution from a path' do
-    before :each do
+    before :all do
       TempHelper::cleanup
       
       @solution_root = SolutionData::all_kinds_of_projects_to_temp_dir
@@ -15,8 +15,13 @@ describe Anvil, ' - full stack integration'  do
       @wcf = 'MACSkeptic.Iron.Hammer.WCF'
 
       @anvil = Anvil::load_solution_from @solution_root
-      @solution_file = @anvil.solution.file
+      @solution = @anvil.solution
+      @solution_file = @solution.file
       @project_hashes = @solution_file.projects
+    end
+    
+    it 'should have properlu set the solution' do 
+      @solution.path.should be_eql(@solution_root)
     end
     
     it 'should properly load the information about the projects in it' do
@@ -68,18 +73,27 @@ describe Anvil, ' - full stack integration'  do
       dll_project[:csproj].should be_eql(@dll + '.csproj')
     end
     
-#    describe 'loading the projects from the solution' do
-#      before :each do
-#        @anvil.load_projects_from_solution
-#        @projects = @anvil.projects
-#      end
-#      
-#      it 'should properly load the projects'do
-#        @projects.should have(5).projects
-#      end
+    describe 'loading the projects from the solution' do
+      before :all do
+        @anvil.load_projects_from_solution
+        @projects = @anvil.projects
+      end
 
-#      it 'should properly load the asp_net project' do
-#      end
+      it 'should properly load the projects'do
+        @projects.should have(5).projects
+      end
+
+      it 'should properly load the asp_net projects' do
+        asp_net_projects = @projects.select { |p| p.class == AspNetProject }
+        asp_net_projects.should have(2).projects
+        asp_net_project = asp_net_projects.first
+        asp_net_project.name.should be_eql(@asp_net)
+        asp_net_project.path.should be_eql(@asp_net)
+      end
+      
+      
+    end
+  end
 #    end
       
 #      
@@ -98,5 +112,4 @@ describe Anvil, ' - full stack integration'  do
 #      asp_net_mvc_project.name.should be_eql(asp_net_mvc)
 #      asp_net_mvc_project.path.should be_eql(File.join(asp_net_mvc, asp_net_mvc))
 #      asp_net_mvc_project.csproj.should be_eql(asp_net_mvc + '.csproj')
-  end  
 end

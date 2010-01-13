@@ -20,7 +20,7 @@ module TheFiler
   end
   
   def self.read_file *path
-    File.open(File.join(*path), 'r') { |file| file.read } unless path.nil? || path.empty?
+    File.open(File.join(*path), 'r') { |file| content = file.read } unless path.nil? || path.empty?
   end
   
   def self.read_lines *path

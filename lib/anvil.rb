@@ -24,7 +24,8 @@ class Anvil
     anvil = Anvil.new(
       :solution => Solution.new(
         :name => entries.first.split('/').pop.sub('.sln', ''),
-        :file => SolutionFile.parse_file(entries.first)
+        :file => SolutionFile.parse_file(entries.first),
+        :path => File.join(*path)
       )
     ) unless entries.nil? || entries.empty?
   end
