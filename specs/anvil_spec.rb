@@ -16,7 +16,7 @@ describe Anvil do
     end
     
     it 'should have a method to do it' do
-      Anvil.should respond_to(:load)
+      Anvil.should respond_to(:load_solution_from)
     end
 
     it 'should scan the directory for *.sln files and return the anvil with a solution loaded' do
@@ -24,7 +24,7 @@ describe Anvil do
       Dir.should_receive('[]').with(File.join @solution_root, '*.sln').and_return(entries = [sln])
       SolutionFile.should_receive(:parse_file).with(sln).and_return(file = 'FFF')
 
-      anvil = Anvil.load @solution_root
+      anvil = Anvil.load_solution_from @solution_root
       anvil.solution.should_not be_nil
       anvil.solution.should be_an_instance_of(Solution)
       anvil.solution.name.should be_eql(@solution_name)

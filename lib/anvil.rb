@@ -18,7 +18,7 @@ class Anvil
     end
   end
 
-  def self.load *path
+  def self.load_solution_from *path
     pattern = File.join path, '*.sln'
     entries = Dir[pattern]
     unless entries.nil? || entries.empty?
