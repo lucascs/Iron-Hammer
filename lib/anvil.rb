@@ -19,15 +19,13 @@ class Anvil
   end
 
   def self.load_solution_from *path
-    pattern = File.join path, '*.sln'
+    pattern = File.join *path, '*.sln'
     entries = Dir[pattern]
-    unless entries.nil? || entries.empty?
-      Anvil.new(
-        :solution => Solution.new(
-          :name => entries.first.split('/').pop.sub('.sln', ''),
-          :file => SolutionFile.parse_file(entries.first)
-        )
-      ) 
-    end
+    anvil = Anvil.new(
+      :solution => Solution.new(
+        :name => entries.first.split('/').pop.sub('.sln', ''),
+        :file => SolutionFile.parse_file(entries.first)
+      )
+    ) unless entries.nil? || entries.empty?
   end
 end unless defined? Anvil
