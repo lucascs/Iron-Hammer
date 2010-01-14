@@ -11,10 +11,10 @@ class Project
   def initialize params={}
     @name = params[:name] || 
       raise(ArgumentError.new 'must provide a project name')
-    @path = params[:path]
+    @path = params[:path] || @name
   end
   
-  def path_to_binaries configuration=nil
+  def path_to_binaries params={}
     ''
   end
 
@@ -23,7 +23,21 @@ class Project
   end
   
   def package params={}
-    package_root = params[:root] || params[:target] || params[:package_root] || DEFAULT_DELIVERY_DIRECTORY
+    package_root(params)
     Package.new :root => package_root, :deliverables => deliverables(params)
+  end
+  
+  protected
+  def package_root params={}
+    root = params[:root] || params[:target] || params[:package_root] || DEFAULT_DELIVERY_DIRECTORY
+  end
+  
+  def run_configuration params={}
+    configuration = params[:configuration]
+    config = (configuration && !configuration.empty? && configuration) || Hammer::DEFAULT_CONFIGURATION
+  end
+  
+  def environment params={}
+    environment = params[:environment] || Hammer::DEFAULT_ENVIRONMENT
   end
 end unless defined? Project
