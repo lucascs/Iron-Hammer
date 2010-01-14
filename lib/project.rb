@@ -6,7 +6,6 @@ class Project
   attr_accessor :name
   attr_accessor :path
   
-  FILES_TO_DELIVER = '*.{dll,exe,config}'
   DEFAULT_DELIVERY_DIRECTORY = 'delivery'
 
   def initialize params={}
@@ -16,20 +15,11 @@ class Project
   end
   
   def path_to_binaries configuration=nil
-    config = (configuration && !configuration.empty? && configuration) || Hammer::DEFAULT_CONFIGURATION
-    [@name, 'bin', config].patheticalize
+    ''
   end
 
   def deliverables params={}
-    environment = params[:environment] || Hammer::DEFAULT_ENVIRONMENT
-    bin = path_to_binaries(params[:configuration])
-    Dir[File.join(bin, FILES_TO_DELIVER)].collect do |file|
-      Deliverable.new(
-        :path_on_package => '', 
-        :actual_path => bin, 
-        :actual_name => file.split('/').last
-      )
-    end
+    []
   end
   
   def package params={}
