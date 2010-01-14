@@ -69,6 +69,10 @@ describe Package do
       @package.should respond_to('pack!')
     end
     
+    it 'should have a zipping method' do
+      @package.should respond_to('zip!')
+    end
+    
     it 'should move everything to the package root folder, respecting the renamings defined on the deliverables' do
       @package.pack!
       
@@ -82,7 +86,7 @@ describe Package do
     it 'should create a zip with all the contents of the package' do
       expected_zip_package = File.join @package.root, 'package.zip'
       
-      @package.pack!
+      @package.pack!.zip!
       
       File.exists?(expected_zip_package).should be_true
       
@@ -96,13 +100,13 @@ describe Package do
     it 'should not screw with the current directory' do
       Zipper::should_receive(:zip_current_working_folder_into_this).with('package.zip')
       original_directory = Dir.pwd
-      @package.pack!
+      @package.pack!.zip!
       Dir.pwd.should be_eql(original_directory)
     end
     
     it 'should allow for customization of the package name/path' do
       Zipper::should_receive(:zip_current_working_folder_into_this).with('customized_package.zip'.inside_temp_dir)
-      @package.pack! 'customized_package.zip'.inside_temp_dir
+      @package.pack!.zip! 'customized_package.zip'.inside_temp_dir
     end
   end
 end

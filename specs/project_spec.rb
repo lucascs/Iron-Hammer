@@ -33,7 +33,7 @@ describe Project do
       @temp = TempHelper::TEMP_FOLDER
       @project = Project.new :name => 'MyProject'
       @project.should_receive(:path_to_binaries).with('release').and_return(@temp)
-      @deliverables = @project.deliverables('release')
+      @deliverables = @project.deliverables(:configuration => 'release')
     end 
     
     it 'should return a list' do
@@ -75,22 +75,23 @@ describe Project do
     end
     
     it 'should not fail when given no configuration' do
-      @project.should_receive(:deliverables).with(nil).and_return(deliverables = [0, 1, 2, 3])
+      @project.should_receive(:deliverables).with({}).and_return(deliverables = [0, 1, 2, 3])
       lambda { @project.package }.should_not raise_error
     end
     
     it 'should not fail when given a nil configuration' do
-      @project.should_receive(:deliverables).with(nil).and_return(deliverables = [0, 1, 2, 3])
+      @project.should_receive(:deliverables).with(:configuration => nil).and_return(deliverables = [0, 1, 2, 3])
       lambda { @project.package(:configuration => nil) }.should_not raise_error
     end
     
     it 'should not fail when given an empty configuration' do
-      @project.should_receive(:deliverables).with('').and_return(deliverables = [0, 1, 2, 3])
+      @project.should_receive(:deliverables).with(:configuration => '').and_return(deliverables = [0, 1, 2, 3])
       lambda { @project.package(:configuration => '') }.should_not raise_error
     end
     
     it 'should work when given a valid configuration' do
-      @project.should_receive(:deliverables).with('configuration').and_return(deliverables = [0, 1, 2, 3])
+      @project.should_receive(:deliverables).with(:configuration => 'configuration').
+        and_return(deliverables = [0, 1, 2, 3])
       package = @project.package(:configuration => 'configuration')
       package.root.should be_eql('delivery')
       package.deliverables.should be_eql(deliverables)

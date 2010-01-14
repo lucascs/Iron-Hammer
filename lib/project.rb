@@ -20,8 +20,9 @@ class Project
     [@name, 'bin', config].patheticalize
   end
 
-  def deliverables configuration=nil
-    bin = path_to_binaries(configuration)
+  def deliverables params={}
+    environment = params[:environment] || Hammer::DEFAULT_ENVIRONMENT
+    bin = path_to_binaries(params[:configuration])
     Dir[File.join(bin, FILES_TO_DELIVER)].collect do |file|
       Deliverable.new(
         :path_on_package => '', 
@@ -33,6 +34,6 @@ class Project
   
   def package params={}
     package_root = params[:root] || params[:target] || params[:package_root] || DEFAULT_DELIVERY_DIRECTORY
-    Package.new :root => package_root, :deliverables => deliverables(params[:configuration])
+    Package.new :root => package_root, :deliverables => deliverables(params)
   end
 end unless defined? Project

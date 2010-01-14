@@ -14,9 +14,13 @@ class Package
       @deliverables && !@deliverables.empty?
   end
   
-  def pack! file='package.zip'
+  def pack! 
     organize_deliverables_for_packaging
-		Dir.chdir(@root) { Zipper::zip_current_working_folder_into_this file }
+    self
+  end
+  
+  def zip! file='package.zip'
+    Dir.chdir(@root) { Zipper::zip_current_working_folder_into_this file }
   end
   
   private 

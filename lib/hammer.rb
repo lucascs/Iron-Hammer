@@ -12,6 +12,7 @@ class Hammer
   attr_accessor :configuration
   
   DEFAULT_CONFIGURATION = 'Release'
+  DEFAULT_ENVIRONMENT = 'local'
 
   def initialize params={}
     @solution       = Solution.new  :name => params[:solution]  || params[:project]
