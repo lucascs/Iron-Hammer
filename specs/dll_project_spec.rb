@@ -15,17 +15,17 @@ describe DllProject do
 
   it 'should provide a path to the binaries without the need of a configuration' do
     DllProject.new(:name => 'MyDllProject').
-      path_to_binaries.should be_eql(['MyDllProject', 'bin', 'Release'].patheticalize)
+      path_to_binaries.should be_eql(File.join('MyDllProject', 'bin', 'Release'))
   end
   
   it 'should provide a path to the binaries given a configuration' do
     @dll_project.should(respond_to :path_to_binaries)
-    @dll_project.path_to_binaries('myConf').should be_eql(['MyProject', 'bin', 'myConf'].patheticalize)
+    @dll_project.path_to_binaries('myConf').should be_eql(File.join('MyProject', 'bin', 'myConf'))
   end
   
   it 'should consider Release as the default configuration when not given a specific one' do
     @dll_project.should(respond_to :path_to_binaries)
-    @dll_project.path_to_binaries('').should be_eql(['MyProject', 'bin', 'Release'].patheticalize)
+    @dll_project.path_to_binaries('').should be_eql(File.join('MyProject', 'bin', 'Release'))
   end
   
   describe 'listing files for the delivery package' do

@@ -21,7 +21,11 @@ class DllProject < Project
   
   def path_to_binaries configuration=nil
     config = (configuration && !configuration.empty? && configuration) || Hammer::DEFAULT_CONFIGURATION
-    [@name, 'bin', config].patheticalize
+    File.join(@name, 'bin', config)
+  end
+  
+  def path_to_configuration_files
+    ''
   end
   
 end unless defined? DllProject
