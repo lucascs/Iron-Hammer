@@ -1,5 +1,5 @@
 require 'iron_hammer/projects/generic_project'
-require 'iron_hammer/windows_utils'
+require 'iron_hammer/utils/windows'
 
 module IronHammer
   module Projects

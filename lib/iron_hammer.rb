@@ -9,5 +9,7 @@ module IronHammer
     DELIVERY_DIRECTORY = 'delivery'
     TEST_CONFIG = 'LocalTestRun.testrunconfig'
     ENVIRONMENT = 'local'
+    SYSTEM_ROOT = 'c:\\Windows'
+    PROGRAM_FILES = 'c:\\Program Files'
   end unless defined? IronHammer::Defaults
 end

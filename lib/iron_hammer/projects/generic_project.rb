@@ -1,4 +1,3 @@
-require 'iron_hammer/deliverable'
 require 'iron_hammer/package'
 
 module IronHammer

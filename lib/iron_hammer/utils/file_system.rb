@@ -1,6 +1,6 @@
 module IronHammer
   module Utils
-    module FileSystem
+    class FileSystem
       def self.copy_file! source, destination
         raise(ArgumentError.new 'source must be a file') if File.directory?(source)
         FileSystem::create_path! File.dirname(destination)
@@ -32,6 +32,6 @@ module IronHammer
       def self.create_path! *path
         FileUtils.mkpath(File.join(*path)) unless path.nil? || path.empty? || File.exists?(File.join(*path))
       end
-    end
+    end unless defined? FileSystem
   end 
 end
