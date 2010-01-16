@@ -6,7 +6,7 @@ require File.dirname(__FILE__) + '/deliverable'
 class DllProject < Project
   
   BINARIES = '*.{dll,exe}'
-  CONFIGURATION = '*.{config,xml}'
+  CONFIGURATION = '*.{config,config.xml}'
   
   def deliverables params={}
     deliverables = []
@@ -17,6 +17,17 @@ class DllProject < Project
   def binaries params={}
     path = path_to_binaries(params)
     Dir[File.join(path, BINARIES)].collect do |file|
+      Deliverable.new(
+        :path_on_package => '', 
+        :actual_path => path, 
+        :actual_name => file.split('/').last
+      )
+    end
+  end
+  
+  def configuration_files_on_the_binaries_directory params={}
+    path = path_to_binaries(params)
+    Dir[File.join(path, CONFIGURATION)].collect do |file|
       Deliverable.new(
         :path_on_package => '', 
         :actual_path => path, 
