@@ -36,8 +36,4 @@ class Project
     configuration = params[:configuration]
     config = (configuration && !configuration.empty? && configuration) || Hammer::DEFAULT_CONFIGURATION
   end
-  
-  def environment params={}
-    environment = params[:environment] || Hammer::DEFAULT_ENVIRONMENT
-  end
 end unless defined? Project
