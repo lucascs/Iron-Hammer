@@ -1,5 +1,5 @@
-require 'iron_hammer/solution'
-require 'iron_hammer/solution_file'
+require 'iron_hammer/solutions/solution'
+require 'iron_hammer/solutions/solution_file'
 
 module IronHammer
   class Anvil
@@ -14,7 +14,11 @@ module IronHammer
     def load_projects_from_solution
       @projects = @projects || []
       @solution.file.projects.each do |p|
-        @projects << ProjectFile.type_of(@solution.path, path = p[:path], csproj = p[:csproj]).send(:new, p)
+        @projects << IronHammer::Projects::ProjectFile.type_of(
+          @solution.path, 
+          path = p[:path], 
+          csproj = p[:csproj]).
+        send(:new, p)
       end
     end
 
@@ -22,9 +26,9 @@ module IronHammer
       pattern = File.join *path, '*.sln'
       entries = Dir[pattern]
       anvil = Anvil.new(
-        :solution => Solution.new(
+        :solution => IronHammer::Solutions::Solution.new(
           :name => entries.first.split('/').pop.sub('.sln', ''),
-          :file => SolutionFile.parse_file(entries.first),
+          :file => IronHammer::Solutions::SolutionFile.parse_file(entries.first),
           :path => File.join(*path)
         )
       ) unless entries.nil? || entries.empty?

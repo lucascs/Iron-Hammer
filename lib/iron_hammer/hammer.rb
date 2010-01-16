@@ -1,8 +1,8 @@
-require 'iron_hammer/windows_utils'
+require 'iron_hammer/utils/windows'
 require 'iron_hammer/projects/generic_project'
-require 'iron_hammer/solution'
-require 'iron_hammer/test_project'
-require 'iron_hammer/dot_net_environment'
+require 'iron_hammer/solutions/solution'
+require 'iron_hammer/projects/test_project'
+require 'iron_hammer/utils/dot_net_environment'
 
 module IronHammer
   class Hammer
@@ -12,20 +12,17 @@ module IronHammer
     attr_accessor :test_project
     attr_accessor :configuration
     
-    DEFAULT_CONFIGURATION = 'Release'
-    DEFAULT_ENVIRONMENT = 'local'
-
     def initialize params={}
-      @solution       = Solution.new  :name => params[:solution]  || params[:project]
-      @project        = GenericProject.new   :name => params[:project]   || params[:solution]
-      @configuration  = params[:configuration] || DEFAULT_CONFIGURATION
+      @solution       = IronHammer::Solutions::Solution.new  :name => params[:solution]  || params[:project]
+      @project        = IronHammer::Projects::GenericProject.new   :name => params[:project]   || params[:solution]
+      @configuration  = params[:configuration] || IronHammer::Defaults::CONFIGURATION_RUN
       
-      @test_project   = TestProject.new params.merge(
+      @test_project   = IronHammer::Projects::TestProject.new params.merge(
         :name   => params[:test_project],
         :dll    => params[:test_dll],
         :config => params[:test_config])
         
-      @dot_net_environment = DotNetEnvironment.new params.merge(
+      @dot_net_environment = IronHammer::Utils::DotNetEnvironment.new params.merge(
         :framework_path => params[:dot_net_path])
     end
 

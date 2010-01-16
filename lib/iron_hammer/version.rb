@@ -1,5 +1,5 @@
 require 'yaml'
-require 'iron_hammer/the_filer'
+require 'iron_hammer/utils/file_system'
 
 module IronHammer
   class Version
@@ -31,7 +31,7 @@ module IronHammer
     end
     
     def create! path, name='version.yaml'
-      TheFiler::write! :path => path, :name => name, :content => to_yaml
+      IronHammer::Utils::FileSystem::write! :path => path, :name => name, :content => to_yaml
     end
   end unless defined? Version
 end
