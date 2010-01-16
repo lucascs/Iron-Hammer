@@ -28,15 +28,31 @@ class DllProject < Project
   def configuration params={}
     conf_paths = paths_to_configuration(params)
     conf = []
-    paths_to_configuration.each do |path|
-      Dir[File.join(path, CONFIGURATION)].collect do |file|
-        Deliverable.new(
+    conf_paths.each do |path|
+      Dir[File.join(path, prioritary_configuration(params))].each do |file|
+        deliverable = Deliverable.new(
           :path_on_package => '', 
-          :actual_path => bin, 
+          :actual_path => path, 
+          :actual_name => file.split('/').last,
+          :name_on_package => file.split('/').last.sub('.' + environment(params), '')
+        )
+        conf << deliverable unless conf.find { |d| d.name_on_package == deliverable.name_on_package }
+      end
+    
+      Dir[File.join(path, CONFIGURATION)].each do |file|
+        deliverable = Deliverable.new(
+          :path_on_package => '', 
+          :actual_path => path, 
           :actual_name => file.split('/').last
         )
+        conf << deliverable unless conf.find { |d| d.name_on_package == deliverable.name_on_package }
       end
     end
+    conf
+  end
+  
+  def prioritary_configuration params={}
+    CONFIGURATION + environment(params)
   end
   
   def path_to_binaries params={}
@@ -44,6 +60,6 @@ class DllProject < Project
   end
   
   def paths_to_configuration params={}
-    [path_to_binaries(params), @path]
+    [@path, path_to_binaries(params)]
   end
 end unless defined? DllProject

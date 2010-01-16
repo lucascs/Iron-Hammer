@@ -28,6 +28,17 @@ describe DllProject do
     @dll_project.path_to_binaries(:configuration => '').should be_eql(File.join('MyProject', 'bin', 'Release'))
   end
   
+  describe 'listing the deliverables' do
+    before :each do
+      @project = DllProject.new :name => 'MyDllProject'
+    end
+  end
+    
+#    it 'should include the prioritary configuration files' do
+#      @project.should_receive(:prioritary_configuration).with(''
+#    end
+
+  
 #  describe 'listing files for the delivery package' do
 #    before :each do 
 #      TempHelper::cleanup
