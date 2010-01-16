@@ -37,10 +37,10 @@ describe DllProject do
       @project.should respond_to(:binaries)
       @project.should_receive(:path_to_binaries).with({}).and_return(path_to_binaries = 'foo')
       Dir.should_receive('[]').with(File.join(path_to_binaries, DllProject::BINARIES)).and_return(paths = [
-        '/workspace/solution/project/bin/file1.dll}',
-        'bin/file2.dll}',
-        'ject/bin/file3.exe}',
-        'file4.exe}'
+        '/workspace/solution/project/bin/file1.dll',
+        'bin/file2.dll',
+        'ject/bin/file3.exe',
+        'file4.exe'
       ])
       
       binaries = @project.binaries
@@ -56,53 +56,105 @@ describe DllProject do
       end
     end
     
-    it 'should be able to list the configuration files that are mixed with the binaries' do
-      @project.should respond_to(:configuration_files_on_the_binaries_directory)
-      @project.should_receive(:path_to_binaries).with({}).and_return(path_to_binaries = 'foo')
-      Dir.should_receive('[]').with(File.join(path_to_binaries, DllProject::CONFIGURATION)).and_return(paths = [
-        '/workspace/solution/project/bin/file1.config}',
-        'bin/file2.config}',
-        'ject/bin/file3.config.xml}',
-        'file4.config}'
-      ])
+    describe 'regarding configuration files' do
+      before :each do
+        @project = DllProject.new :name => 'MyDllProject'
+      end
+    
+      it 'should be able to list the ones that are mixed with the binaries' do
+        @project.should respond_to(:configuration_files_on_the_binaries_directory)
+        @project.should_receive(:path_to_binaries).with({}).and_return(path_to_binaries = 'foo')
+        Dir.should_receive('[]').with(File.join(path_to_binaries, DllProject::CONFIGURATION)).and_return(paths = [
+          '/workspace/solution/project/bin/file1.config',
+          'bin/file2.config',
+          'ject/bin/file3.config.xml',
+          'file4.config'
+        ])
+        
+        conf_on_bin = @project.configuration_files_on_the_binaries_directory
+        conf_on_bin.should be_an_instance_of(Array)
+        conf_on_bin.should have(4).deliverables
+        paths.each do |p|
+          (conf_on_bin.select do |d| 
+            d.actual_path == path_to_binaries && 
+            d.path_on_package == '' && 
+            d.name_on_package == (f = p.split('/').last) && 
+            d.actual_name == f
+          end).should have(1).matching_element
+        end
+      end
+    
+      it 'should be able to list the ones that are lying on the project root directory' do
+        @project.should respond_to(:configuration_files_on_the_project_root_directory)
+        Dir.should_receive('[]').with(File.join(@project.path, DllProject::CONFIGURATION)).and_return(paths = [
+          '/workspace/solution/project/bin/file1.config',
+          'bin/file2.config',
+          'ject/bin/file3.config.xml',
+          'file4.config'
+        ])
+        
+        conf_on_root = @project.configuration_files_on_the_project_root_directory
+        conf_on_root.should be_an_instance_of(Array)
+        conf_on_root.should have(4).deliverables
+        paths.each do |p|
+          (conf_on_root.select do |d| 
+            d.actual_path == @project.path && 
+            d.path_on_package == '' && 
+            d.name_on_package == (f = p.split('/').last) && 
+            d.actual_name == f
+          end).should have(1).matching_element
+        end
+      end
       
-      conf_on_bin = @project.configuration_files_on_the_binaries_directory
-      conf_on_bin.should be_an_instance_of(Array)
-      conf_on_bin.should have(4).deliverables
-      paths.each do |p|
-        (conf_on_bin.select do |d| 
-          d.actual_path == path_to_binaries && 
-          d.path_on_package == '' && 
-          d.name_on_package == (f = p.split('/').last) && 
-          d.actual_name == f
-        end).should have(1).matching_element
+      describe 'for a specific environment' do
+        before :each do
+          @project = DllProject.new :name => 'MyDllProject'
+        end
+
+        it 'should consider the name change for the files mixed with the binaries' do
+          @project.should_receive(:path_to_binaries).with(:environment => env = 'production').and_return(path_to_bin = 'bin')
+          Dir.should_receive('[]').with(File.join(path_to_bin, DllProject::CONFIGURATION + '.' + env)).
+            and_return(paths = [
+            '/bin/myConfig.config.production',
+            '/bin/myConfig.config.xml.production'
+          ])
+          
+          conf_on_bin = @project.configuration_files_on_the_binaries_directory :environment => env
+          conf_on_bin.should be_an_instance_of(Array)
+          conf_on_bin.should have(2).deliverables
+          paths.each do |p|
+            (conf_on_bin.select do |d| 
+              d.actual_path == path_to_bin && 
+              d.path_on_package == '' && 
+              d.actual_name == (f = p.split('/').last) &&
+              d.name_on_package == f.sub('.production', '')
+            end).should have(1).matching_element
+          end
+        end
+    
+        it 'should consider the name change for the files on the root directory' do
+          Dir.should_receive('[]').with(File.join(@project.path, DllProject::CONFIGURATION + '.production')).
+            and_return(paths = [
+            '/root/myConfig.config.production',
+            '/root/myConfig.config.xml.production'
+          ])
+          
+          conf_on_root = @project.configuration_files_on_the_project_root_directory :environment => 'production'
+          conf_on_root.should be_an_instance_of(Array)
+          conf_on_root.should have(2).deliverables
+          paths.each do |p|
+            (conf_on_root.select do |d| 
+              d.actual_path == @project.path && 
+              d.path_on_package == '' && 
+              d.actual_name == (f = p.split('/').last) &&
+              d.name_on_package == f.sub('.production', '')
+            end).should have(1).matching_element
+          end
+        end
       end
     end
-    
-    it 'should be able to list the configuration files that are lying on the project root directory' do
-      @project.should respond_to(:configuration_files_on_the_project_root_directory)
-      Dir.should_receive('[]').with(File.join(@project.path, DllProject::CONFIGURATION)).and_return(paths = [
-        '/workspace/solution/project/bin/file1.config}',
-        'bin/file2.config}',
-        'ject/bin/file3.config.xml}',
-        'file4.config}'
-      ])
-      
-      conf_on_root = @project.configuration_files_on_the_project_root_directory
-      conf_on_root.should be_an_instance_of(Array)
-      conf_on_root.should have(4).deliverables
-      paths.each do |p|
-        (conf_on_root.select do |d| 
-          d.actual_path == @project.path && 
-          d.path_on_package == '' && 
-          d.name_on_package == (f = p.split('/').last) && 
-          d.actual_name == f
-        end).should have(1).matching_element
-      end
-    end
-    
   end
-    
+end
 #    it 'should include the prioritary configuration files' do
 #      @project.should_receive(:prioritary_configuration).with(''
 #    end
@@ -149,4 +201,4 @@ describe DllProject do
 #      @deliverables.should_not include(Deliverable.create @temp, 'maiProject.foo')
 #    end
 #  end
-end
+

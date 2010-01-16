@@ -36,21 +36,30 @@ class DllProject < Project
   
   def configuration_files_on_the_binaries_directory params={}
     path = path_to_binaries(params)
-    Dir[File.join(path, CONFIGURATION)].collect do |file|
+    environment = params[:environment]
+    addendum = environment ? ('.' + environment) : ''
+    pattern = CONFIGURATION + addendum
+    
+    Dir[File.join(path, pattern)].collect do |file|
       Deliverable.new(
         :path_on_package => '', 
         :actual_path => path, 
-        :actual_name => file.split('/').last
+        :actual_name => original_name = file.split('/').last,
+        :name_on_package => original_name.sub(addendum, '')
       )
     end
   end
   
   def configuration_files_on_the_project_root_directory params={}
-    Dir[File.join(@path, CONFIGURATION)].collect do |file|
+    environment = params[:environment]
+    addendum = environment ? ('.' + environment) : ''
+    pattern = CONFIGURATION + addendum
+    Dir[File.join(@path, pattern)].collect do |file|
       Deliverable.new(
         :path_on_package => '', 
         :actual_path => @path, 
-        :actual_name => file.split('/').last
+        :actual_name => original_name = file.split('/').last,
+        :name_on_package => original_name.sub(addendum, '')
       )
     end
   end
