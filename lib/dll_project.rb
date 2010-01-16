@@ -34,24 +34,7 @@ class DllProject < Project
     end
   end
   
-  def configuration_files_on_the_binaries_directory params={}
-    path = path_to_binaries(params)
-    environment = params[:environment]
-    addendum = environment ? ('.' + environment) : ''
-    pattern = CONFIGURATION + addendum
-    
-    Dir[File.join(path, pattern)].collect do |file|
-      Deliverable.new(
-        :path_on_package => '', 
-        :actual_path => path, 
-        :actual_name => original_name = file.split('/').last,
-        :name_on_package => original_name.sub(addendum, '')
-      )
-    end
-  end
-  
-  def configuration_files_on_the_project_root_directory params={}
-    environment = params[:environment]
+  def configuration_files_on_the_project_root_directory environment=nil
     addendum = environment ? ('.' + environment) : ''
     pattern = CONFIGURATION + addendum
     Dir[File.join(@path, pattern)].collect do |file|
@@ -64,8 +47,11 @@ class DllProject < Project
     end
   end
   
-  def configuration params={}
-    
+  def configuration environment=Hammer::DEFAULT_ENVIRONMENT
+    conf = configuration_files_on_the_project_root_directory environment
+    secondary_configuration = configuration_files_on_the_project_root_directory
+    secondary_configuration.each {|c| conf << c unless conf.find {|prior| prior.name_on_package == c.name_on_package }}
+    conf
   end
   
   def path_to_binaries params={}
