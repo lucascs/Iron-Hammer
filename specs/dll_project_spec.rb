@@ -55,56 +55,8 @@ describe DllProject do
     end
     
     describe 'regarding configuration files' do
-      it 'should be able to list the ones that are lying on the project root directory' do
-        @project.should respond_to(:configuration_files_on_the_project_root_directory)
-        Dir.should_receive('[]').with(File.join(@project.path, DllProject::CONFIGURATION)).and_return(paths = [
-          '/workspace/solution/project/bin/file1.config',
-          'bin/file2.config',
-          'ject/bin/file3.config.xml',
-          'file4.config'
-        ])
-        
-        conf_on_root = @project.configuration_files_on_the_project_root_directory
-        conf_on_root.should be_an_instance_of(Array)
-        conf_on_root.should have(4).deliverables
-        paths.each do |p|
-          (conf_on_root.select do |d| 
-            d.actual_path == @project.path && 
-            d.path_on_package == '' && 
-            d.name_on_package == (f = p.split('/').last) && 
-            d.actual_name == f
-          end).should have(1).matching_element
-        end
-      end
-      
-      describe 'for a specific environment' do
-        before :each do
-          @project = DllProject.new :name => 'MyDllProject'
-        end
-
-        it 'should consider the name change for the files on the root directory' do
-          Dir.should_receive('[]').with(File.join(@project.path, DllProject::CONFIGURATION + '.production')).
-            and_return(paths = [
-            '/root/myConfig.config.production',
-            '/root/myConfig.config.xml.production'
-          ])
-          
-          conf_on_root = @project.configuration_files_on_the_project_root_directory 'production'
-          conf_on_root.should be_an_instance_of(Array)
-          conf_on_root.should have(2).deliverables
-          paths.each do |p|
-            (conf_on_root.select do |d| 
-              d.actual_path == @project.path && 
-              d.path_on_package == '' && 
-              d.actual_name == (f = p.split('/').last) &&
-              d.name_on_package == f.sub('.production', '')
-            end).should have(1).matching_element
-          end
-        end
-      end
-      
       it 'should be able to judge the priority of configuration files' do
-        @project.should_receive(:configuration_files_on_the_project_root_directory).with('production').
+        Configuration::should_receive(:list).with(:environment => 'production', :path => @project.path).
           and_return(files_for_production = [
             file2 = Deliverable.new(
               :actual_name => 'file2.config.production', 
@@ -116,7 +68,7 @@ describe DllProject do
               :name_on_package => 'file3.config')
         ])
         
-        @project.should_receive(:configuration_files_on_the_project_root_directory).with().
+        Configuration::should_receive(:list).with(:path => @project.path).
           and_return(generic_files = [
             file1 = Deliverable.new(
               :actual_name => 'file1.config', 

@@ -2,21 +2,11 @@ require File.dirname(__FILE__) + '/project'
 require File.dirname(__FILE__) + '/windows_utils'
 require File.dirname(__FILE__) + '/hammer'
 require File.dirname(__FILE__) + '/deliverable'
+require File.dirname(__FILE__) + '/configuration'
 
 class DllProject < Project
-  def configuration_files_on_the_binaries_directory params={}
-    path = path_to_binaries(params)
-    Dir[File.join(path, CONFIGURATION)].collect do |file|
-      Deliverable.new(
-        :path_on_package => '', 
-        :actual_path => path, 
-        :actual_name => file.split('/').last
-      )
-    end
-  end
   BINARIES = '*.{dll,exe}'
-  CONFIGURATION = '*.{config,config.xml}'
-  
+
   def deliverables params={}
     [binaries(params), configuration(params[:environment] || Hammer::DEFAULT_ENVIRONMENT)].flatten
   end
@@ -32,24 +22,15 @@ class DllProject < Project
     end
   end
   
-  def configuration_files_on_the_project_root_directory environment=nil
-    suffix = environment ? ('.' + environment) : ''
-    pattern = CONFIGURATION + suffix
-    Dir[File.join(@path, pattern)].collect do |file|
-      Deliverable.new(
-        :path_on_package => '', 
-        :actual_path => @path, 
-        :actual_name => original_name = file.split('/').last,
-        :name_on_package => original_name.sub(suffix, '')
-      )
-    end
-  end
-  
   def configuration environment
-    conf = configuration_files_on_the_project_root_directory environment
-    secondary_configuration = configuration_files_on_the_project_root_directory
+    conf = Configuration::list :path => path_to_configuration, :environment => environment
+    secondary_configuration = Configuration::list :path => path_to_configuration
     secondary_configuration.each {|c| conf << c unless conf.find {|prior| prior.name_on_package == c.name_on_package }}
     conf
+  end
+  
+  def path_to_configuration
+    @path
   end
   
   def path_to_binaries params={}
