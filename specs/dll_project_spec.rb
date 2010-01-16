@@ -32,6 +32,29 @@ describe DllProject do
     before :each do
       @project = DllProject.new :name => 'MyDllProject'
     end
+    
+    it 'should be able to list the binaries' do
+      @project.should respond_to(:binaries)
+      @project.should_receive(:path_to_binaries).with({}).and_return(path_to_binaries = 'foo')
+      Dir.should_receive('[]').with(File.join(path_to_binaries, DllProject::BINARIES)).and_return(paths = [
+        '/workspace/solution/project/bin/file1.dll}',
+        'bin/file2.dll}',
+        'ject/bin/file3.exe}',
+        'file4.exe}'
+      ])
+      
+      binaries = @project.binaries
+      binaries.should be_an_instance_of(Array)
+      binaries.should have(4).deliverables
+      paths.each do |p|
+        (binaries.select do |d| 
+          d.actual_path == path_to_binaries && 
+          d.path_on_package == '' && 
+          d.name_on_package == (f = p.split('/').last) && 
+          d.actual_name == f
+        end).should have(1).matching_element
+      end
+    end
   end
     
 #    it 'should include the prioritary configuration files' do
