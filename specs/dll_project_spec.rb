@@ -137,6 +137,35 @@ describe DllProject do
         configuration.should include(file3)
       end
     end
+    
+    it 'should consider configuration + binaries as deliverables' do
+      @project.should respond_to(:deliverables)
+      @project.should_receive(:configuration).with('production').and_return(conf = [1, 2, 3])
+      @project.should_receive(:binaries).with(:environment => 'production').and_return(bin = [4, 5])
+      
+      deliverables = @project.deliverables :environment => 'production'
+      deliverables.should be_an_instance_of(Array)
+      deliverables.should have(5).elements
+      deliverables.should include(1)
+      deliverables.should include(2)
+      deliverables.should include(3)
+      deliverables.should include(4)
+      deliverables.should include(5)
+    end
+    
+    it 'should assume the default environment when none is passed' do
+      @project.should_receive(:configuration).with(Hammer::DEFAULT_ENVIRONMENT).and_return(conf = [1, 2, 3])
+      @project.should_receive(:binaries).with({}).and_return(bin = [4, 5])
+      
+      deliverables = @project.deliverables
+      deliverables.should be_an_instance_of(Array)
+      deliverables.should have(5).elements
+      deliverables.should include(1)
+      deliverables.should include(2)
+      deliverables.should include(3)
+      deliverables.should include(4)
+      deliverables.should include(5)
+    end
   end
 end
 

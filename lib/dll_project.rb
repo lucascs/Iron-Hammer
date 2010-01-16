@@ -18,9 +18,7 @@ class DllProject < Project
   CONFIGURATION = '*.{config,config.xml}'
   
   def deliverables params={}
-    deliverables = []
-    deliverables << binaries(params)
-    deliverables << configuration
+    [binaries(params), configuration(params[:environment] || Hammer::DEFAULT_ENVIRONMENT)].flatten
   end
   
   def binaries params={}
@@ -35,19 +33,19 @@ class DllProject < Project
   end
   
   def configuration_files_on_the_project_root_directory environment=nil
-    addendum = environment ? ('.' + environment) : ''
-    pattern = CONFIGURATION + addendum
+    suffix = environment ? ('.' + environment) : ''
+    pattern = CONFIGURATION + suffix
     Dir[File.join(@path, pattern)].collect do |file|
       Deliverable.new(
         :path_on_package => '', 
         :actual_path => @path, 
         :actual_name => original_name = file.split('/').last,
-        :name_on_package => original_name.sub(addendum, '')
+        :name_on_package => original_name.sub(suffix, '')
       )
     end
   end
   
-  def configuration environment=Hammer::DEFAULT_ENVIRONMENT
+  def configuration environment
     conf = configuration_files_on_the_project_root_directory environment
     secondary_configuration = configuration_files_on_the_project_root_directory
     secondary_configuration.each {|c| conf << c unless conf.find {|prior| prior.name_on_package == c.name_on_package }}
