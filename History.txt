@@ -1,0 +1,30 @@
+=== 0.3.1 2010-01-16
+
+* 1 major improvement
+  * List of deliverables for dll projects – taking different environments into consideration
+
+=== 0.3.0 2010-01-14
+
+* 1 major improvement
+  * Mechanism to create a delivery package based on a set o deliverables
+
+=== 0.2.1
+
+* 1 major improvement
+  * Hammer => Command line for testing a single project with MSTEST
+
+=== 0.2.0 
+
+* 1 major improvement
+  * Hammer => Command line for building a solution with MSBUILD
+
+=== 0.1.1
+
+* 1 major improvement
+  * Anvil => Read the .csproj, distinguishing the kind of project it is
+
+=== 0.1.0
+
+* 1 major improvement
+  * Anvil => Read a directory looking for a *sln file – then parse it to see which projects belong to it
+
