@@ -4,7 +4,16 @@ require File.dirname(__FILE__) + '/hammer'
 require File.dirname(__FILE__) + '/deliverable'
 
 class DllProject < Project
-  
+  def configuration_files_on_the_binaries_directory params={}
+    path = path_to_binaries(params)
+    Dir[File.join(path, CONFIGURATION)].collect do |file|
+      Deliverable.new(
+        :path_on_package => '', 
+        :actual_path => path, 
+        :actual_name => file.split('/').last
+      )
+    end
+  end
   BINARIES = '*.{dll,exe}'
   CONFIGURATION = '*.{config,config.xml}'
   
@@ -31,6 +40,16 @@ class DllProject < Project
       Deliverable.new(
         :path_on_package => '', 
         :actual_path => path, 
+        :actual_name => file.split('/').last
+      )
+    end
+  end
+  
+  def configuration_files_on_the_project_root_directory params={}
+    Dir[File.join(@path, CONFIGURATION)].collect do |file|
+      Deliverable.new(
+        :path_on_package => '', 
+        :actual_path => @path, 
         :actual_name => file.split('/').last
       )
     end

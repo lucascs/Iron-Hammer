@@ -56,7 +56,7 @@ describe DllProject do
       end
     end
     
-    it 'should be able to list the configuration files that are messed with the binaries' do
+    it 'should be able to list the configuration files that are mixed with the binaries' do
       @project.should respond_to(:configuration_files_on_the_binaries_directory)
       @project.should_receive(:path_to_binaries).with({}).and_return(path_to_binaries = 'foo')
       Dir.should_receive('[]').with(File.join(path_to_binaries, DllProject::CONFIGURATION)).and_return(paths = [
@@ -72,6 +72,28 @@ describe DllProject do
       paths.each do |p|
         (conf_on_bin.select do |d| 
           d.actual_path == path_to_binaries && 
+          d.path_on_package == '' && 
+          d.name_on_package == (f = p.split('/').last) && 
+          d.actual_name == f
+        end).should have(1).matching_element
+      end
+    end
+    
+    it 'should be able to list the configuration files that are lying on the project root directory' do
+      @project.should respond_to(:configuration_files_on_the_project_root_directory)
+      Dir.should_receive('[]').with(File.join(@project.path, DllProject::CONFIGURATION)).and_return(paths = [
+        '/workspace/solution/project/bin/file1.config}',
+        'bin/file2.config}',
+        'ject/bin/file3.config.xml}',
+        'file4.config}'
+      ])
+      
+      conf_on_root = @project.configuration_files_on_the_project_root_directory
+      conf_on_root.should be_an_instance_of(Array)
+      conf_on_root.should have(4).deliverables
+      paths.each do |p|
+        (conf_on_root.select do |d| 
+          d.actual_path == @project.path && 
           d.path_on_package == '' && 
           d.name_on_package == (f = p.split('/').last) && 
           d.actual_name == f
