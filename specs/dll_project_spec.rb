@@ -166,6 +166,29 @@ describe DllProject do
       deliverables.should include(4)
       deliverables.should include(5)
     end
+    
+    it 'should work even if there are no configurations' do
+      @project.should_receive(:configuration).with(Hammer::DEFAULT_ENVIRONMENT).and_return(conf = [])
+      @project.should_receive(:binaries).with({}).and_return(bin = [4, 5])
+      
+      deliverables = @project.deliverables
+      deliverables.should be_an_instance_of(Array)
+      deliverables.should have(2).elements
+      deliverables.should include(4)
+      deliverables.should include(5)
+    end
+    
+    it 'should work even if there are no binaries' do
+      @project.should_receive(:configuration).with(Hammer::DEFAULT_ENVIRONMENT).and_return(conf = [1, 2, 3])
+      @project.should_receive(:binaries).with({}).and_return(bin = [])
+      
+      deliverables = @project.deliverables
+      deliverables.should be_an_instance_of(Array)
+      deliverables.should have(3).elements
+      deliverables.should include(1)
+      deliverables.should include(2)
+      deliverables.should include(3)
+    end
   end
 end
 
