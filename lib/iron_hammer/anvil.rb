@@ -1,4 +1,5 @@
 require 'iron_hammer/solutions/solution'
+require 'iron_hammer/projects/project_file'
 require 'iron_hammer/solutions/solution_file'
 
 module IronHammer
