@@ -34,7 +34,7 @@ module IronHammer
     end
     
     describe 'loading the projects from the solution' do
-      before :all do #awesomeness
+      before :each do #awesomeness
         @anvil = Anvil.new(
           :solution => IronHammer::Solutions::Solution.new(
             :name => @solution_name = 'MACSkeptic.Iron.Hammer.All.Kinds.Of.Projects',
@@ -50,11 +50,47 @@ module IronHammer
         )
       end
       
+      
       it 'should have a method to do it' do
         @anvil.should respond_to(:load_projects_from_solution)
       end
 
       it 'should load all the projects belonging to the solution' do
+        mock_projects
+        
+        @anvil.load_projects_from_solution
+
+        @anvil.projects.should_not be_nil
+        @anvil.projects.should be_an_instance_of(Array)
+        @anvil.projects.should have(@project_names.length).elements
+        
+        (@anvil.projects.select { |p| p.is_a? IronHammer::Projects::AspNetMvcProject }).
+          should have(1).asp_net_mvc_project
+        (@anvil.projects.select { |p| p.is_a? IronHammer::Projects::AspNetProject }).
+          should have(2).asp_net_projects
+        (@anvil.projects.select { |p| p.is_a? IronHammer::Projects::TestProject }).
+          should have(1).test_project
+        (@anvil.projects.select { |p| p.is_a? IronHammer::Projects::DllProject }).
+          should have(1).dll_project
+      end
+      
+      it 'should filter dll projects' do
+        mock_projects
+        
+        @anvil.load_projects_from_solution
+        
+        @anvil.dll_projects.should have(1).dll_project
+      end
+      
+      it 'should filter test projects' do
+        mock_projects
+        
+        @anvil.load_projects_from_solution
+        
+        @anvil.test_projects.should have(1).test_project
+      end
+      
+      def mock_projects
         @project_hashes.each do |p|
           IronHammer::Projects::ProjectFile.should_receive(:type_of).
             with(@solution_root, p[:path], p[:csproj]).
@@ -71,21 +107,6 @@ module IronHammer
                 IronHammer::Projects::AspNetProject
             end)
         end
-        
-        @anvil.load_projects_from_solution
-
-        @anvil.projects.should_not be_nil
-        @anvil.projects.should be_an_instance_of(Array)
-        @anvil.projects.should have(@project_names.length).elements
-        
-        (@anvil.projects.select { |p| p.class == IronHammer::Projects::AspNetMvcProject }).
-          should have(1).asp_net_mvc_project
-        (@anvil.projects.select { |p| p.class == IronHammer::Projects::AspNetProject }).
-          should have(2).asp_net_projects
-        (@anvil.projects.select { |p| p.class == IronHammer::Projects::TestProject }).
-          should have(1).test_project
-        (@anvil.projects.select { |p| p.class == IronHammer::Projects::DllProject }).
-          should have(1).dll_project
       end
     end
   end

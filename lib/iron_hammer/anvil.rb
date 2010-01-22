@@ -34,5 +34,13 @@ module IronHammer
         )
       ) unless entries.nil? || entries.empty?
     end
+    
+    def dll_projects
+      @projects.select {|p| p.is_a? DllProject}
+    end
+    
+    def test_projects
+      @projects.select {|p| p.is_a? TestProject}
+    end
   end unless defined? Anvil
 end
