@@ -24,7 +24,7 @@ module IronHammer
     end
 
     def self.load_solution_from *path
-      pattern = File.join *path, '*.sln'
+      pattern = File.join path, '*.sln'
       entries = Dir[pattern]
       anvil = Anvil.new(
         :solution => IronHammer::Solutions::Solution.new(
