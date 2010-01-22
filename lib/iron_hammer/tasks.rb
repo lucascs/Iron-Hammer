@@ -16,10 +16,12 @@ namespace :iron do
     task :build => [:clean, :initialize] do
 	    sh @hammer.build @anvil.solution
     end
-
-    desc 'Runs the unit tests'
-    task :unit => [:build] do
-	    sh @hammer.test *@anvil.test_projects
+    
+    namespace :test do
+      desc 'Runs the unit tests'
+      task :unit => [:build] do
+        sh @hammer.test *@anvil.test_projects
+      end
     end
 end
 
