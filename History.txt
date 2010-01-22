@@ -1,3 +1,9 @@
+=== 0.3.2 2010-01-22
+
+* 2 major improvement
+  * Methods for filtering projects of a given type on Anvil
+  * Rake tasks for building and test running
+
 === 0.3.1 2010-01-16
 
 * 1 major improvement
