@@ -26,14 +26,14 @@ module IronHammer
       solution      = solution.solution
       "#{msbuild} /p:Configuration=#{configuration} #{solution} /t:Rebuild"
     end
-    
-    def test project
-      container = project.container @configuration
-      results   = project.results_file
+   
+    def test *projects
+      containers = projects.collect{|project| "/testcontainer:#{project.container @configuration}"}
+      results   = projects.first.results_file
       mstest    = @dot_net_environment.mstest
-      "#{mstest} /testcontainer:#{container} /resultsfile:#{results} #{details}"
+      "#{mstest} #{containers.join ' '} /resultsfile:#{results} #{details}"
     end
-
+	
   end unless defined? Hammer
 end
 
