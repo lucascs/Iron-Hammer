@@ -4,19 +4,7 @@
 
 == DESCRIPTION:
 
-Iron Hammer gathers together three components to help on the automatization of C# projects:
-
-# Anvil
-Parse the contents of a directory, loading information about projects and solutions contained there
-
-# Hammer
-Provides command lines for building and running tests
-
-# Blacksmith
-The "intelligent" part of the mix, provides a DSL for utilizing the tools described above.
-
---- 
-I might add more components to the mix if deemed necessary, like something to take care of the deployment process
+Iron Hammer gathers together three components to help automate the build, test and deployment process of C# projects: an Anvil, a Hammer and a Blacksmith.
 
 == FEATURES/PROBLEMS:
 
@@ -31,13 +19,15 @@ I might add more components to the mix if deemed necessary, like something to ta
 
 == SYNOPSIS:
 
-  # reading the solution file information from the current directory
+  # Reading the solution file information from the current directory
   a = Anvil.load_solution_from '.'
-  # reading the project information based on the solution read before
+  # Reading the project information based on the solution read before
   a.load_projects_from_solution
   # Initializing a new Hammer
   h = Hammer.new
+  # Getting the command line for building a solution
   h.build a.solution
+  # Getting the command line for running multiple tests
   h.test a.test_projects
 
 == REQUIREMENTS:
