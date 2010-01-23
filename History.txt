@@ -1,3 +1,8 @@
+=== 0.3.3 2010-01-22
+
+* 2 major improvement
+  * Corrected README.rdoc
+
 === 0.3.2 2010-01-22
 
 * 2 major improvement

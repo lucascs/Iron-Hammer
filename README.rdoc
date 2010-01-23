@@ -4,7 +4,7 @@
 
 == DESCRIPTION:
 
-It consists (or at least it will, when its done) of three main components: an Anvil, a Hammer, and a Blacksmith.
+Iron Hammer gathers together three components to help on the automatization of C# projects:
 
 # Anvil
 Parse the contents of a directory, loading information about projects and solutions contained there
@@ -20,19 +20,33 @@ I might add more components to the mix if deemed necessary, like something to ta
 
 == FEATURES/PROBLEMS:
 
-  TODO (list of features or problems)
+  # Anvil
+  Parse the contents of a directory, loading information about projects and solutions contained there
+
+  # Hammer
+  Provides command lines for building and running tests
+  
+  # Blacksmith
+  Not implemented yet
 
 == SYNOPSIS:
 
-  TODO (code sample of usage)
+  # reading the solution file information from the current directory
+  a = Anvil.load_solution_from '.'
+  # reading the project information based on the solution read before
+  a.load_projects_from_solution
+  # Initializing a new Hammer
+  h = Hammer.new
+  h.build a.solution
+  h.test a.test_projects
 
 == REQUIREMENTS:
 
-  TODO (list of requirements)
+  rubyzip2 (>= 2.0.1)
 
 == INSTALL:
 
-  TODO (sudo gem install, anything else)
+  gem install iron_hammer
 
 == LICENSE:
 

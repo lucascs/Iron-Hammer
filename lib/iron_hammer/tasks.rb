@@ -8,7 +8,7 @@ namespace :iron do
     task :initialize do
 	    @anvil = Anvil.load_solution_from '.'
 	    @anvil.load_projects_from_solution
-	    @hammer = Hammer.new :visual_studio_path => VISUAL_STUDIO_PATH
+	    @hammer = Hammer.new(defined?(VISUAL_STUDIO_PATH) ? {:visual_studio_path => VISUAL_STUDIO_PATH} : {})
 	    FileUtils.mkdir 'TestResults' unless (File.exists?('TestResults') && File.directory?('TestResults'))
     end
 
