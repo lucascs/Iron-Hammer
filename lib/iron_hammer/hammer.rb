@@ -28,6 +28,7 @@ module IronHammer
     end
    
     def test *projects
+      return if projects.nil? || projects.empty?
       containers = projects.collect{|project| "/testcontainer:#{project.container @configuration}"}
       results   = projects.first.results_file
       mstest    = @dot_net_environment.mstest

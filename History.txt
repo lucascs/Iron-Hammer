@@ -1,6 +1,11 @@
+=== 0.3.4 2010-01-23
+
+* 1 bug fix
+  * Fixed a bug when calling the test method if there are no test projects in the solution
+
 === 0.3.3 2010-01-22
 
-* 1 major improvement
+* 1 minor improvement
   * Corrected README.rdoc
 
 === 0.3.2 2010-01-22

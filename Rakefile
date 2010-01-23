@@ -11,7 +11,7 @@ $hoe = Hoe.spec 'iron_hammer' do
   self.post_install_message = File.read('PostInstall.txt')
   self.rubyforge_name       = self.name
   self.extra_deps           = [['rubyzip2','>= 2.0.1']]
-  self.version              = '0.3.3'
+  self.version              = '0.3.4'
 end
 
 require 'newgem/tasks'

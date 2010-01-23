@@ -1,5 +1,26 @@
-============================================
+========================================================================================
 
-Thanks for installing Iron-Hammer
+Thanks for installing Iron-Hammer (c) 2010 Mozair Alves do Carmo Junior - MACSkeptic
 
-============================================
+# You can now use Hammer tasks on your Rakefile with ease #
+
+--- rakefile.rb
+VISUAL_STUDIO_PATH = 'f:\\Program Files (x86)\\Microsoft Visual Studio 2008\\Common7\\IDE'
+require 'iron_hammer/tasks'
+
+--- Calling the custom iron hammer tasks
+$ rake iron:build
+$ rake iron:test:unit
+
+# If you prefer, you can still do it by yourself #
+
+--- rakefile.rb
+require 'iron_hammer'
+
+@anvil = Anvil.load_solution_from '.'
+@anvil.load_projects_from_solution
+@hammer = Hammer.new :visual_studio_path => VISUAL_STUDIO_PATH
+sh @hammer.build @anvil.solution
+sh @hammer.test *@anvil.test_projects
+
+========================================================================================

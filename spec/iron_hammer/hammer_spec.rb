@@ -44,18 +44,22 @@ module IronHammer
 	
 	describe 'for multiple test projects' do
     it 'should provide a proper command line to run tests' do
-        details = ['duration', 'errorstacktrace', 'errormessage', 'outcometext'].inject('') do |buffer, detail|
-          buffer << "/detail:#{detail} "
-        end
-        
-        test_dll          = ['MyTestProject', 'bin', @configuration, 'MyTestProject'].patheticalize
-        another_test_dll  = ['MyOtherTestProject', 'bin', @configuration, 'MyOtherTestProject'].patheticalize
-        results_file      = ['TestResults', 'TestResults.trx'].patheticalize
-        mstest            = [@visual_studio_path, 'mstest.exe'].patheticalize
-       
-        @fully_set_hammer.test(TestProject.new(:name => 'MyTestProject'), TestProject.new(:name => 'MyOtherTestProject')).
-          should be_eql("#{mstest} /testcontainer:#{test_dll}.dll /testcontainer:#{another_test_dll}.dll /resultsfile:#{results_file} #{details}")
+      details = ['duration', 'errorstacktrace', 'errormessage', 'outcometext'].inject('') do |buffer, detail|
+        buffer << "/detail:#{detail} "
       end
+      
+      test_dll          = ['MyTestProject', 'bin', @configuration, 'MyTestProject'].patheticalize
+      another_test_dll  = ['MyOtherTestProject', 'bin', @configuration, 'MyOtherTestProject'].patheticalize
+      results_file      = ['TestResults', 'TestResults.trx'].patheticalize
+      mstest            = [@visual_studio_path, 'mstest.exe'].patheticalize
+     
+      @fully_set_hammer.test(TestProject.new(:name => 'MyTestProject'), TestProject.new(:name => 'MyOtherTestProject')).
+        should be_eql("#{mstest} /testcontainer:#{test_dll}.dll /testcontainer:#{another_test_dll}.dll /resultsfile:#{results_file} #{details}")
+      end
+    end
+    
+    it 'should just return nil if no test project is given' do
+      @fully_set_hammer.test(*[]).should be_nil
     end
   end
 end
