@@ -4,6 +4,7 @@ require 'iron_hammer/projects/asp_net_project'
 require 'iron_hammer/projects/asp_net_mvc_project'
 require 'iron_hammer/projects/test_project'
 require 'iron_hammer/projects/dll_project'
+require 'iron_hammer/projects/dependency'
 require 'iron_hammer/utils/file_system'
 
 module IronHammer
@@ -13,6 +14,7 @@ module IronHammer
 
       GUID_EVALUATION_ORDER = [AspNetMvcProject, AspNetProject, TestProject]
       GUID_PATH = '//Project/PropertyGroup/ProjectTypeGuids'
+      REFERENCE_PATH = '//Reference'
 
       def initialize params={}
         @type = params[:type] || DllProject
@@ -35,6 +37,20 @@ module IronHammer
         elem = doc && doc.elements[GUID_PATH]
         guids = ((elem && elem.text) || '').split(';').collect { |e| e.upcase }
       end
+      
+      def self.dependencies_of xml
+        doc = REXML::Document.new xml
+        references = doc && doc.get_elements(REFERENCE_PATH) 
+        references.map do |reference|
+          includes = reference.attribute(:Include).value
+          name = includes.split(', ')[0]
+          match = includes.match /Version=(.+?),/
+          version = match[1] if match
+          Dependency.new :name => name, :version => version
+        end
+        
+      end
     end unless defined? ProjectFile
   end
 end
+

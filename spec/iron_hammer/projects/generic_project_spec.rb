@@ -47,6 +47,7 @@ module IronHammer
           package.deliverables.should be_eql(deliverables)
         end 
       end
+      
     end
   end
 end

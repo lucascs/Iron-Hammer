@@ -4,4 +4,5 @@ module ProjectFileData
   def self.test; DataHelper::read 'project_file', 'test.csproj'; end
   def self.dll; DataHelper::read 'project_file', 'dll.csproj'; end
   def self.wcf; DataHelper::read 'project_file', 'wcf.csproj'; end
+  def self.with_dependencies; DataHelper::read 'project_file', 'with_dependencies.csproj'; end
 end unless defined? ProjectFileData

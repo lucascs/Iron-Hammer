@@ -1,5 +1,5 @@
 module TempHelper
-  TEMP_FOLDER = File.dirname(__FILE__) + '/../temp/'
+  TEMP_FOLDER = '/tmp/iron_hammer/' #File.dirname(__FILE__) + '/../temp/'
   
   def self.cleanup
     FileUtils.rm_rf TEMP_FOLDER

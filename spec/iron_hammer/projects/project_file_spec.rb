@@ -57,6 +57,24 @@ module IronHammer
         project_file.should_not be_nil
         project_file.type.should be_eql(AspNetProject)
       end
+      
+      describe 'listing dependencies' do
+        before :each do
+          @dependencies = ProjectFile.dependencies_of(ProjectFileData::with_dependencies)
+        end
+        it 'all dependencies must be of type Dependency' do
+          @dependencies.should_not be_empty
+          @dependencies.each { |d| d.should be_a Dependency }
+        end
+        
+        it 'should contain a specific dependency' do
+          found_dependencies = @dependencies.select { |d| d.name == 'manipulacaointerfacearquivos' }
+          found_dependencies.size.should == 1
+        end
+        it 'should contain a specific dependency with version' do
+          @dependencies.should include(Dependency.new :name => 'ICSharpCode.SharpZipLib', :version => '0.84.0.0')
+        end
+      end
     end
   end
 end
