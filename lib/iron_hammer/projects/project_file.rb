@@ -14,7 +14,7 @@ module IronHammer
 
       GUID_EVALUATION_ORDER = [AspNetMvcProject, AspNetProject, TestProject]
       GUID_PATH = '//Project/PropertyGroup/ProjectTypeGuids'
-      REFERENCE_PATH = '//Reference'
+      REFERENCE_PATH = '//Reference[not(starts_with(@Include, "System"))]'
 
       def initialize params={}
         @type = params[:type] || DllProject

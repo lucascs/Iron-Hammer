@@ -74,11 +74,11 @@ module IronHammer
         it 'should contain a specific dependency with version' do
           @dependencies.should include(Dependency.new :name => 'ICSharpCode.SharpZipLib', :version => '0.84.0.0')
         end
-        it 'should not contain dependencies of type system' do
+        it 'should not contain system dependencies' do
           @dependencies.should_not contain_system_dependencies
         end
         def contain_system_dependencies
-          satisfy {|ds| ds.find {|d| d.name.starts_with 'System'}})
+          simple_matcher("contain system dependencies") {|ds| ds.find {|d| d.name.starts_with 'System'}}
         end
       end
     end
