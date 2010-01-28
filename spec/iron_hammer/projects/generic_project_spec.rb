@@ -48,6 +48,28 @@ module IronHammer
         end 
       end
       
+      describe 'listing dependencies' do
+        before :each do
+          @project = GenericProject.new :path => 'my_path', :name => 'project_name'
+          File.stub!(:read).with(['my_path', 'project_name.csproj'].patheticalize).and_return "any_xml"
+        end
+        
+        it 'should load dependencies of the project' do
+          
+          ProjectFile.should_receive(:dependencies_of).with "any_xml"
+          
+          @project.dependencies
+        end
+        
+        it 'should load dependencies of the project only on the first time' do
+          
+          expected = [Dependency.new(:name => 'anything')]
+          ProjectFile.should_receive(:dependencies_of).with("any_xml").and_return expected
+          
+          @project.dependencies.should == expected
+          @project.dependencies.should == expected
+        end
+      end      
     end
   end
 end
