@@ -23,5 +23,29 @@ namespace :iron do
         sh @hammer.test *@anvil.test_projects
       end
     end
+    
+    namespace :ivy do
+      desc 'Generates ivy-<project_name>.xml for all dll projects of the solution'
+      task :generate => [:initialize] do
+        @anvil.dll_projects.each do |project|
+          builder = IvyBuilder.new project
+          builder.write_to "ivy-#{project.name}.xml"
+        end
+      end
+      
+      task :retrieve => [:generate] do
+        @anvil.dll_projects.each do |project|
+          ivy = "ivy-#{project.name}.xml"
+          sh "java -jar #{IVY_JAR} -ivy #{ivy} -settings #{IVY_SETTINGS} -retrieve Libraries/[artifact].[ext]"
+        end
+      end
+      
+      task :publish => [:generate] do
+        @anvil.dll_projects.each do |project|
+          ivy = "ivy-#{project.name}.xml"
+          sh "java -jar #{IVY_JAR} -ivy #{ivy} -settings #{IVY_SETTINGS} -publish default -publishpattern delivery/[artifact].[ext]"
+        end
+      end
+    end
 end
 
