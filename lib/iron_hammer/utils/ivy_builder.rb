@@ -14,6 +14,12 @@ module IronHammer
           xml.publications do
             xml.artifact :name => @project.name, :type => 'dll'
           end if @project.is_a? DllProject
+          
+          xml.dependencies do
+            @project.dependencies.each do |dependency|
+              xml.dependency :org => dependency.name, :name => dependency.name, :revision => dependency.version
+            end
+          end unless @project.dependencies.empty?
         end
       end   
     end

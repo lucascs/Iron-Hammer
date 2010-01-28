@@ -4,7 +4,7 @@ module IronHammer
     describe IvyBuilder do
       it "should build a xml for a basic project" do
         project = GenericProject.new :name => "MyProject"
-        
+        project.stub!(:dependencies).and_return []
         @ivy = IvyBuilder.new project
         
         xml = @ivy.to_s
@@ -15,7 +15,8 @@ module IronHammer
       
       it "should add binaries as artifacts" do
         project = DllProject.new :name => "MyProject"
-        
+        project.stub!(:dependencies).and_return []
+                
         @ivy = IvyBuilder.new project
         
         xml = @ivy.to_s
@@ -25,6 +26,20 @@ module IronHammer
         xml.should match /type="dll"/
       end
       
+      it "should include project dependencies" do
+        project = mock(GenericProject)
+        project.stub!(:name).and_return "MyProject"
+        project.stub!(:dependencies).and_return [Dependency.new :name => "My Dependency", :version => "1.2.3"]        
+
+        @ivy = IvyBuilder.new project
+        
+        xml = @ivy.to_s
+        xml.should match /<dependencies>.*<\/dependencies>/ms
+        xml.should match /<dependency .*\/>/
+        xml.should match /org="My Dependency"/
+        xml.should match /name="My Dependency"/
+        xml.should match /revision="1.2.3"/
+      end
     end
     
   end
