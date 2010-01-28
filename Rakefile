@@ -10,7 +10,8 @@ $hoe = Hoe.spec 'iron_hammer' do
   self.developer 'Mozair Alves do Carmo Junior', 'macskeptic@gmail.com'
   self.post_install_message = File.read('PostInstall.txt')
   self.rubyforge_name       = self.name
-  self.extra_deps           = [['rubyzip2','>= 2.0.1']]
+  self.extra_deps           = [['rubyzip2','>= 2.0.1'],
+                               ['builder', '>= 2.1.2']]
   self.version              = '0.3.4'
 end
 
