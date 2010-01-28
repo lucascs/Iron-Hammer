@@ -2,6 +2,7 @@ require 'iron_hammer/utils/ivy_builder'
 module IronHammer
   module Utils
     describe IvyBuilder do
+      ORGANISATION = "My org"
       it "should build a xml for a basic project" do
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
@@ -9,7 +10,7 @@ module IronHammer
         
         xml = @ivy.to_s
         xml.should match /<info .*\/>/
-        xml.should match /organisation="MyProject"/
+        xml.should match /organisation="My org"/
         xml.should match /module="MyProject"/
       end
       
@@ -36,7 +37,7 @@ module IronHammer
         xml = @ivy.to_s
         xml.should match /<dependencies>.*<\/dependencies>/ms
         xml.should match /<dependency .*\/>/
-        xml.should match /org="My Dependency"/
+        xml.should match /org="My org"/
         xml.should match /name="My Dependency"/
         xml.should match /revision="1.2.3"/
       end
@@ -50,7 +51,7 @@ module IronHammer
         @ivy.write_to file
         xml = File.read(file)
         xml.should match /<info .*\/>/
-        xml.should match /organisation="MyProject"/
+        xml.should match /organisation="My org"/
         xml.should match /module="MyProject"/
       end
     end

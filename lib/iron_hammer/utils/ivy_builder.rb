@@ -5,19 +5,20 @@ module IronHammer
       
       def initialize project
         @project = project
+        @organisation = ORGANISATION || "org"
       end 
    
       def to_s
         xml = Builder::XmlMarkup.new(:indent => 2)
         xml.tag! 'ivy-module', :version => '2.0' do
-          xml.info :organisation => @project.name, :module => @project.name
+          xml.info :organisation => @organisation, :module => @project.name
           xml.publications do
             xml.artifact :name => @project.name, :type => 'dll'
           end if @project.is_a? DllProject
           
           xml.dependencies do
             @project.dependencies.each do |dependency|
-              xml.dependency :org => dependency.name, :name => dependency.name, :revision => dependency.version
+              xml.dependency :org => @organisation, :name => dependency.name, :revision => dependency.version
             end
           end unless @project.dependencies.empty?
         end
