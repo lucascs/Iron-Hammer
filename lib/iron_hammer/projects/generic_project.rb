@@ -23,7 +23,7 @@ module IronHammer
       end
       
       def dependencies
-        @dependencies = @dependencies || ProjectFile.dependencies_of(File.read [@path, @csproj].patheticalize)
+        @dependencies ||= ProjectFile.dependencies_of(File.read [@path, @csproj].patheticalize)
       end
       
       def package params={}
