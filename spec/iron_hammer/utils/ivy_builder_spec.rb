@@ -40,6 +40,19 @@ module IronHammer
         xml.should match /name="My Dependency"/
         xml.should match /revision="1.2.3"/
       end
+      
+      it "should write the xml to a file" do
+        project = GenericProject.new :name => "MyProject"
+        project.stub!(:dependencies).and_return []
+        @ivy = IvyBuilder.new project
+        
+        file = "#{TempHelper::TEMP_FOLDER}/ivy.xml"
+        @ivy.write_to file
+        xml = File.read(file)
+        xml.should match /<info .*\/>/
+        xml.should match /organisation="MyProject"/
+        xml.should match /module="MyProject"/
+      end
     end
     
   end

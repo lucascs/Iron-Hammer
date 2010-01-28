@@ -21,7 +21,11 @@ module IronHammer
             end
           end unless @project.dependencies.empty?
         end
-      end   
+      end
+      
+      def write_to file
+        File.open(file, "w") { |f| f.write to_s }
+      end
     end
   end
 end
