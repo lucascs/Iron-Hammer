@@ -14,6 +14,7 @@ lib/iron_hammer/package.rb
 lib/iron_hammer/projects/asp_net_mvc_project.rb
 lib/iron_hammer/projects/asp_net_project.rb
 lib/iron_hammer/projects/dll_project.rb
+lib/iron_hammer/projects/dependency.rb
 lib/iron_hammer/projects/generic_project.rb
 lib/iron_hammer/projects/project_file.rb
 lib/iron_hammer/projects/project_types.rb
@@ -23,6 +24,7 @@ lib/iron_hammer/solutions/solution_file.rb
 lib/iron_hammer/tasks.rb
 lib/iron_hammer/utils/dot_net_environment.rb
 lib/iron_hammer/utils/file_system.rb
+lib/iron_hammer/utils/ivy_builder.rb
 lib/iron_hammer/utils/windows.rb
 lib/iron_hammer/utils/zipper.rb
 lib/iron_hammer/version.rb

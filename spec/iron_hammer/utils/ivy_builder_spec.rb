@@ -39,7 +39,7 @@ module IronHammer
         xml.should match /<dependency .*\/>/
         xml.should match /org="My org"/
         xml.should match /name="My Dependency"/
-        xml.should match /revision="1.2.3"/
+        xml.should match /rev="1.2.3"/
       end
       
       it "should write the xml to a file" do

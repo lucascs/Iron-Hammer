@@ -43,7 +43,7 @@ namespace :iron do
       task :publish => [:generate] do
         @anvil.dll_projects.each do |project|
           ivy = "ivy-#{project.name}.xml"
-          sh "java -jar #{IVY_JAR} -ivy #{ivy} -settings #{IVY_SETTINGS} -publish default -publishpattern delivery/[artifact].[ext]"
+          sh "java -jar #{IVY_JAR} -ivy #{ivy} -settings #{IVY_SETTINGS} -publish default -publishpattern delivery/[artifact].[ext] -revision 1.0.0 -overwrite true"
         end
       end
     end
