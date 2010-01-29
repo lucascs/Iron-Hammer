@@ -33,15 +33,19 @@ namespace :iron do
         end
       end
 
+      desc 'Retrieves all project dependencies from ivy repository and modify project csproj to reference them'
       task :retrieve => [:generate] do
         @anvil.dll_projects.each do |project|
           xml = "ivy-#{project.name}.xml"
           builder = IvyBuilder.new project
 
           sh builder.retrieve xml
+
+          builder.modify_csproj
         end
       end
 
+      desc 'Publish project assemblies to ivy repository'
       task :publish => [:generate] do
         @anvil.dll_projects.each do |project|
           xml = "ivy-#{project.name}.xml"

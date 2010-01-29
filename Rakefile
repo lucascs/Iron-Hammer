@@ -12,7 +12,7 @@ $hoe = Hoe.spec 'iron_hammer' do
   self.rubyforge_name       = self.name
   self.extra_deps           = [['rubyzip2','>= 2.0.1'],
                                ['builder', '>= 2.1.2']]
-  self.version              = '0.3.5'
+  self.version              = '0.3.6'
 end
 
 require 'newgem/tasks'
@@ -21,3 +21,4 @@ Dir['tasks/**/*.rake'].each { |t| load t }
 # TODO - want other tests/tasks run by default? Add them to the list
 # remove_task :default
 # task :default => [:spec, :features]
+

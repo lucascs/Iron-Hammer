@@ -1,6 +1,11 @@
+=== 0.3.6 2010-01-29
+
+* 1 major improvement
+  * retrieve ivy task modifies project csproj to reference retrieved dependencies
+
 === 0.3.5 2010-01-28
 
-* 3 major improvement
+* 3 major improvements
   * new task for generating ivy.xml with project dependencies
   * new task for retrieving dependencies from ivy repository
   * new task for publishing project binaries to ivy repository
@@ -17,7 +22,7 @@
 
 === 0.3.2 2010-01-22
 
-* 2 major improvement
+* 2 major improvements
   * Methods for filtering projects of a given type on Anvil
   * Rake tasks for building and test running
 
@@ -36,7 +41,7 @@
 * 1 major improvement
   * Hammer => Command line for testing a single project with MSTEST
 
-=== 0.2.0 
+=== 0.2.0
 
 * 1 major improvement
   * Hammer => Command line for building a solution with MSBUILD
