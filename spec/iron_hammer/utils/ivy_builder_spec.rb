@@ -90,7 +90,7 @@ module IronHammer
           lib_dir = mock(Dir)
           lib_dir.stub!(:find).and_return "abc.dll"
 
-          Dir.stub!(:new).with(File.join(@dir, 'Libraries')).and_return(lib_dir)
+          Dir.stub!(:new).with(File.join(@dir, '..', 'Libraries')).and_return(lib_dir)
 
           @ivy = IvyBuilder.new project
         end
@@ -112,7 +112,7 @@ module IronHammer
           doc.each_element('//Reference[not(starts_with(@Include, "System"))]') do |reference|
             hint_path = reference.elements['HintPath']
             hint_path.should_not be_nil
-            hint_path.text.should match /^Libraries/
+            hint_path.text.should match /^..\\Libraries/
           end
         end
 
