@@ -20,7 +20,7 @@ module IronHammer
         @type = params[:type] || DllProject
         raise ArgumentError.new('type must be a Class') unless @type.class == Class
       end
-      
+
       def self.type_of *path
         self.parse(IronHammer::Utils::FileSystem::read_file(*path)).type
       end
@@ -31,24 +31,20 @@ module IronHammer
           result || (guids.include?(ProjectTypes::guid_for(current)) && current)
         end) || DllProject)
       end
-      
+
       def self.guids_from xml
         doc = REXML::Document.new xml
         elem = doc && doc.elements[GUID_PATH]
         guids = ((elem && elem.text) || '').split(';').collect { |e| e.upcase }
       end
-      
+
       def self.dependencies_of xml
         doc = REXML::Document.new xml
-        references = doc && doc.get_elements(REFERENCE_PATH) 
+        references = doc && doc.get_elements(REFERENCE_PATH)
         references.map do |reference|
-          includes = reference.attribute(:Include).value
-          name = includes.split(', ')[0]
-          match = includes.match /Version=(.+?),/
-          version = match[1] if match
-          Dependency.new :name => name, :version => version
+          Dependency.from_reference reference
         end
-        
+
       end
     end unless defined? ProjectFile
   end

@@ -16,14 +16,14 @@ namespace :iron do
     task :build => [:clean, :initialize] do
 	    sh @hammer.build @anvil.solution
     end
-    
+
     namespace :test do
       desc 'Runs the unit tests'
       task :unit => [:build] do
         sh @hammer.test *@anvil.test_projects
       end
     end
-    
+
     namespace :ivy do
       desc 'Generates ivy-<project_name>.xml for all dll projects of the solution'
       task :generate => [:initialize] do
@@ -32,18 +32,22 @@ namespace :iron do
           builder.write_to "ivy-#{project.name}.xml"
         end
       end
-      
+
       task :retrieve => [:generate] do
         @anvil.dll_projects.each do |project|
-          ivy = "ivy-#{project.name}.xml"
-          sh "java -jar #{IVY_JAR} -ivy #{ivy} -settings #{IVY_SETTINGS} -retrieve Libraries/[artifact].[ext]"
+          xml = "ivy-#{project.name}.xml"
+          builder = IvyBuilder.new project
+
+          sh builder.retrieve xml
         end
       end
-      
+
       task :publish => [:generate] do
         @anvil.dll_projects.each do |project|
-          ivy = "ivy-#{project.name}.xml"
-          sh "java -jar #{IVY_JAR} -ivy #{ivy} -settings #{IVY_SETTINGS} -publish default -publishpattern delivery/[artifact].[ext] -revision 1.0.0 -overwrite true"
+          xml = "ivy-#{project.name}.xml"
+          builder = IvyBuilder.new project
+
+          sh builder.retrieve xml
         end
       end
     end
