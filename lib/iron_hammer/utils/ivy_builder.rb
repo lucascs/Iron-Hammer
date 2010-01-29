@@ -5,7 +5,9 @@ module IronHammer
       
       def initialize project
         @project = project
-        @organisation = ORGANISATION || "org"
+        @organisation = defined?(ORGANISATION)? ORGANISATION : 'org'
+        @ivy_jar = defined?(IVY_JAR)? IVY_JAR : 'ivy.jar'
+        @ivy_settings = defined?(IVY_SETTINGS)? IVY_SETTINGS : 'ivysettings.xml'
       end 
    
       def to_s
@@ -22,6 +24,10 @@ module IronHammer
             end
           end unless @project.dependencies.empty?
         end
+      end
+      
+      def retrieve ivy_file
+        "java -jar #{@ivy_jar} -ivy #{ivy_file} -settings #{@ivy_settings} -retrieve Libraries/[artifact].[ext]"
       end
       
       def write_to file

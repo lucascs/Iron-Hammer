@@ -54,6 +54,17 @@ module IronHammer
         xml.should match /organisation="My org"/
         xml.should match /module="MyProject"/
       end
+      
+      it "should generate retrieve command" do
+        project = GenericProject.new :name => "MyProject"
+        project.stub!(:dependencies).and_return []
+        @ivy = IvyBuilder.new project
+        
+        command = @ivy.retrieve "ivy.xml"
+        
+        command.should match /-ivy ivy.xml/
+        command.should match /-retrieve/
+      end
     end
     
   end
