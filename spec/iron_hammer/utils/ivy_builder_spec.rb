@@ -12,7 +12,7 @@ module IronHammer
 
         xml = @ivy.to_s
         xml.should match /<info .*\/>/
-        xml.should match /organisation="My org"/
+        xml.should match /organisation="org"/
         xml.should match /module="MyProject"/
       end
 
@@ -32,14 +32,14 @@ module IronHammer
       it "should include project dependencies" do
         project = mock(GenericProject)
         project.stub!(:name).and_return "MyProject"
-        project.stub!(:dependencies).and_return [Dependency.new :name => "My Dependency", :version => "1.2.3"]
+        project.stub!(:dependencies).and_return [Dependency.new(:name => "My Dependency", :version => "1.2.3")]
 
         @ivy = IvyBuilder.new project
 
         xml = @ivy.to_s
         xml.should match /<dependencies>.*<\/dependencies>/ms
         xml.should match /<dependency .*\/>/
-        xml.should match /org="My org"/
+        xml.should match /org="org"/
         xml.should match /name="My Dependency"/
         xml.should match /rev="1.2.3"/
       end
@@ -53,7 +53,7 @@ module IronHammer
         @ivy.write_to file
         xml = File.read(file)
         xml.should match /<info .*\/>/
-        xml.should match /organisation="My org"/
+        xml.should match /organisation="org"/
         xml.should match /module="MyProject"/
       end
 
