@@ -80,20 +80,21 @@ module IronHammer
       
       def mock_projects
         @project_hashes.each do |p|
-          IronHammer::Projects::ProjectFile.should_receive(:type_of).
-            with(@solution_root, p[:path], p[:csproj]).
+          project_file = Object.new
+          ProjectFile.should_receive(:load_from).with(*[@solution_root, p[:path], p[:csproj]]).and_return(project_file)          
+          project_file.should_receive(:type).
             and_return(case p[:name]
-              when @asp_net
-                IronHammer::Projects::AspNetProject
-              when @asp_net_mvc
-                IronHammer::Projects::AspNetMvcProject
-              when @tests
-                IronHammer::Projects::TestProject
-              when @dll
-                IronHammer::Projects::DllProject
-              when @wcf
-                IronHammer::Projects::AspNetProject
-            end)
+                when @asp_net
+                  IronHammer::Projects::AspNetProject
+                when @asp_net_mvc
+                  IronHammer::Projects::AspNetMvcProject
+                when @tests
+                  IronHammer::Projects::TestProject
+                when @dll
+                  IronHammer::Projects::DllProject
+                when @wcf
+                  IronHammer::Projects::AspNetProject
+              end)
         end
       end
     end

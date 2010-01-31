@@ -1,5 +1,6 @@
 require 'builder'
 require 'rexml/document'
+
 module IronHammer
   module Utils
     class IvyBuilder

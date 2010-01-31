@@ -23,7 +23,7 @@ module IronHammer
       end
       
       def dependencies
-        @dependencies ||= ProjectFile.dependencies_of(File.read [@path, @csproj].patheticalize)
+        @dependencies ||= file.dependencies
       end
       
       def package params={}
@@ -39,6 +39,14 @@ module IronHammer
       def run_configuration params={}
         configuration = params[:configuration]
         config = (configuration && !configuration.empty? && configuration) || IronHammer::Defaults::CONFIGURATION_RUN
+      end
+      
+      def file
+        @file ||= ProjectFile.load_from path_to_csproj
+      end
+      
+      def path_to_csproj
+        return File.join @path, @csproj
       end
     end unless defined? GenericProject
   end

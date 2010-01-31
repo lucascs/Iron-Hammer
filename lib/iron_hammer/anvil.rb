@@ -22,10 +22,7 @@ module IronHammer
 
     def projects 
       @projects ||= (@solution.file.projects.collect do |p|
-        IronHammer::Projects::ProjectFile.type_of(
-          @solution.path, 
-          path = p[:path], 
-          csproj = p[:csproj]).new(p)
+        ProjectFile.load_from(root_path = @solution.path, project_path = p[:path], csproj = p[:csproj]).type.new(p)
       end)
     end
     
