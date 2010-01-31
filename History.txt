@@ -2,7 +2,8 @@
 
 * 1 major improvement
   * changed Anvil so that calling 'load_projects_from_solution' is no longer necessary
-  * 
+* 1 minor improvement
+  * major refactoring of project_file class and some improvements to its api
 
 === 0.3.6 2010-01-29
 
