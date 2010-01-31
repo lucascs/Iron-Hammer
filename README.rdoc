@@ -20,7 +20,7 @@ Iron Hammer gathers together three components to help automate the build, test a
 == SYNOPSIS:
 
   # Reading the solution file information from the current directory
-  a = Anvil.load_solution_from '.'
+  a = Anvil.load_from '.'
   # Initializing a new Hammer
   h = Hammer.new
   # Getting the command line for building a solution

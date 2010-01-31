@@ -17,8 +17,7 @@ $ rake iron:test:unit
 --- rakefile.rb
 require 'iron_hammer'
 
-@anvil = Anvil.load_solution_from '.'
-@anvil.load_projects_from_solution
+@anvil = Anvil.load_from '.'
 @hammer = Hammer.new :visual_studio_path => VISUAL_STUDIO_PATH
 sh @hammer.build @anvil.solution
 sh @hammer.test *@anvil.test_projects
