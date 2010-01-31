@@ -21,8 +21,6 @@ Iron Hammer gathers together three components to help automate the build, test a
 
   # Reading the solution file information from the current directory
   a = Anvil.load_solution_from '.'
-  # Reading the project information based on the solution read before
-  a.load_projects_from_solution
   # Initializing a new Hammer
   h = Hammer.new
   # Getting the command line for building a solution
@@ -32,7 +30,8 @@ Iron Hammer gathers together three components to help automate the build, test a
 
 == REQUIREMENTS:
 
-  rubyzip2 (>= 2.0.1)
+  rubyzip2 (>= 2.0.1) 
+  builder (>= 2.1.2)
 
 == INSTALL:
 
@@ -44,7 +43,7 @@ Iron Hammer gathers together three components to help automate the build, test a
 
 MACSkeptic Iron-Hammer
 
-Copyright (c) 2010 Mozair Alves do Carmo Junior, http://codevil.com/
+Copyright (c) 2010 Mozair Alves do Carmo Junior, http://codevil.com
 
 Permission is hereby granted, free of charge, to any person obtaining
 a copy of this software and associated documentation files (the
