@@ -5,26 +5,11 @@ require 'iron_hammer/solutions/solution_file'
 module IronHammer
   class Anvil
     attr_accessor :solution
-    attr_accessor :projects
 
-    def initialize params={}
-      @solution = params[:solution]
-      @projects = params[:projects]
-    end
-
-    def load_projects_from_solution
-      @projects = @projects || []
-      @solution.file.projects.each do |p|
-        @projects << IronHammer::Projects::ProjectFile.type_of(
-          @solution.path, 
-          path = p[:path], 
-          csproj = p[:csproj]).
-        send(:new, p)
-      end
-    end
-
-    def self.load_solution_from *path
-      pattern = File.join path, '*.sln'
+    def self.load_from *path
+      target = path
+      target = '.' if path.nil? || path.empty?
+      pattern = File.join target, '*.sln'
       entries = Dir[pattern]
       anvil = Anvil.new(
         :solution => IronHammer::Solutions::Solution.new(
@@ -34,13 +19,33 @@ module IronHammer
         )
       ) unless entries.nil? || entries.empty?
     end
+
+    def projects 
+      @projects ||= (@solution.file.projects.collect do |p|
+        IronHammer::Projects::ProjectFile.type_of(
+          @solution.path, 
+          path = p[:path], 
+          csproj = p[:csproj]).new(p)
+      end)
+    end
     
     def dll_projects
-      @projects.select {|p| p.is_a? DllProject}
+      @dll_projects ||= projects.select {|p| p.is_a? DllProject}
     end
     
     def test_projects
-      @projects.select {|p| p.is_a? TestProject}
+      @test_projects ||= projects.select {|p| p.is_a? TestProject}
+    end
+    
+    def load_projects_from_solution #deprecated!
+      Kernel::warn '[DEPRECATION] `load_projects_from_solution` is deprecated and now it is a no-op. ' +
+        'Please, just use `projects` instead - they will be loaded in a lazy fashion ;)'
+    end
+
+  private    
+    def initialize params={}
+      @solution = params[:solution]
+      @projects = params[:projects]
     end
   end unless defined? Anvil
 end

@@ -10,41 +10,47 @@ require 'iron_hammer/utils/file_system'
 module IronHammer
   module Projects
     class ProjectFile
-      attr_accessor :type
-
+      attr_accessor :path
+      
       GUID_EVALUATION_ORDER = [AspNetMvcProject, AspNetProject, TestProject]
       GUID_PATH = '//Project/PropertyGroup/ProjectTypeGuids'
       REFERENCE_PATH = '//Reference[not(starts_with(@Include, "System"))]'
-
-      def initialize params={}
-        @type = params[:type] || DllProject
-        raise ArgumentError.new('type must be a Class') unless @type.class == Class
+      
+      def self.load_from *path
+        ProjectFile.new path
       end
-
-      def self.type_of *path
-        self.parse(IronHammer::Utils::FileSystem::read_file(*path)).type
-      end
-
-      def self.parse xml
-        guids = guids_from xml
-        ProjectFile.new :type => ((GUID_EVALUATION_ORDER.inject(false) do |result, current|
+      
+      def type
+        @type ||= ((GUID_EVALUATION_ORDER.inject(false) do |result, current|
           result || (guids.include?(ProjectTypes::guid_for(current)) && current)
         end) || DllProject)
       end
 
-      def self.guids_from xml
-        doc = REXML::Document.new xml
-        elem = doc && doc.elements[GUID_PATH]
-        guids = ((elem && elem.text) || '').split(';').collect { |e| e.upcase }
+      def dependencies
+        references.collect { |reference| Dependency.from_reference reference }
       end
-
-      def self.dependencies_of xml
-        doc = REXML::Document.new xml
-        references = doc && doc.get_elements(REFERENCE_PATH)
-        references.map do |reference|
-          Dependency.from_reference reference
-        end
-
+      
+    private
+      def references
+        doc && doc.get_elements(REFERENCE_PATH)
+      end
+    
+      def doc
+        @doc ||= REXML::Document.new xml
+      end
+      
+      def xml
+        @xml ||= IronHammer::Utils::FileSystem::read_file(*@path)
+      end
+    
+      def guids
+        return @guids if @guids
+        return @guids = [] unless (elem = doc && doc.elements[GUID_PATH]) && elem.text
+        @guids = elem.text.split(';').collect { |e| e.upcase }
+      end
+      
+      def initialize *path
+        @path = path
       end
     end unless defined? ProjectFile
   end

@@ -17,7 +17,7 @@ module IronHammer
       end
       
       it 'should have a method to do it' do
-        Anvil.should respond_to(:load_solution_from)
+        Anvil.should respond_to(:load_from)
       end
 
       it 'should scan the directory for *.sln files and return the anvil with a solution loaded' do
@@ -25,7 +25,7 @@ module IronHammer
         Dir.should_receive('[]').with(File.join @solution_root, '*.sln').and_return(entries = [sln])
         IronHammer::Solutions::SolutionFile.should_receive(:parse_file).with(sln).and_return(file = 'FFF')
 
-        anvil = Anvil.load_solution_from @solution_root
+        anvil = Anvil.load_from @solution_root
         anvil.solution.should_not be_nil
         anvil.solution.should be_an_instance_of(IronHammer::Solutions::Solution)
         anvil.solution.name.should be_eql(@solution_name)
@@ -50,16 +50,9 @@ module IronHammer
         )
       end
       
-      
-      it 'should have a method to do it' do
-        @anvil.should respond_to(:load_projects_from_solution)
-      end
-
       it 'should load all the projects belonging to the solution' do
         mock_projects
         
-        @anvil.load_projects_from_solution
-
         @anvil.projects.should_not be_nil
         @anvil.projects.should be_an_instance_of(Array)
         @anvil.projects.should have(@project_names.length).elements
@@ -76,16 +69,11 @@ module IronHammer
       
       it 'should filter dll projects' do
         mock_projects
-        
-        @anvil.load_projects_from_solution
-        
         @anvil.dll_projects.should have(1).dll_project
       end
       
       it 'should filter test projects' do
         mock_projects
-        
-        @anvil.load_projects_from_solution
         
         @anvil.test_projects.should have(1).test_project
       end
