@@ -18,13 +18,16 @@ module IronHammer
       it "should add binaries as artifacts" do
         project = DllProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
+        deliverable = mock(Deliverable)
+        project.stub!(:binaries).and_return [deliverable]
+        deliverable.stub!(:actual_name).and_return "an_artifact.dll"
 
         @ivy = IvyBuilder.new project
 
         xml = @ivy.to_s
         xml.should match /<publications>.*<\/publications>/ms
         xml.should match /<artifact .*\/>/
-        xml.should match /name="MyProject"/
+        xml.should match /name="an_artifact"/
         xml.should match /type="dll"/
       end
 
@@ -67,15 +70,17 @@ module IronHammer
         command.should match /-retrieve/
       end
 
-      it "should generate publish command" do
+      it "should generate publish command, including binaries path" do
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
+        project.stub!(:path_to_binaries).and_return "binaries/here"
         @ivy = IvyBuilder.new project
 
         command = @ivy.publish "ivy.xml"
 
         command.should match /-ivy ivy.xml/
         command.should match /-publish/
+        command.should match /-publishpattern binaries\/here\/\[artifact\].\[ext\]/
         command.should match /-revision/
       end
 

@@ -17,7 +17,11 @@ module IronHammer
         xml.tag! 'ivy-module', :version => '2.0' do
           xml.info :organisation => @organisation, :module => @project.name
           xml.publications do
-            xml.artifact :name => @project.name, :type => 'dll'
+            @project.binaries.each do |binary|
+              extension = binary.actual_name.split(/\./).last
+              name = binary.actual_name.gsub(/\.[^\.]+$/, '')
+              xml.artifact :name => name, :type => extension
+            end
           end if @project.is_a? DllProject
 
           xml.dependencies do
@@ -40,7 +44,7 @@ module IronHammer
           -ivy #{ivy_file}
           -settings #{@ivy_settings}
           -publish default
-          -publishpattern delivery/[artifact].[ext]
+          -publishpattern #{@project.path_to_binaries}/[artifact].[ext]
           -revision 1.0.0.0
           -overwrite true".gsub(/\s+/, ' ')
       end
