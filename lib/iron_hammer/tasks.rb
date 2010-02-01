@@ -29,7 +29,10 @@ namespace :iron do
       task :setup do
         @anvil.projects.each do |project|
           project.dependencies.each do |dependency|
-            dependency_project DependencyProject.new :name => dependency.name, :binaries_path => ENV['binaries_path']
+            dependency_project = DependencyProject.new(
+                :name => dependency.name,
+                :binaries_path => ENV['binaries_path'],
+                :version => dependency.version)
 
             puts "Dependency #{dependency.name}"
 

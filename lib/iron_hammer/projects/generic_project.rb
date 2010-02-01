@@ -18,6 +18,10 @@ module IronHammer
         ''
       end
 
+      def version
+        '1.0.0.0'
+      end
+
       def deliverables params={}
         []
       end

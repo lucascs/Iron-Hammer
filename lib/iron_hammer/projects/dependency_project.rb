@@ -6,7 +6,8 @@ module IronHammer
 
       def initialize params
           super(params)
-          @binaries_path = params['binaries_path']
+          @binaries_path = params[:binaries_path]
+          @version = params[:version] || '1.0.0.0'
       end
 
       def dependencies
@@ -15,6 +16,10 @@ module IronHammer
 
       def assembly_name
         name
+      end
+
+      def version
+        @version
       end
 
       def path_to_binaries

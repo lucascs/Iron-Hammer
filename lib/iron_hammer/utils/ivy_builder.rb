@@ -43,7 +43,7 @@ module IronHammer
           -settings #{@ivy_settings}
           -publish default
           -publishpattern #{@project.path_to_binaries}/[artifact].[ext]
-          -revision 1.0.0.0
+          -revision #{@project.version}
           -overwrite true".gsub(/\s+/, ' ')
       end
 
