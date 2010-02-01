@@ -1,3 +1,11 @@
+=== 0.3.8 2010-02-01
+* 1 bugfix
+  * only consider csproj's of solution
+
+* 2 minor improvements
+  * included LocalTestRun.runtestconfig on test command
+  * including artifacts on ivy based on project binaries
+
 === 0.3.7 2010-01-30
 
 * 1 major improvement

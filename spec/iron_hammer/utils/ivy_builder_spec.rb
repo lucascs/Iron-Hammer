@@ -7,20 +7,19 @@ module IronHammer
       it "should build a xml for a basic project" do
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
+        project.stub!(:assembly_name).and_return "an_artifact.dll"
         @ivy = IvyBuilder.new project
 
         xml = @ivy.to_s
         xml.should match /<info .*\/>/
         xml.should match /organisation="org"/
-        xml.should match /module="MyProject"/
+        xml.should match /module="an_artifact"/
       end
 
       it "should add binaries as artifacts" do
         project = DllProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
-        deliverable = mock(Deliverable)
-        project.stub!(:binaries).and_return [deliverable]
-        deliverable.stub!(:actual_name).and_return "an_artifact.dll"
+        project.stub!(:assembly_name).and_return "an_artifact.dll"
 
         @ivy = IvyBuilder.new project
 
@@ -35,6 +34,7 @@ module IronHammer
         project = mock(GenericProject)
         project.stub!(:name).and_return "MyProject"
         project.stub!(:dependencies).and_return [Dependency.new(:name => "My Dependency", :version => "1.2.3")]
+        project.stub!(:assembly_name).and_return "an_artifact.dll"
 
         @ivy = IvyBuilder.new project
 
@@ -49,6 +49,7 @@ module IronHammer
       it "should write the xml to a file" do
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
+        project.stub!(:assembly_name).and_return "an_artifact.dll"
         @ivy = IvyBuilder.new project
 
         file = "#{TempHelper::TEMP_FOLDER}/ivy.xml"
@@ -56,7 +57,7 @@ module IronHammer
         xml = File.read(file)
         xml.should match /<info .*\/>/
         xml.should match /organisation="org"/
-        xml.should match /module="MyProject"/
+        xml.should match /module="an_artifact"/
       end
 
       it "should generate retrieve command" do

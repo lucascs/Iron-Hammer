@@ -3,6 +3,7 @@ require 'rake/clean'
 require 'iron_hammer'
 
 CLEAN.include("TestResults/**")
+CLEAN.include("ivy*.xml")
 
 namespace :iron do
     task :initialize do
