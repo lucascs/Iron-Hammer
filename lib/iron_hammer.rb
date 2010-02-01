@@ -23,6 +23,7 @@ require 'iron_hammer/package'
 require 'iron_hammer/projects/asp_net_mvc_project'
 require 'iron_hammer/projects/asp_net_project'
 require 'iron_hammer/projects/dependency'
+require 'iron_hammer/projects/dependency_project'
 require 'iron_hammer/projects/dll_project'
 require 'iron_hammer/projects/generic_project'
 require 'iron_hammer/projects/project_file'
@@ -42,3 +43,4 @@ include IronHammer::Projects
 include IronHammer::Solutions
 include IronHammer::Utils
 include IronHammer::Deliverables
+

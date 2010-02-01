@@ -15,6 +15,7 @@ lib/iron_hammer/projects/asp_net_mvc_project.rb
 lib/iron_hammer/projects/asp_net_project.rb
 lib/iron_hammer/projects/dll_project.rb
 lib/iron_hammer/projects/dependency.rb
+lib/iron_hammer/projects/dependency_project.rb
 lib/iron_hammer/projects/generic_project.rb
 lib/iron_hammer/projects/project_file.rb
 lib/iron_hammer/projects/project_types.rb

@@ -25,6 +25,23 @@ namespace :iron do
     end
 
     namespace :ivy do
+      desc 'Publish project dependencies into ivy repository'
+      task :setup do
+        @anvil.projects.each do |project|
+          project.dependencies.each do |dependency|
+            dependency_project DependencyProject.new :name => dependency.name, :binaries_path => ENV['binaries_path']
+
+            puts "Dependency #{dependency.name}"
+
+            builder = IvyBuilder.new dependency_project
+
+            builder.write_to "ivy-#{dependency.name}.xml"
+
+            sh builder.publish "ivy-#{dependency.name}.xml"
+          end
+        end
+      end
+
       desc 'Generates ivy-<project_name>.xml for all projects of the solution'
       task :generate => [:initialize] do
         @anvil.projects.each do |project|
