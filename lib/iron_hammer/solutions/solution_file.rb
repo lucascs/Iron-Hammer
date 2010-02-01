@@ -5,13 +5,13 @@ module IronHammer
     class SolutionFile
       attr_accessor :projects
 
-      NAME_PATH_CSPROJ = /.* = \"(.+)\"\, \"(.+)\\(.+)\", .*/
+      NAME_PATH_CSPROJ = /.* = \"(.+)\"\, \"(.+)\\(.+\.csproj)\", .*/
       STOP_TRIGGER = /^Global/
 
       def initialize projects=[]
         @projects = projects
       end
-      
+
       def self.parse lines
         projects = []
         lines.each do |line|
@@ -22,10 +22,11 @@ module IronHammer
         end
         SolutionFile.new projects
       end
-      
+
       def self.parse_file *path
-        self.parse IronHammer::Utils::FileSystem::read_lines(*path) 
+        self.parse IronHammer::Utils::FileSystem::read_lines(*path)
       end
     end unless defined? SolutionFile
   end
 end
+
