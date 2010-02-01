@@ -4,7 +4,6 @@ require 'rexml/document'
 module IronHammer
   module Utils
     describe IvyBuilder do
-      ORGANISATION = "My org"
       it "should build a xml for a basic project" do
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
