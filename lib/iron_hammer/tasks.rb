@@ -25,9 +25,9 @@ namespace :iron do
     end
 
     namespace :ivy do
-      desc 'Generates ivy-<project_name>.xml for all dll projects of the solution'
+      desc 'Generates ivy-<project_name>.xml for all projects of the solution'
       task :generate => [:initialize] do
-        @anvil.dll_projects.each do |project|
+        @anvil.projects.each do |project|
           builder = IvyBuilder.new project
           builder.write_to "ivy-#{project.name}.xml"
         end
@@ -35,7 +35,7 @@ namespace :iron do
 
       desc 'Retrieves all project dependencies from ivy repository and modify project csproj to reference them'
       task :retrieve => [:generate] do
-        @anvil.dll_projects.each do |project|
+        @anvil.projects.each do |project|
           xml = "ivy-#{project.name}.xml"
           builder = IvyBuilder.new project
 
@@ -45,7 +45,7 @@ namespace :iron do
         end
       end
 
-      desc 'Publish project assemblies to ivy repository'
+      desc 'Publish project assemblies to ivy repository (only dll projects)'
       task :publish => [:generate] do
         @anvil.dll_projects.each do |project|
           xml = "ivy-#{project.name}.xml"

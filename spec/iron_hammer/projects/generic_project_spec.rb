@@ -58,6 +58,12 @@ module IronHammer
         @project.assembly_name
       end
 
+      it 'should be able to get csproj name' do
+        test = GenericProject.new :name => 'MyTest', :csproj => 'MyTestProject.csproj'
+
+        test.csproj.should == 'MyTestProject.csproj'
+      end
+
       describe 'listing dependencies' do
         before :each do
           @project = GenericProject.new :path => 'my_path', :name => 'project_name'
