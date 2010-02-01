@@ -50,7 +50,7 @@ namespace :iron do
           xml = "ivy-#{project.name}.xml"
           builder = IvyBuilder.new project
 
-          sh builder.retrieve xml
+          sh builder.publish xml
         end
       end
     end
