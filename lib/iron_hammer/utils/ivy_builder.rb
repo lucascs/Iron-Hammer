@@ -15,10 +15,10 @@ module IronHammer
       def to_s
         xml = Builder::XmlMarkup.new(:indent => 2)
         xml.tag! 'ivy-module', :version => '2.0' do
-          name = @project.assembly_name.gsub(/\.[^\.]+$/, '')
+          name = @project.assembly_name
           xml.info :organisation => @organisation, :module => name
           xml.publications do
-            extension = @project.assembly_name.split(/\./).last
+            extension = 'dll'
             xml.artifact :name => name, :type => extension
           end if @project.is_a? DllProject
 
