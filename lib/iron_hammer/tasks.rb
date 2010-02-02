@@ -8,7 +8,10 @@ CLEAN.include("ivy*.xml")
 
 namespace :iron do
     @anvil = Anvil.load_from '.'
-    @hammer = Hammer.new(defined?(VISUAL_STUDIO_PATH) ? {:visual_studio_path => VISUAL_STUDIO_PATH} : {})
+    @hammer = Hammer.new(
+      (defined?(VISUAL_STUDIO_PATH) ? {:visual_studio_path => VISUAL_STUDIO_PATH} : {}).merge(
+      :configuration => ENV['Configuration']
+      ))
     FileUtils.mkdir 'TestResults' unless (File.exists?('TestResults') && File.directory?('TestResults'))
 
     desc 'Executes the default lifecycle'
