@@ -24,7 +24,9 @@ module IronHammer
 
           xml.dependencies do
             @project.dependencies.each do |dependency|
-              xml.dependency :org => @organisation, :name => dependency.name, :rev => dependency.version
+              xml.dependency :org => @organisation, :name => dependency.name, :rev => dependency.version do
+                xml.artifact :type => dependency.extension
+              end
             end
           end unless @project.dependencies.empty?
         end

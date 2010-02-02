@@ -40,10 +40,22 @@ module IronHammer
 
         xml = @ivy.to_s
         xml.should match /<dependencies>.*<\/dependencies>/ms
-        xml.should match /<dependency .*\/>/
+        xml.should match /<dependency .*>.*<\/dependency>/ms
         xml.should match /org="org"/
         xml.should match /name="My Dependency"/
         xml.should match /rev="1.2.3"/
+      end
+
+      it "should include project dependencies artifact" do
+        project = mock(GenericProject)
+        project.stub!(:name).and_return "MyProject"
+        project.stub!(:dependencies).and_return [Dependency.new(:name => "My Dependency", :version => "1.2.3", :extension => "exe")]
+        project.stub!(:assembly_name).and_return "MyProjectArtifact"
+
+        @ivy = IvyBuilder.new project
+
+        xml = @ivy.to_s
+        xml.should match /<artifact type="exe"\/>/
       end
 
       it "should write the xml to a file" do
