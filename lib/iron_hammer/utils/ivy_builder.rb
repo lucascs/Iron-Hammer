@@ -58,16 +58,20 @@ module IronHammer
         references.each do |reference|
           reference.elements['SpecificVersion'] = REXML::Element.new('SpecificVersion').add_text('false')
           reference.elements['HintPath'] = REXML::Element.new('HintPath').
-                add_text("..\\Libraries\\#{artifact_for reference}")
+                add_text([relative, 'Libraries', "#{artifact_for reference}"].flatten.patheticalize)
         end
 
         FileSystem.write! :path => @project.path, :name => @project.csproj, :content => doc.to_s
       end
 
+      def relative
+        ['..'] * @project.path.split(/\/|\\/).size
+      end
+
       private
       def artifact_for reference
         dependency = Dependency.from_reference reference
-        libraries_dir = Dir.new(File.join(@project.path, '..', 'Libraries'))
+        libraries_dir = Dir.new('Libraries')
         libraries_dir.find {|f| f.match "#{dependency.name}\\.(dll|exe)"}
       end
     end

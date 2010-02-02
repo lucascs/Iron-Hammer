@@ -87,17 +87,22 @@ module IronHammer
 
       describe "modifying csproj" do
         before :each do
-          @dir = 'abc'.inside_temp_dir
-          project = GenericProject.new :path => @dir, :csproj => 'abc.csproj', :name => 'abc'
+          @dir = 'temp'
+          @project = GenericProject.new :path => @dir, :csproj => 'abc.csproj', :name => 'abc'
 
           FileSystem.write! :name => 'abc.csproj', :path => @dir, :content => ProjectFileData.with_dependencies
+          FileSystem.write! :name => 'abc.csproj', :path => File.join(@dir, 'def'), :content => ProjectFileData.with_dependencies
 
           lib_dir = mock(Dir)
           lib_dir.stub!(:find).and_return "abc.dll"
 
-          Dir.stub!(:new).with(File.join(@dir, '..', 'Libraries')).and_return(lib_dir)
+          Dir.stub!(:new).with('Libraries').and_return(lib_dir)
 
-          @ivy = IvyBuilder.new project
+          @ivy = IvyBuilder.new @project
+        end
+
+        after :each do
+          FileUtils.rm_rf @dir
         end
 
         it "should not modify system references" do
@@ -117,10 +122,22 @@ module IronHammer
           doc.each_element('//Reference[not(starts_with(@Include, "System"))]') do |reference|
             hint_path = reference.elements['HintPath']
             hint_path.should_not be_nil
-            hint_path.text.should match /^..\\Libraries/
+            hint_path.text.should match /^\.\.\\Libraries/
           end
         end
 
+        it "should modify hint path of references to Libraries dir, considering relative paths" do
+          @project.path = File.join(@dir, 'def')
+          @ivy.modify_csproj
+          xml = FileSystem.read_file(@dir, 'def', 'abc.csproj')
+
+          doc = REXML::Document.new xml
+          doc.each_element('//Reference[not(starts_with(@Include, "System"))]') do |reference|
+            hint_path = reference.elements['HintPath']
+            hint_path.should_not be_nil
+            hint_path.text.should match /^\.\.\\\.\.\\Libraries/
+          end
+        end
       end
 
     end

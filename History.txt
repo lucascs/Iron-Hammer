@@ -1,3 +1,10 @@
+=== 0.3.9 2010-02-02
+* 1 bugfix
+  * fixing path of projects with more than one subfolder
+
+* 1 major
+  * new task for publishing initial dependencies of a project into ivy
+
 === 0.3.8 2010-02-01
 * 1 bugfix
   * only consider csproj's of solution

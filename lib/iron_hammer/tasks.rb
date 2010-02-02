@@ -27,6 +27,7 @@ namespace :iron do
     namespace :ivy do
       desc 'Publish project dependencies into ivy repository'
       task :setup do
+        @anvil = Anvil.load_from '.'
         @anvil.projects.each do |project|
           project.dependencies.each do |dependency|
             dependency_project = DependencyProject.new(
