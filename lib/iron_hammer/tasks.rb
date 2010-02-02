@@ -24,6 +24,13 @@ namespace :iron do
       end
     end
 
+    namespace :analyze do
+      desc 'Analyze the code using fxcop'
+      task :fxcop => [:initialize] do
+        sh @hammer.analyze *@anvil.projects
+      end
+    end
+
     namespace :ivy do
       desc 'Publish project dependencies into ivy repository'
       task :setup do

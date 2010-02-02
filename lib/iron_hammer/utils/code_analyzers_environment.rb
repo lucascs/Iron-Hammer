@@ -13,6 +13,14 @@ module IronHammer
         [@fxcop_path, 'fxcopcmd.exe'].patheticalize
       end
 
+      def fxcop_rules
+        [@fxcop_path, 'Rules'].patheticalize
+      end
+
+      def fxcop_result
+        "fxcop-result.xml"
+      end
+
       private
       def default_fxcop_path
         [

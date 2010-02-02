@@ -12,6 +12,7 @@ module IronHammer
       @configuration  = params[:configuration] || IronHammer::Defaults::CONFIGURATION_RUN
       @dot_net_environment = IronHammer::Utils::DotNetEnvironment.new params.merge(
         :framework_path => params[:dot_net_path])
+      @code_analyzers_environment = CodeAnalyzersEnvironment.new params
     end
 
     def details
@@ -35,6 +36,15 @@ module IronHammer
       results   = projects.first.results_file
       mstest    = @dot_net_environment.mstest
       "#{mstest} #{runconfig || ''}#{containers.join ' '} /resultsfile:#{results} #{details}"
+    end
+
+    def analyze *projects
+      return if projects.nil? || projects.empty?
+      fxcop = @code_analyzers_environment.fxcop
+      rules = @code_analyzers_environment.fxcop_rules
+      binaries = projects.collect {|project| "/file:#{project.path_to_binaries}"}
+      results = @code_analyzers_environment.fxcop_result
+      "#{fxcop} /rule:#{rules} /out:#{results} #{binaries.join ' '}"
     end
 
   end unless defined? Hammer
