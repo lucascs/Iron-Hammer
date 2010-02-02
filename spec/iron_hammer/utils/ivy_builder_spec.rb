@@ -55,7 +55,7 @@ module IronHammer
         @ivy = IvyBuilder.new project
 
         xml = @ivy.to_s
-        xml.should match /<artifact type="exe"\/>/
+        xml.should match /<artifact .*type="exe".*\/>/
       end
 
       it "should write the xml to a file" do
