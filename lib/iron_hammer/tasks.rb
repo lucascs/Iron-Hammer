@@ -5,11 +5,11 @@ require 'iron_hammer'
 CLEAN.include("TestResults/**")
 CLEAN.include("ivy*.xml")
 
-directory "TestResults"
 
 namespace :iron do
-   @anvil = Anvil.load_from '.'
-   @hammer = Hammer.new(defined?(VISUAL_STUDIO_PATH) ? {:visual_studio_path => VISUAL_STUDIO_PATH} : {})
+    @anvil = Anvil.load_from '.'
+    @hammer = Hammer.new(defined?(VISUAL_STUDIO_PATH) ? {:visual_studio_path => VISUAL_STUDIO_PATH} : {})
+    FileUtils.mkdir 'TestResults' unless (File.exists?('TestResults') && File.directory?('TestResults'))
 
     desc 'Executes the default lifecycle'
     task :default => [:clean, "ivy:retrieve", :build, "test:unit", "ivy:publish"]
@@ -37,12 +37,12 @@ namespace :iron do
 
     namespace :ivy do
       desc 'Publish project dependencies into ivy repository'
-      task :setup, [:binaries_path] do |binaries_path|
+      task :setup, [:binaries_path] do |t, args|
         @anvil.projects.each do |project|
           project.dependencies.each do |dependency|
             dependency_project = DependencyProject.new(
                 :name => dependency.name,
-                :binaries_path => binaries_path,
+                :binaries_path => args.binaries_path,
                 :version => dependency.version)
 
             puts "Dependency #{dependency.name}"
