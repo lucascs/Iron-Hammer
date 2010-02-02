@@ -1,6 +1,7 @@
 === 0.3.9 2010-02-02
 * 1 bugfix
   * fixing path of projects with more than one subfolder
+  * test project now calling superclass constructor
 
 * 1 major
   * new task for publishing initial dependencies of a project into ivy
