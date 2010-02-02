@@ -3,10 +3,12 @@ module IronHammer
     class Dependency
       attr_accessor :name
       attr_accessor :version
+      attr_accessor :extension
 
       def initialize params = {}
         @name = params[:name] || raise(ArgumentError.new('you must specify a name'))
         @version = params[:version]
+        @extension = params[:extension] || 'dll'
       end
 
       def == other
@@ -22,7 +24,14 @@ module IronHammer
         name = includes.split(', ')[0]
         match = includes.match /Version=(.+?),/
         version = match[1] if match
-        Dependency.new :name => name, :version => version
+        extension = get_extension reference
+        Dependency.new :name => name, :version => version, :extension => extension
+      end
+
+      private
+      def self.get_extension reference
+        hint_path = reference.elements["//HintPath"]
+        hint_path.text.split(/\./).last if hint_path
       end
     end
   end

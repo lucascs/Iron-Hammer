@@ -18,8 +18,8 @@ module IronHammer
           name = @project.assembly_name
           xml.info :organisation => @organisation, :module => name
           xml.publications do
-            extension = 'dll'
-            xml.artifact :name => name, :type => extension
+            xml.artifact :name => name, :type => 'dll'
+            xml.artifact :name => name, :type => 'exe'
           end if @project.is_a? DllProject
 
           xml.dependencies do
