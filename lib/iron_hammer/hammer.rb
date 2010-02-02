@@ -44,7 +44,7 @@ module IronHammer
       rules = @code_analyzers_environment.fxcop_rules
       binaries = projects.collect {|project| "/file:#{project.path_to_binaries}"}
       results = @code_analyzers_environment.fxcop_result
-      "#{fxcop} /rule:#{rules} /out:#{results} #{binaries.join ' '}"
+      "\"#{fxcop}\" /rule:\"#{rules}\" /out:\"#{results}\" #{binaries.join ' '}"
     end
 
   end unless defined? Hammer

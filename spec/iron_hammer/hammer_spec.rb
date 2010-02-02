@@ -75,9 +75,9 @@ module IronHammer
       project.stub!(:path_to_binaries).and_return '/my/binaries'
       command = @fully_set_hammer.analyze(project)
       command.should match /fxcopcmd\.exe/
-      command.should match /\/out:fxcop-result.xml/
+      command.should match /\/out:"fxcop-result.xml"/
       command.should match /\/file:\/my\/binaries/
-      command.should match /\/rule:.*\\Rules/
+      command.should match /\/rule:".*\\Rules"/
     end
   end
 end

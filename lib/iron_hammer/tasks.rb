@@ -5,15 +5,17 @@ require 'iron_hammer'
 CLEAN.include("TestResults/**")
 CLEAN.include("ivy*.xml")
 
+directory "TestResults"
+
 namespace :iron do
-    task :initialize do
-	    @anvil = Anvil.load_from '.'
-	    @hammer = Hammer.new(defined?(VISUAL_STUDIO_PATH) ? {:visual_studio_path => VISUAL_STUDIO_PATH} : {})
-	    FileUtils.mkdir 'TestResults' unless (File.exists?('TestResults') && File.directory?('TestResults'))
-    end
+   @anvil = Anvil.load_from '.'
+   @hammer = Hammer.new(defined?(VISUAL_STUDIO_PATH) ? {:visual_studio_path => VISUAL_STUDIO_PATH} : {})
+
+    desc 'Executes the default lifecycle'
+    task :default => [:clean, "ivy:retrieve", :build, "test:unit", "ivy:publish"]
 
     desc 'Builds the solution'
-    task :build => [:clean, :initialize] do
+    task :build => [:clean] do
 	    sh @hammer.build @anvil.solution
     end
 
@@ -26,20 +28,21 @@ namespace :iron do
 
     namespace :analyze do
       desc 'Analyze the code using fxcop'
-      task :fxcop => [:initialize] do
-        sh @hammer.analyze *@anvil.projects
+      task :fxcop do
+        sh @hammer.analyze *@anvil.projects do |ok, response|
+          puts response
+        end
       end
     end
 
     namespace :ivy do
       desc 'Publish project dependencies into ivy repository'
-      task :setup do
-        @anvil = Anvil.load_from '.'
+      task :setup, [:binaries_path] do |binaries_path|
         @anvil.projects.each do |project|
           project.dependencies.each do |dependency|
             dependency_project = DependencyProject.new(
                 :name => dependency.name,
-                :binaries_path => ENV['binaries_path'],
+                :binaries_path => binaries_path,
                 :version => dependency.version)
 
             puts "Dependency #{dependency.name}"
@@ -54,7 +57,8 @@ namespace :iron do
       end
 
       desc 'Generates ivy-<project_name>.xml for all projects of the solution'
-      task :generate => [:initialize] do
+      task :generate do
+        puts "Generating ivy files for projects"
         @anvil.projects.each do |project|
           builder = IvyBuilder.new project
           builder.write_to "ivy-#{project.name}.xml"
