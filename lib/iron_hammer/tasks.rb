@@ -25,7 +25,9 @@ namespace :iron do
     namespace :test do
       desc 'Runs the unit tests'
       task :unit => [:build] do
-        sh @hammer.test *@anvil.test_projects
+        command = @hammer.test *@anvil.test_projects
+        puts "There are no tests to run" unless command
+        sh command if command
       end
     end
 

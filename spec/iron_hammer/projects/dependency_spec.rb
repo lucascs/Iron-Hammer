@@ -39,6 +39,13 @@ module IronHammer
         dependency = Dependency.from_reference @reference
         dependency.extension.should == 'exe'
       end
+
+      it "should fill dependency extension using executable extension" do
+        @reference = REXML::Document.new('<Reference Include="anyName"><ExecutableExtension>.exe</ExecutableExtension></Reference>').root
+
+        dependency = Dependency.from_reference @reference
+        dependency.extension.should == 'exe'
+      end
     end
   end
 end

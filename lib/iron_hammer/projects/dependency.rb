@@ -30,8 +30,11 @@ module IronHammer
 
       private
       def self.get_extension reference
-        hint_path = reference.elements["//HintPath"]
-        hint_path.text.split(/\./).last if hint_path
+        hint_path = reference.elements["HintPath"]
+        return hint_path.text.split(/\./).last if hint_path
+
+        executable_extension = reference.elements["ExecutableExtension"]
+        executable_extension.text.gsub(/\./, '') if executable_extension
       end
     end
   end

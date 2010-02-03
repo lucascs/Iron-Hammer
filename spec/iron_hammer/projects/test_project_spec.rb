@@ -4,7 +4,7 @@ module IronHammer
   module Projects
     describe TestProject do
       before :all do
-        @basic_test = TestProject.new :name => 'TestProject'
+        @basic_test = TestProject.new :name => 'TestProject', :dll => 'TestProject'
       end
 
       it 'should consider the test project to assume a default name when its name is not informed' do
@@ -29,12 +29,10 @@ module IronHammer
         test.config.should be_eql('TestConfig.testrunconfig')
       end
 
-      it 'should point to the default test dll config when it is not provided' do
-        test = TestProject.new :project => 'MyProject'
-        test.dll.should be_eql('MyProject.Tests.dll')
-
+      it 'should use assembly_name when dll is not provided' do
         test = TestProject.new :name => 'TestProject'
-        test.dll.should be_eql('TestProject.dll')
+        test.should_receive(:assembly_name)
+        test.dll
       end
 
       it 'should allow the customization of the test dll' do

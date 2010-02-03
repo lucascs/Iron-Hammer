@@ -38,14 +38,14 @@ module IronHammer
       results_file  = ['TestResults', 'TestResults.trx'].patheticalize
       mstest        = [@visual_studio_path, 'mstest.exe'].patheticalize
 
-      @fully_set_hammer.test(IronHammer::Projects::TestProject.new :name => 'MyTestProject').
+      @fully_set_hammer.test(IronHammer::Projects::TestProject.new :name => 'MyTestProject', :dll => 'MyTestProject').
         should be_eql("#{mstest} /testcontainer:#{test_dll}.dll /resultsfile:#{results_file} #{details}")
     end
 
 	  it 'should include local test config if any' do
 	    File.stub!(:exists?).with(File.join('base', '..', 'LocalTestRun.testrunconfig')).and_return true
       @fully_set_hammer.test(
-        IronHammer::Projects::TestProject.new(:name => 'MyTestProject', :path => 'base')
+        IronHammer::Projects::TestProject.new(:name => 'MyTestProject', :path => 'base', :dll => 'MyTestProject')
       ).should match(/runconfig:LocalTestRun.testrunconfig/)
     end
 
@@ -60,7 +60,7 @@ module IronHammer
         results_file      = ['TestResults', 'TestResults.trx'].patheticalize
         mstest            = [@visual_studio_path, 'mstest.exe'].patheticalize
 
-        @fully_set_hammer.test(TestProject.new(:name => 'MyTestProject'), TestProject.new(:name => 'MyOtherTestProject')).
+        @fully_set_hammer.test(TestProject.new(:name => 'MyTestProject', :dll => 'MyTestProject'), TestProject.new(:name => 'MyOtherTestProject', :dll => 'MyOtherTestProject')).
           should be_eql("#{mstest} /testcontainer:#{test_dll}.dll /testcontainer:#{another_test_dll}.dll /resultsfile:#{results_file} #{details}")
       end
 
