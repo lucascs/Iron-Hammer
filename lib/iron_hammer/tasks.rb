@@ -45,18 +45,24 @@ namespace :iron do
       task :setup, [:binaries_path] do |t, args|
         @anvil.projects.each do |project|
           project.dependencies.each do |dependency|
-            dependency_project = DependencyProject.new(
+
+            sh "java -jar #{IVY_JAR} -settings #{IVY_SETTINGS} -dependency #{ORGANISATION} #{dependency.name} #{dependency.version}" do |ok, res|
+              if !ok
+                dependency_project = DependencyProject.new(
                 :name => dependency.name,
                 :binaries_path => args.binaries_path,
                 :version => dependency.version)
 
-            puts "Dependency #{dependency.name}"
+                puts "Dependency #{dependency.name}"
 
-            builder = IvyBuilder.new dependency_project
+                builder = IvyBuilder.new dependency_project
 
-            builder.write_to "ivy-#{dependency.name}.xml"
+                builder.write_to "ivy-#{dependency.name}.xml"
 
-            sh builder.publish "ivy-#{dependency.name}.xml"
+                sh builder.publish "ivy-#{dependency.name}.xml"
+              end
+            end
+
           end
         end
       end
