@@ -49,6 +49,14 @@ module IronHammer
       ).should match(/runconfig:LocalTestRun.testrunconfig/)
     end
 
+    it 'should include test run config if any' do
+	    File.stub!(:exists?).with(File.join('base', '..', 'LocalTestRun.testrunconfig')).and_return false
+	    File.stub!(:exists?).with(File.join('base', '..', 'TestRunConfig.testrunconfig')).and_return true
+      @fully_set_hammer.test(
+        IronHammer::Projects::TestProject.new(:name => 'MyTestProject', :path => 'base', :dll => 'MyTestProject')
+      ).should match(/runconfig:TestRunConfig.testrunconfig/)
+    end
+
 	  describe 'for multiple test projects' do
       it 'should provide a proper command line to run tests' do
         details = ['duration', 'errorstacktrace', 'errormessage', 'outcometext'].inject('') do |buffer, detail|

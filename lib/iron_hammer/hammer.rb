@@ -31,7 +31,10 @@ module IronHammer
     def test *projects
       return if projects.nil? || projects.empty?
       parent_dir = File.join(projects.first.path || '.', '..')
-      runconfig = '/runconfig:LocalTestRun.testrunconfig ' if File.exists?(File.join(parent_dir, 'LocalTestRun.testrunconfig'))
+      config = ['LocalTestRun', 'TestRunConfig'].find do |config_name|
+        File.exists?(File.join(parent_dir, "#{config_name}.testrunconfig"))
+      end
+      runconfig = "/runconfig:#{config}.testrunconfig " if config
       containers = projects.collect{|project| "/testcontainer:#{project.container @configuration}"}
       results   = projects.first.results_file
       mstest    = @dot_net_environment.mstest
