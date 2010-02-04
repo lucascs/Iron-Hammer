@@ -13,9 +13,9 @@ module IronHammer
 
       def service name
         services = @wmi.ExecQuery("SELECT * FROM Win32_Service WHERE Name = '#{name}'")
-        nil
-
-
+        services.each do |s|
+          return WindowsService.new s
+        end
       end
     end
   end
