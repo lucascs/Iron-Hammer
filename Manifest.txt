@@ -10,6 +10,7 @@ lib/iron_hammer/default_deliverables_behavior.rb
 lib/iron_hammer/deliverables/configuration_file.rb
 lib/iron_hammer/deliverables/deliverable.rb
 lib/iron_hammer/deploy/wmi_service.rb
+lib/iron_hammer/deploy/windows_service.rb
 lib/iron_hammer/hammer.rb
 lib/iron_hammer/package.rb
 lib/iron_hammer/projects/asp_net_mvc_project.rb

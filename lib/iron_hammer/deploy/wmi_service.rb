@@ -8,9 +8,15 @@ module IronHammer
     class WMIService
 
       def initialize computer
-        @service = WIN32OLE.connect("winmgmts:{impersonationLevel=impersonate}!\\\\#{computer}\\root\\cimv2")
+        @wmi = WIN32OLE.connect("winmgmts:{impersonationLevel=impersonate}!\\\\#{computer}\\root\\cimv2")
       end
 
+      def service name
+        services = @wmi.ExecQuery("SELECT * FROM Win32_Service WHERE Name = '#{name}'")
+        nil
+
+
+      end
     end
   end
 end
