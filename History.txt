@@ -1,3 +1,9 @@
+=== 1.0.0 2010-02-04
+
+=== 0.3.11 2010-02-03
+* 1 bugfix
+  * Only publishing dependencies when not on repository
+
 === 0.3.10 2010-02-02
 * 2 bugfix
   * Test dll is now based on assembly name
