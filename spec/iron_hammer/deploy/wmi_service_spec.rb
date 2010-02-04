@@ -22,7 +22,7 @@ module IronHammer
 
         it "should find a service" do
 
-          @ole.should_receive(:ExecQuery).with("SELECT * FROM Win32_Service WHERE Name = 'MyService'")
+          @ole.should_receive(:ExecQuery).with("SELECT * FROM Win32_Service WHERE Name = 'MyService'").and_return []
 
           wmi = WMIService.new 'MyComputer'
 

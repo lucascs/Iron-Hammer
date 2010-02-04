@@ -16,6 +16,7 @@ module IronHammer
         services.each do |s|
           return WindowsService.new s
         end
+        nil
       end
     end
   end
