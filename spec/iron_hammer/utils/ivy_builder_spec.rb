@@ -87,6 +87,7 @@ module IronHammer
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
         project.stub!(:path_to_binaries).and_return "binaries/here"
+        project.stub!(:version).and_return '1.0.0.0'
         @ivy = IvyBuilder.new project
 
         command = @ivy.publish "ivy.xml"

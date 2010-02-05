@@ -9,7 +9,7 @@ module IronHammer
 
         WIN32OLE.should_receive(:connect).with("winmgmts:{impersonationLevel=impersonate}!\\\\MyComputer\\root\\cimv2")
 
-        WMIService.new 'MyComputer'
+        WMIService.new :computer => 'MyComputer'
       end
 
       describe "locating a windows service" do
@@ -24,7 +24,7 @@ module IronHammer
 
           @ole.should_receive(:ExecQuery).with("SELECT * FROM Win32_Service WHERE Name = 'MyService'").and_return []
 
-          wmi = WMIService.new 'MyComputer'
+          wmi = WMIService.new :computer => 'MyComputer'
 
           wmi.service 'MyService'
 
@@ -34,7 +34,7 @@ module IronHammer
 
           @ole.stub!(:ExecQuery).and_return []
 
-          wmi = WMIService.new 'MyComputer'
+          wmi = WMIService.new :computer => 'MyComputer'
 
           wmi.service('MyService').should be_nil
 
@@ -44,7 +44,7 @@ module IronHammer
 
           @ole.stub!(:ExecQuery).and_return [@ole]
 
-          wmi = WMIService.new 'MyComputer'
+          wmi = WMIService.new :computer => 'MyComputer'
 
           wmi.service('MyService').should be_a WindowsService
 
@@ -57,7 +57,7 @@ module IronHammer
             @ole.stub!(:Get).with('Win32_BaseService').and_return base
             base.should_receive(:Create)
 
-            wmi = WMIService.new 'MyComputer'
+            wmi = WMIService.new :computer => 'MyComputer'
 
             wmi.create! :name => 'MyService', :path => '/my/path'
           end

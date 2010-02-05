@@ -86,6 +86,20 @@ module IronHammer
           @project.dependencies.should be_eql(expected)
         end
       end
+
+      it "should read assembly info and return" do
+        File.should_receive(:read).with "abc/Properties/AssemblyInfo.cs"
+        @project.path = "abc"
+        @project.assembly_info
+      end
+
+      it "should use assembly_info to determine version" do
+        info = mock(AssemblyInfo)
+        @project.stub!(:assembly_info).and_return info
+        info.should_receive(:version).and_return "1.2.3.4"
+
+        @project.version.should == "1.2.3.4"
+      end
     end
   end
 end

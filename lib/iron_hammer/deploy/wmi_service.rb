@@ -1,7 +1,9 @@
-require 'win32ole' if RUBY_PLATFORM.downcase.include?("mswin")
-
-class WIN32OLE
-end unless defined? WIN32OLE
+begin
+  require 'win32ole'
+rescue LoadError
+  class WIN32OLE
+  end unless defined? WIN32OLE
+end
 
 module IronHammer
   module Deploy
@@ -37,8 +39,15 @@ module IronHammer
 
     class WMIService
 
-      def initialize computer
-        @wmi = WIN32OLE.connect("winmgmts:{impersonationLevel=impersonate}!\\\\#{computer}\\root\\cimv2")
+      def initialize params ={}
+        computer = params[:computer]
+        user = params[:user]
+        password = params[:password]
+        if user && password
+          @wmi = WIN32OLE.new("WbemScripting.SWbemLocator").ConnectServer(computer, "root\\cimv2", user, password)
+        else
+          @wmi = WIN32OLE.connect("winmgmts:{impersonationLevel=impersonate}!\\\\#{computer}\\root\\cimv2")
+        end
       end
 
       def service name

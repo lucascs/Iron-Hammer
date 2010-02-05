@@ -30,7 +30,7 @@ module IronHammer
       @@status[23] = "The service exists in the database of services available from the system."
       @@status[24] = "The service is currently paused in the system."
 
-      def text code
+      def self.text code
         @@status[code]
       end
     end

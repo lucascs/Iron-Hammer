@@ -1,4 +1,5 @@
 require 'iron_hammer/package'
+require 'iron_hammer/projects/assembly_info'
 
 module IronHammer
   module Projects
@@ -19,7 +20,7 @@ module IronHammer
       end
 
       def version
-        '1.0.0.0'
+        assembly_info.version || '1.0.0.0'
       end
 
       def deliverables params={}
@@ -28,6 +29,10 @@ module IronHammer
 
       def assembly_name
         @assembly_name ||= file.assembly_name
+      end
+
+      def assembly_info
+        @assembly_info ||= AssemblyInfo.new File.read(File.join @path, 'Properties', 'AssemblyInfo.cs')
       end
 
       def dependencies
