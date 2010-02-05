@@ -32,7 +32,7 @@ module IronHammer
 
         it "should return nil if there are no services with given name" do
 
-          @ole.stub(:ExecQuery).and_return []
+          @ole.stub!(:ExecQuery).and_return []
 
           wmi = WMIService.new 'MyComputer'
 
@@ -42,11 +42,25 @@ module IronHammer
 
         it "should return a WindowsService if any service matches given name" do
 
-          @ole.stub(:ExecQuery).and_return [@ole]
+          @ole.stub!(:ExecQuery).and_return [@ole]
 
           wmi = WMIService.new 'MyComputer'
 
           wmi.service('MyService').should be_a WindowsService
+
+        end
+
+        describe 'creating a service' do
+
+          it "should open Win32_BaseService and use it to create the new service" do
+            base = mock(WIN32OLE)
+            @ole.stub!(:Get).with('Win32_BaseService').and_return base
+            base.should_receive(:Create)
+
+            wmi = WMIService.new 'MyComputer'
+
+            wmi.create! :name => 'MyService', :path => '/my/path'
+          end
 
         end
       end
