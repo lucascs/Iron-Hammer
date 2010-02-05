@@ -8,6 +8,7 @@ Hoe.plugin :newgem
 
 $hoe = Hoe.spec 'iron_hammer' do
   self.developer 'Mozair Alves do Carmo Junior', 'macskeptic@gmail.com'
+  self.developer 'Lucas Cavalcanti', 'lucasmrtuner@gmail.com'
 
   self.post_install_message = File.read('PostInstall.txt')
   self.rubyforge_name       = self.name

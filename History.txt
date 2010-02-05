@@ -1,4 +1,6 @@
 === 1.0.0 2010-02-04
+* 1 major
+  * starting service deploy helpers
 
 === 0.3.11 2010-02-03
 * 1 bugfix
