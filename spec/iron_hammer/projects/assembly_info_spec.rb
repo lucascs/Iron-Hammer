@@ -17,6 +17,24 @@ ASSEMBLY
 
         assembly_info.version.should == '1.0.0.0'
       end
+
+      describe "modifying version of assembly_info" do
+        before :each do
+          content = DataHelper::read 'AssemblyInfo.cs'
+          path = 'Properties'.inside_temp_dir
+          name = 'AssemblyInfo.cs'
+          @assembly_info = File.join path, name
+          FileSystem.write! :path => path, :name => name, :content => content
+        end
+
+        it "should modify actual file when setting version" do
+          info = AssemblyInfo.new @assembly_info
+
+          info.version = '1.2.3.4'
+
+          AssemblyInfo.new(@assembly_info).version.should == '1.2.3.4'
+        end
+      end
     end
   end
 end
