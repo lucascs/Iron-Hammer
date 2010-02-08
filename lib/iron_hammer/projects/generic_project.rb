@@ -32,7 +32,7 @@ module IronHammer
       end
 
       def assembly_info
-        @assembly_info ||= AssemblyInfo.new File.read(File.join @path, 'Properties', 'AssemblyInfo.cs')
+        @assembly_info ||= AssemblyInfo.new(File.join @path, 'Properties', 'AssemblyInfo.cs')
       end
 
       def dependencies

@@ -87,9 +87,9 @@ module IronHammer
         end
       end
 
-      it "should read assembly info and return" do
-        File.should_receive(:read).with "abc/Properties/AssemblyInfo.cs"
-        @project.path = "abc"
+      it "should create an assembly_info" do
+        AssemblyInfo.should_receive(:new)
+
         @project.assembly_info
       end
 
