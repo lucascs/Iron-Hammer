@@ -23,6 +23,10 @@ module IronHammer
         assembly_info.version || '1.0.0.0'
       end
 
+      def version= new_version
+        assembly_info.version = new_version
+      end
+
       def deliverables params={}
         []
       end

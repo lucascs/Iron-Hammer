@@ -100,6 +100,14 @@ module IronHammer
 
         @project.version.should == "1.2.3.4"
       end
+
+      it "should use assembly_info setter for version" do
+        info = mock(AssemblyInfo)
+        @project.stub!(:assembly_info).and_return info
+        info.should_receive('version=').with("1.2.3.4")
+
+        @project.version = "1.2.3.4"
+      end
     end
   end
 end
