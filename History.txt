@@ -1,3 +1,7 @@
+=== 1.0.1 2010-02-08
+* 1 major
+  * It is now possible to set project version
+
 === 1.0.0 2010-02-04
 * 1 major
   * starting service deploy helpers
