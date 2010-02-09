@@ -68,7 +68,8 @@ namespace :iron do
               dependency_project = DependencyProject.new(
               :name => dependency.name,
               :binaries_path => args.binaries_path,
-              :version => dependency.version)
+              :version => dependency.version,
+              :extension => dependency.extension)
 
               puts "Dependency #{dependency.name}"
 
