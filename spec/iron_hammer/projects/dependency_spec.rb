@@ -13,7 +13,7 @@ module IronHammer
       end
 
       it "should fill dependency name" do
-        @includes.stub!(:value).and_return "MyName"
+        @includes.stub!(:value).and_return "MyName, Version=1.2.3.4"
 
         dependency = Dependency.from_reference @reference
         dependency.name.should == "MyName"
@@ -41,14 +41,14 @@ module IronHammer
       end
 
       it "should fill dependency extension using hint path" do
-        @reference = REXML::Document.new('<Reference Include="anyName"><HintPath>..\\anyFile.exe</HintPath></Reference>').root
+        @reference = REXML::Document.new('<Reference Include="anyName, Version=1.2.3.4"><HintPath>..\\anyFile.exe</HintPath></Reference>').root
 
         dependency = Dependency.from_reference @reference
         dependency.extension.should == 'exe'
       end
 
       it "should fill dependency extension using executable extension" do
-        @reference = REXML::Document.new('<Reference Include="anyName"><ExecutableExtension>.exe</ExecutableExtension></Reference>').root
+        @reference = REXML::Document.new('<Reference Include="anyName, Version=1.2.3.4"><ExecutableExtension>.exe</ExecutableExtension></Reference>').root
 
         dependency = Dependency.from_reference @reference
         dependency.extension.should == 'exe'
