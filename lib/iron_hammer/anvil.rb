@@ -20,29 +20,38 @@ module IronHammer
       ) unless entries.nil? || entries.empty?
     end
 
-    def projects 
+    def projects
       @projects ||= (@solution.file.projects.collect do |p|
         ProjectFile.load_from(root_path = @solution.path, project_path = p[:path], csproj = p[:csproj]).type.new(p)
       end)
     end
-    
+
     def dll_projects
       @dll_projects ||= projects.select {|p| p.is_a? DllProject}
     end
-    
+
     def test_projects
       @test_projects ||= projects.select {|p| p.is_a? TestProject}
     end
-    
+
+    def integration_test_projects
+      test_projects.select {|p| p.name.include? 'Integration'}
+    end
+
+    def unit_test_projects
+      test_projects - integration_test_projects
+    end
+
     def load_projects_from_solution #deprecated!
       Kernel::warn '[DEPRECATION] `load_projects_from_solution` is deprecated and now it is a no-op. ' +
         'Please, just use `projects` instead - they will be loaded in a lazy fashion ;)'
     end
 
-  private    
+  private
     def initialize params={}
       @solution = params[:solution]
       @projects = params[:projects]
     end
   end unless defined? Anvil
 end
+

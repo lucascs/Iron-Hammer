@@ -5,7 +5,7 @@ module IronHammer
     it 'should provide an accessor for the solution loaded' do
       Anvil.new.should respond_to(:solution)
     end
-    
+
     it 'should provide an accessor for the projects loaded' do
       Anvil.new.should respond_to(:projects)
     end
@@ -15,7 +15,7 @@ module IronHammer
         @solution_root = 'solution/dummy/root'
         @solution_name = 'MACSkeptic.Iron.Hammer.All.Kinds.Of.Projects'
       end
-      
+
       it 'should have a method to do it' do
         Anvil.should respond_to(:load_from)
       end
@@ -29,10 +29,10 @@ module IronHammer
         anvil.solution.should_not be_nil
         anvil.solution.should be_an_instance_of(IronHammer::Solutions::Solution)
         anvil.solution.name.should be_eql(@solution_name)
-        anvil.solution.file.should be_eql(file) 
+        anvil.solution.file.should be_eql(file)
       end
     end
-    
+
     describe 'loading the projects from the solution' do
       before :each do #awesomeness
         @anvil = Anvil.new(
@@ -49,14 +49,14 @@ module IronHammer
           )
         )
       end
-      
+
       it 'should load all the projects belonging to the solution' do
         mock_projects
-        
+
         @anvil.projects.should_not be_nil
         @anvil.projects.should be_an_instance_of(Array)
         @anvil.projects.should have(@project_names.length).elements
-        
+
         (@anvil.projects.select { |p| p.is_a? IronHammer::Projects::AspNetMvcProject }).
           should have(1).asp_net_mvc_project
         (@anvil.projects.select { |p| p.is_a? IronHammer::Projects::AspNetProject }).
@@ -66,22 +66,48 @@ module IronHammer
         (@anvil.projects.select { |p| p.is_a? IronHammer::Projects::DllProject }).
           should have(1).dll_project
       end
-      
+
       it 'should filter dll projects' do
         mock_projects
         @anvil.dll_projects.should have(1).dll_project
       end
-      
+
       it 'should filter test projects' do
         mock_projects
-        
+
         @anvil.test_projects.should have(1).test_project
       end
-      
+
+      it 'should filter unit test projects' do
+        mock_projects
+
+        test_project = @anvil.test_projects.first
+        test_project.stub!(:name).and_return('Abc.IntegrationTest')
+
+        @anvil.unit_test_projects.should have(0).unit_test_projects
+
+        test_project.stub!(:name).and_return('Abc.Test')
+
+        @anvil.unit_test_projects.should have(1).unit_test_projects
+      end
+
+      it 'should filter integration test projects' do
+        mock_projects
+
+        test_project = @anvil.test_projects.first
+        test_project.stub!(:name).and_return('Abc.IntegrationTest')
+
+        @anvil.integration_test_projects.should have(1).integration_test_projects
+
+        test_project.stub!(:name).and_return('Abc.Test')
+
+        @anvil.integration_test_projects.should have(0).integration_test_projects
+      end
+
       def mock_projects
         @project_hashes.each do |p|
           project_file = Object.new
-          ProjectFile.should_receive(:load_from).with(*[@solution_root, p[:path], p[:csproj]]).and_return(project_file)          
+          ProjectFile.should_receive(:load_from).with(*[@solution_root, p[:path], p[:csproj]]).and_return(project_file)
           project_file.should_receive(:type).
             and_return(case p[:name]
                 when @asp_net
@@ -100,3 +126,4 @@ module IronHammer
     end
   end
 end
+
