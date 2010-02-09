@@ -52,26 +52,32 @@ namespace :iron do
     namespace :ivy do
       desc 'Publishes project dependencies into ivy repository'
       task :setup, [:binaries_path] do |t, args|
+        all_dependencies = []
         @anvil.projects.each do |project|
           project.dependencies.each do |dependency|
+            all_dependencies << dependency unless all_dependencies.include? dependency
+          end
+        end
 
-            sh "java -jar #{IVY_JAR} -settings #{IVY_SETTINGS} -dependency #{ORGANISATION} #{dependency.name} #{dependency.version}" do |ok, res|
-              if !ok
-                dependency_project = DependencyProject.new(
-                :name => dependency.name,
-                :binaries_path => args.binaries_path,
-                :version => dependency.version)
+        files = Dir.new(args.binaries_path).entries
+        candidates = all_dependencies.select {|x| files.include? "#{x.name}.#{x.extension}"}
 
-                puts "Dependency #{dependency.name}"
+        candidates.each do |dependency|
+          sh "java -jar #{IVY_JAR} -settings #{IVY_SETTINGS} -dependency #{ORGANISATION} #{dependency.name} #{dependency.version}" do |ok, res|
+            unless res.exitstatus == 0
+              dependency_project = DependencyProject.new(
+              :name => dependency.name,
+              :binaries_path => args.binaries_path,
+              :version => dependency.version)
 
-                builder = IvyBuilder.new dependency_project
+              puts "Dependency #{dependency.name}"
 
-                builder.write_to "ivy-#{dependency.name}.xml"
+              builder = IvyBuilder.new dependency_project
 
-                sh builder.publish "ivy-#{dependency.name}.xml"
-              end
+              builder.write_to "ivy-#{dependency.name}.xml"
+
+              sh builder.publish "ivy-#{dependency.name}.xml"
             end
-
           end
         end
       end
