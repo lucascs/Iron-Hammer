@@ -7,7 +7,8 @@ CLEAN.include("ivy*.xml")
 
 
 namespace :iron do
-    @anvil = Anvil.load_from '.'
+
+    @anvil = Anvil.load_from(ENV['SolutionDir'] || '.')
     @hammer = Hammer.new(
       (defined?(VISUAL_STUDIO_PATH) ? {:visual_studio_path => VISUAL_STUDIO_PATH} : {}).merge(
       :configuration => ENV['Configuration']

@@ -26,7 +26,7 @@ module IronHammer
 
       private
       def file
-        @file ||= File.read(@filename)
+        File.read(@filename)
       end
     end
   end

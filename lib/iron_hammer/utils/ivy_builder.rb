@@ -24,7 +24,8 @@ module IronHammer
 
           xml.dependencies do
             @project.dependencies.each do |dependency|
-              xml.dependency :org => @organisation, :name => dependency.name, :rev => 'latest.integration' do
+              rev = dependency.version.gsub /\.\d+$/, '.+'
+              xml.dependency :org => @organisation, :name => dependency.name, :rev => rev do
                 xml.artifact :type => dependency.extension, :name => dependency.name
               end
             end
@@ -74,7 +75,7 @@ module IronHammer
       def artifact_for reference
         dependency = Dependency.from_reference reference
         libraries_dir = Dir.new('Libraries')
-        libraries_dir.find {|f| f.match "#{dependency.name}\\.(dll|exe)"}
+        libraries_dir.find {|f| f.match "^#{dependency.name}\\.(dll|exe)"}
       end
     end
   end

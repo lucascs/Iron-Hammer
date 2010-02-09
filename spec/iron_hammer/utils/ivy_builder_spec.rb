@@ -43,7 +43,7 @@ module IronHammer
         xml.should match /<dependency .*>.*<\/dependency>/ms
         xml.should match /org="org"/
         xml.should match /name="My Dependency"/
-        xml.should match /rev="latest.integration"/
+        xml.should match /rev="1.2.+"/
       end
 
       it "should include project dependencies artifact" do
