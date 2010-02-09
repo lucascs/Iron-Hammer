@@ -26,6 +26,13 @@ module IronHammer
         dependency.version.should == "1.2.3.4"
       end
 
+      it "should fill dependency version if includes ends with version" do
+        @includes.stub!(:value).and_return "MyName, Version=1.2.3.4"
+
+        dependency = Dependency.from_reference @reference
+        dependency.version.should == "1.2.3.4"
+      end
+
       it "should fill dependency extension with dll by default" do
         @includes.stub!(:value).and_return "MyName, Version=1.2.3.4, anything else"
 

@@ -22,7 +22,7 @@ module IronHammer
       def self.from_reference reference
         includes = reference.attribute(:Include).value
         name = includes.split(', ')[0]
-        match = includes.match /Version=(.+?),/
+        match = includes.match /Version=(.+?)(,|$)/
         version = match[1] if match
         extension = get_extension reference
         Dependency.new :name => name, :version => version, :extension => extension
