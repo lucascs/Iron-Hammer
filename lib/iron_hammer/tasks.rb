@@ -24,16 +24,24 @@ namespace :iron do
     end
 
     namespace :test do
+
       desc 'Runs the unit tests'
       task :unit => [:build] do
-        command = @hammer.test *@anvil.test_projects
-        puts "There are no tests to run" unless command
+        command = @hammer.test *@anvil.unit_test_projects
+        puts "There are no unit tests to run" unless command
+        sh command if command
+      end
+
+      desc 'Runs the integration tests'
+      task :integration => [:build] do
+        command = @hammer.test *@anvil.integration_test_projects
+        puts "There are no integration tests to run" unless command
         sh command if command
       end
     end
 
     namespace :analyze do
-      desc 'Analyze the code using fxcop'
+      desc 'Analyzes the code using fxcop'
       task :fxcop do
         sh @hammer.analyze *@anvil.projects do |ok, response|
           puts response
@@ -42,7 +50,7 @@ namespace :iron do
     end
 
     namespace :ivy do
-      desc 'Publish project dependencies into ivy repository'
+      desc 'Publishes project dependencies into ivy repository'
       task :setup, [:binaries_path] do |t, args|
         @anvil.projects.each do |project|
           project.dependencies.each do |dependency|
@@ -101,7 +109,7 @@ namespace :iron do
         end
       end
 
-      desc 'Publish project assemblies to ivy repository (only dll projects)'
+      desc 'Publishes project assemblies to ivy repository (only dll projects)'
       task :publish => [:generate] do
         @anvil.dll_projects.each do |project|
           xml = "ivy-#{project.name}.xml"

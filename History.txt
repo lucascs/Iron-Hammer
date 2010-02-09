@@ -1,6 +1,12 @@
+=== 1.0.2 2010-02-09
+* 2 major
+  * filtering unit and integration tests
+  * tasks for unit and integration tests
+
 === 1.0.1 2010-02-08
-* 1 major
+* 2 major
   * It is now possible to set project version
+  * depenency versions now use last digit dinamically
 
 === 1.0.0 2010-02-04
 * 1 major
