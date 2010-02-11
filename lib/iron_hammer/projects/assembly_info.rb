@@ -16,8 +16,8 @@ module IronHammer
         content = file
         File.open(@filename, 'w') do |f|
           content.each_line do |line|
-            line.gsub!(/^(\[assembly: AssemblyVersion\(").*("\)\])$/) do |match|
-              "#{$1}#{new_version}#{$2}"
+            line.gsub!(/^(\[assembly: Assembly(File)?Version\(").*("\)\])$/) do |match|
+              "#{$1}#{new_version}#{$3}"
             end
             f << line
           end

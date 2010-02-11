@@ -14,7 +14,7 @@ $hoe = Hoe.spec 'iron_hammer' do
   self.rubyforge_name       = self.name
   self.extra_deps           = [['rubyzip2','>= 2.0.1'],
                                ['builder', '>= 2.1.2']]
-  self.version              = '1.0.2'
+  self.version              = '1.0.3'
 end
 
 require 'newgem/tasks'
