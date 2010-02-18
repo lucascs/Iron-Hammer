@@ -30,16 +30,6 @@ module IronHammer
         @project.path_to_binaries(:configuration => '').should be_eql(File.join('MyProject', 'bin', 'Release'))
       end
 
-      it "should list artifacts, but only filenames" do
-        @project.stub!(:assembly_name).and_return 'MyProjectArtifact'
-        @project.stub!(:path_to_binaries).and_return '/any/path'
-
-        Dir.should_receive('[]').with(File.join('/any/path', 'MyProjectArtifact.{dll,exe}')).and_return(
-          ['/any/path/MyProjectArtifact.dll'])
-
-        @project.artifacts.should == ['MyProjectArtifact.dll']
-      end
-
       describe 'listing the deliverables' do
         describe 'regarding the binaries' do
           it 'should be able to list them (EXEs and DLLs)' do

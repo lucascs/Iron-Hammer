@@ -58,6 +58,16 @@ module IronHammer
         @project.assembly_name
       end
 
+      it "should list artifacts, but only filenames" do
+        @project.stub!(:assembly_name).and_return 'MyProjectArtifact'
+        @project.stub!(:path_to_binaries).and_return '/any/path'
+
+        Dir.should_receive('[]').with(File.join('/any/path', 'MyProjectArtifact.{dll,exe}')).and_return(
+          ['/any/path/MyProjectArtifact.dll'])
+
+        @project.artifacts.should == ['MyProjectArtifact.dll']
+      end
+
       describe 'dependencies with projects' do
         before :each do
           @file = mock(ProjectFile)
@@ -83,7 +93,7 @@ module IronHammer
         end
 
         it "should include normal dependencies" do
-          @file.should_receive(:project_dependencies).and_return ['OtherProject']
+          @file.stub!(:project_dependencies).and_return ['OtherProject']
 
           normal_dependency = Dependency.new :name => 'NormalDependency'
 
@@ -97,7 +107,7 @@ module IronHammer
         end
 
         it "should only include dependencies" do
-          @file.should_receive(:project_dependencies).and_return ['OtherProject']
+          @file.stub!(:project_dependencies).and_return ['OtherProject']
           other = DllProject.new :name => 'Unrelated'
 
           @project.stub!(:dependencies).and_return []
@@ -110,7 +120,7 @@ module IronHammer
         it 'should only include Dll projects' do
           file = mock(ProjectFile)
           @project.stub!(:file).and_return file
-          file.should_receive(:project_dependencies).and_return ['OtherProject']
+          file.stub!(:project_dependencies).and_return ['OtherProject']
 
           @project.stub!(:dependencies).and_return []
 

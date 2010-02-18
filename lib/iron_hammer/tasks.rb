@@ -130,8 +130,9 @@ namespace :iron do
         @anvil.dll_projects.each do |project|
           xml = "ivy-#{project.name}.xml"
           builder = IvyBuilder.new project
-          FileSystem.write! :name => xml, :path, '.',
-            :content => builder.generate_xml project.dependencies_with_projects
+
+          FileSystem.write! :name => xml, :path => '.',
+            :content => builder.generate_xml(project.dependencies_with_projects @anvil.projects)
 
           sh builder.publish xml
         end

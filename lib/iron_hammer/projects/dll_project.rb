@@ -14,12 +14,6 @@ module IronHammer
         @path
       end
 
-      def artifacts
-        Dir[File.join(path_to_binaries, "#{assembly_name}.{dll,exe}")].map do |file|
-          file.split(/\/|\\/).last
-        end
-      end
-
       def path_to_binaries params={}
         File.join(@path, 'bin', run_configuration(params))
       end

@@ -31,6 +31,12 @@ module IronHammer
         []
       end
 
+      def artifacts
+        Dir[File.join(path_to_binaries, "#{assembly_name}.{dll,exe}")].map do |file|
+          file.split(/\/|\\/).last
+        end
+      end
+
       def assembly_name
         @assembly_name ||= file.assembly_name
       end
@@ -43,9 +49,12 @@ module IronHammer
         @dependencies ||= file.dependencies
       end
 
+      def project_references
+        @project_references ||= file.project_dependencies
+      end
+
       def dependencies_with_projects projects
-        project_dependencies = file.project_dependencies
-        selected = projects.select {|p| p.is_a?(DllProject) && project_dependencies.include?(p.name)}
+        selected = projects.select {|p| p.is_a?(DllProject) && project_references.include?(p.name)}
         dependencies + selected.map {|p| Dependency.from_project p}
       end
 
