@@ -45,7 +45,9 @@ module IronHammer
       return if projects.nil? || projects.empty?
       fxcop = @code_analyzers_environment.fxcop
       rules = @code_analyzers_environment.fxcop_rules
-      binaries = projects.collect {|project| "/file:#{project.path_to_binaries}"}
+      binaries = projects.collect do |project|
+        project.artifacts.map {|artifact| "/file:#{File.join(project.path_to_binaries, artifact)}"}
+      end.flatten
       results = @code_analyzers_environment.fxcop_result
       "\"#{fxcop}\" /rule:\"#{rules}\" /out:\"#{results}\" #{binaries.join ' '}"
     end

@@ -81,10 +81,11 @@ module IronHammer
     it "should provide a proper command line to run fxcop" do
       project = GenericProject.new :name => 'MyProject'
       project.stub!(:path_to_binaries).and_return '/my/binaries'
+      project.stub!(:artifacts).and_return 'myArtifact.exe'
       command = @fully_set_hammer.analyze(project)
       command.should match /fxcopcmd\.exe/
       command.should match /\/out:"fxcop-result.xml"/
-      command.should match /\/file:\/my\/binaries/
+      command.should match /\/file:\/my\/binaries\/myArtifact\.exe/
       command.should match /\/rule:".*\\Rules"/
     end
   end
