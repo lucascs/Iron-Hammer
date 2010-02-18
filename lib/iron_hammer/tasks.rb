@@ -1,6 +1,7 @@
 require 'rubygems'
 require 'rake/clean'
 require 'iron_hammer'
+require 'iron_hammer/utils/topological_sort'
 
 CLEAN.include("TestResults/**")
 CLEAN.include("ivy*.xml")
@@ -127,7 +128,7 @@ namespace :iron do
 
       desc 'Publishes project assemblies to ivy repository (only dll projects)'
       task :publish => [:generate] do
-        @anvil.dll_projects.each do |project|
+        @anvil.dll_projects.topological_sort.each do |project|
           xml = "ivy-#{project.name}.xml"
           builder = IvyBuilder.new project
 
