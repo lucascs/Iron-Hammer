@@ -76,13 +76,20 @@ module IronHammer
           found_dependencies = @dependencies.select { |d| d.name == 'manipulacaointerfacearquivos' }
           found_dependencies.size.should == 1
         end
+
         it 'should contain a specific dependency with version' do
           @dependencies.should include(Dependency.new :name => 'ICSharpCode.SharpZipLib', :version => '0.84.0.0')
+        end
+
+        it 'should contain a project dependencies' do
+          project_dependencies = @project_file.project_dependencies
+          project_dependencies.should include('LibProvisioning')
         end
 
         it 'should not contain system dependencies' do
           @dependencies.should_not contain_system_dependencies
         end
+
         def contain_system_dependencies
           simple_matcher("contain system dependencies") {|ds| ds.find {|d| d.name.starts_with 'System'}}
         end

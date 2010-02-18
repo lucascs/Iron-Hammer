@@ -19,14 +19,15 @@ module IronHammer
       it "should add binaries as artifacts" do
         project = DllProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
-        project.stub!(:assembly_name).and_return "MyProjectArtifact"
+        project.stub!(:assembly_name).and_return 'MyProject'
+        project.stub!(:artifacts).and_return ["My.Project.Artifact.dll"]
 
         @ivy = IvyBuilder.new project
 
         xml = @ivy.to_s
         xml.should match /<publications>.*<\/publications>/ms
         xml.should match /<artifact .*\/>/
-        xml.should match /name="MyProjectArtifact"/
+        xml.should match /name="My.Project.Artifact"/
         xml.should match /type="dll"/
       end
 

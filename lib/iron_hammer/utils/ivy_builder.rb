@@ -18,8 +18,11 @@ module IronHammer
           name = @project.assembly_name
           xml.info :organisation => @organisation, :module => name
           xml.publications do
-            @project.binary_types.each do |btype|
-              xml.artifact :name => name, :type => btype
+            @project.artifacts.each do |artifact|
+              names = artifact.split '.'
+              extension = names.pop
+              name = names.join '.'
+              xml.artifact :name => name, :type => extension
             end
           end if @project.is_a? DllProject
 

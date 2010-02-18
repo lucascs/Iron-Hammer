@@ -16,6 +16,7 @@ module IronHammer
       GUID_PATH = '//Project/PropertyGroup/ProjectTypeGuids'
       ASSEMBLY_NAME_PATH = '//Project/PropertyGroup/AssemblyName'
       REFERENCE_PATH = '//Reference[not(starts_with(@Include, "System"))]'
+      PROJECT_REFERENCE_PATH = '//ProjectReference/Name'
 
       def self.load_from *path
         ProjectFile.new path
@@ -35,9 +36,17 @@ module IronHammer
         references.collect { |reference| Dependency.from_reference reference }
       end
 
+      def project_dependencies
+        project_references.collect { |name| name.text }
+      end
+
     private
       def references
         doc && doc.get_elements(REFERENCE_PATH)
+      end
+
+      def project_references
+        doc && doc.get_elements(PROJECT_REFERENCE_PATH)
       end
 
       def doc
