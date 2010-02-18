@@ -8,6 +8,10 @@ class DummyProject
     @name = params[:name]
     @project_references = params[:project_references] || []
   end
+
+  def to_s
+    @name
+  end
 end
 describe Array do
 
@@ -30,6 +34,7 @@ describe Array do
       [a,b].topological_sort.should == [b, a]
       [b,a].topological_sort.should == [b, a]
     end
+
   end
 end
 

@@ -7,7 +7,12 @@ class Array
     list = []
     self.each {|e| set << e.name if e.project_references.empty?}
     self.each {|e| graph[e.name] = []; refs[e.name] = []}
-    self.each {|e| e.project_references.each {|r| graph[r] << e.name; refs[r] << e.name}}
+    self.each do |e|
+      e.project_references.each do |r|
+        graph[r] << e.name if graph[r]
+        refs[e.name] << r if refs[e.name]
+      end
+    end
 
     until set.empty?
       n = set.pop
