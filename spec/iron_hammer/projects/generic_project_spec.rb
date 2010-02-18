@@ -58,6 +58,70 @@ module IronHammer
         @project.assembly_name
       end
 
+      describe 'dependencies with projects' do
+        before :each do
+          @file = mock(ProjectFile)
+          @project.stub!(:file).and_return @file
+        end
+
+        it 'should include dll projects that are dependencies' do
+          @file.should_receive(:project_dependencies).and_return ['OtherProject']
+
+          @project.stub!(:dependencies).and_return []
+
+          other = DllProject.new :name => 'OtherProject'
+          other.stub!(:assembly_name).and_return 'OtherProject'
+          other.stub!(:version).and_return '1.2.3.4'
+          other.stub!(:artifacts).and_return ['OtherProject.exe']
+
+          dependencies = @project.dependencies_with_projects [other]
+
+          dependencies.should have(1).dependency
+          dependencies.first.should == Dependency.new(
+              :name => 'OtherProject', :version => '1.2.3.4', :extension => 'exe')
+
+        end
+
+        it "should include normal dependencies" do
+          @file.should_receive(:project_dependencies).and_return ['OtherProject']
+
+          normal_dependency = Dependency.new :name => 'NormalDependency'
+
+          @project.stub!(:dependencies).and_return [normal_dependency]
+
+          dependencies = @project.dependencies_with_projects []
+
+          dependencies.should have(1).dependency
+          dependencies.first.should == normal_dependency
+
+        end
+
+        it "should only include dependencies" do
+          @file.should_receive(:project_dependencies).and_return ['OtherProject']
+          other = DllProject.new :name => 'Unrelated'
+
+          @project.stub!(:dependencies).and_return []
+
+          dependencies = @project.dependencies_with_projects [other]
+
+          dependencies.should be_empty
+        end
+
+        it 'should only include Dll projects' do
+          file = mock(ProjectFile)
+          @project.stub!(:file).and_return file
+          file.should_receive(:project_dependencies).and_return ['OtherProject']
+
+          @project.stub!(:dependencies).and_return []
+
+          other = TestProject.new :name => 'OtherProject'
+
+          dependencies = @project.dependencies_with_projects [other]
+
+          dependencies.should be_empty
+        end
+      end
+
       it 'should be able to get csproj name' do
         test = GenericProject.new :name => 'MyTest', :csproj => 'MyTestProject.csproj'
 

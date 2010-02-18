@@ -12,11 +12,11 @@ module IronHammer
       end
 
       def == other
-        @name == other.name && @version == other.version
+        @name == other.name && @version == other.version && @extension == other.extension
       end
 
       def to_s
-        "[Dependency name=#{@name} version=#{@version}]"
+        "[Dependency name=#{@name} version=#{@version} extension=#{@extension}]"
       end
 
       def self.from_reference reference
@@ -29,6 +29,10 @@ module IronHammer
         Dependency.new :name => name, :version => version, :extension => extension
       end
 
+      def self.from_project project
+        Dependency.new :name => project.assembly_name, :version => project.version,
+          :extension => project.artifacts.first.split('.').last
+      end
       private
       def self.get_extension reference
         hint_path = reference.elements["HintPath"]

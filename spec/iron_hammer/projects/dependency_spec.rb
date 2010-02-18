@@ -19,6 +19,16 @@ module IronHammer
         dependency.name.should == "MyName"
       end
 
+      it "should create a dependency from a project" do
+        project = DllProject.new :name => 'project'
+        project.stub!(:assembly_name).and_return 'assembly'
+        project.stub!(:version).and_return '1.2.3.4'
+        project.stub!(:artifacts).and_return ['artifact.exe']
+
+        dependency = Dependency.from_project project
+        dependency.should == Dependency.new(:name => 'assembly', :version => '1.2.3.4', :extension => 'exe')
+      end
+
       it "should fill dependency version" do
         @includes.stub!(:value).and_return "MyName, Version=1.2.3.4, anything else"
 

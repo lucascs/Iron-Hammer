@@ -43,6 +43,12 @@ module IronHammer
         @dependencies ||= file.dependencies
       end
 
+      def dependencies_with_projects projects
+        project_dependencies = file.project_dependencies
+        selected = projects.select {|p| p.is_a?(DllProject) && project_dependencies.include?(p.name)}
+        dependencies + selected.map {|p| Dependency.from_project p}
+      end
+
       def package params={}
         package_root(params)
         Package.new :root => package_root, :deliverables => deliverables(params)
