@@ -80,11 +80,6 @@ module IronHammer
           @dependencies.should include(Dependency.new :name => 'ICSharpCode.SharpZipLib', :version => '0.84.0.0')
         end
 
-        it 'should contain a project dependencies' do
-          project_dependencies = @project_file.project_dependencies
-          project_dependencies.should include(Dependency.new :name => 'LibProvisioning')
-        end
-
         it 'should not contain system dependencies' do
           @dependencies.should_not contain_system_dependencies
         end

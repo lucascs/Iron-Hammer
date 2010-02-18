@@ -23,6 +23,7 @@ lib/iron_hammer/projects/dependency_project.rb
 lib/iron_hammer/projects/generic_project.rb
 lib/iron_hammer/projects/project_file.rb
 lib/iron_hammer/projects/project_types.rb
+lib/iron_hammer/projects/solution_project.rb
 lib/iron_hammer/projects/test_project.rb
 lib/iron_hammer/solutions/solution.rb
 lib/iron_hammer/solutions/solution_file.rb

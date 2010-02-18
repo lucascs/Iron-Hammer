@@ -50,14 +50,20 @@ namespace :iron do
     end
 
     namespace :ivy do
-      desc 'Publishes project dependencies into ivy repository'
-      task :setup, [:binaries_path] do |t, args|
-        all_dependencies = []
-        @anvil.projects.each do |project|
-          project.dependencies.each do |dependency|
-            all_dependencies << dependency unless all_dependencies.include? dependency
+      def all_dependencies
+        unless @all_dependencies
+          @all_dependencies = []
+          @anvil.projects.each do |project|
+            project.dependencies.each do |dependency|
+              @all_dependencies << dependency unless @all_dependencies.include? dependency
+            end
           end
         end
+        @all_dependencies
+      end
+
+      desc 'Publishes project dependencies into ivy repository'
+      task :setup, [:binaries_path] do |t, args|
 
         files = Dir.new(args.binaries_path).entries
         candidates = all_dependencies.select {|x| files.include? "#{x.name}.#{x.extension}"}
@@ -105,12 +111,15 @@ namespace :iron do
       end
 
       desc 'Retrieves all project dependencies from ivy repository and modify project csproj to reference them'
-      task :retrieve => [:generate] do
-        @anvil.projects.each do |project|
-          xml = "ivy-#{project.name}.xml"
-          builder = IvyBuilder.new project
+      task :retrieve do
+        builder = IvyBuilder.new(SolutionProject.new(@anvil.solution.name, all_dependencies))
+        xml = "ivy-#{@anvil.solution.name}.xml"
+        builder.write_to xml
 
-          sh builder.retrieve xml
+        sh builder.retrieve xml
+
+        @anvil.projects.each do |project|
+          builder = IvyBuilder.new project
 
           builder.modify_csproj
         end
