@@ -13,6 +13,10 @@ module IronHammer
       end
 
       def to_s
+        generate_xml @project.dependencies
+      end
+
+      def generate_xml dependencies=[]
         xml = Builder::XmlMarkup.new(:indent => 2)
         xml.tag! 'ivy-module', :version => '2.0' do
           name = @project.assembly_name
@@ -27,13 +31,13 @@ module IronHammer
           end if @project.is_a? DllProject
 
           xml.dependencies do
-            @project.dependencies.each do |dependency|
+            dependencies.each do |dependency|
               rev = dependency.version.gsub /\.\d+$/, '.+'
               xml.dependency :org => @organisation, :name => dependency.name, :rev => rev do
                 xml.artifact :type => dependency.extension, :name => dependency.name
               end
             end
-          end unless @project.dependencies.empty?
+          end unless dependencies.empty?
         end
       end
 
