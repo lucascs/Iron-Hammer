@@ -28,6 +28,9 @@ lib/iron_hammer/projects/test_project.rb
 lib/iron_hammer/solutions/solution.rb
 lib/iron_hammer/solutions/solution_file.rb
 lib/iron_hammer/tasks.rb
+lib/iron_hammer/tasks/analyze.rb
+lib/iron_hammer/tasks/ivy.rb
+lib/iron_hammer/tasks/test.rb
 lib/iron_hammer/utils/code_analyzers_environment.rb
 lib/iron_hammer/utils/dot_net_environment.rb
 lib/iron_hammer/utils/file_system.rb
