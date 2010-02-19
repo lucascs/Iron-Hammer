@@ -1,6 +1,8 @@
 require 'iron_hammer'
 require 'iron_hammer/utils/topological_sort'
 
+CLEAN.include('Libraries/*')
+
 namespace :iron do
   namespace :ivy do
     def all_dependencies
@@ -43,24 +45,12 @@ namespace :iron do
     end
 
     desc 'Generates ivy-<project_name>.xml for all projects of the solution'
-    task :generate => :update_version do
+    task :generate do
       puts "Generating ivy files for projects"
       @anvil.projects.each do |project|
         builder = IvyBuilder.new project
         builder.write_to "ivy-#{project.name}.xml"
       end
-    end
-
-    desc 'updates version of AssemblyInfo based on build_number environment variable'
-    task :update_version do
-      @anvil.projects.each do |project|
-        old_version = project.version
-        project.version = old_version.gsub /\.\d+$/, ".#{build_number}"
-      end
-    end
-
-    def build_number
-      ENV['BUILD_NUMBER'] || '0'
     end
 
     desc 'Retrieves all project dependencies from ivy repository and modify project csproj to reference them'

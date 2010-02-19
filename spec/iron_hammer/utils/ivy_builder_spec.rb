@@ -108,7 +108,7 @@ module IronHammer
           FileSystem.write! :name => 'abc.csproj', :path => File.join(@dir, 'def'), :content => ProjectFileData.with_dependencies
 
           lib_dir = mock(Dir)
-          lib_dir.stub!(:find).and_return "abc.dll"
+          lib_dir.stub!(:find).and_return "abc-1.2.3.4.dll"
 
           Dir.stub!(:new).with('Libraries').and_return(lib_dir)
 
@@ -127,6 +127,13 @@ module IronHammer
           doc.get_elements('//Reference[starts_with(@Include, "System")]/HintPath').should be_empty
         end
 
+        it "should not modify system references" do
+          @ivy.modify_csproj
+          xml = FileSystem.read_file(@dir, 'abc.csproj')
+
+          doc = REXML::Document.new xml
+          doc.get_elements('//Reference[contains(@Include, "Version=1.2.3.4")]').should_not be_empty
+        end
 
         it "should modify hint path of references to Libraries dir" do
           @ivy.modify_csproj
