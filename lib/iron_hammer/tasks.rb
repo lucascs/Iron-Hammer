@@ -17,7 +17,7 @@ namespace :iron do
     FileUtils.mkdir 'TestResults' unless (File.exists?('TestResults') && File.directory?('TestResults'))
 
     desc 'Executes the default lifecycle'
-    task :default => [:clean, "ivy:retrieve", :build, "test:unit", "ivy:publish"]
+    task :default => [:clean, "ivy:retrieve", "ivy:update_version", :build, "test:unit", "ivy:publish"]
 
     desc 'Builds the solution'
     task :build => [:clean] do
