@@ -34,7 +34,7 @@ namespace :iron do
 
             puts "Dependency #{dependency.name}"
 
-            builder = IvyBuilder.new dependency_project
+            builder = IvyConfiguration.builder_for dependency_project
 
             builder.write_to "ivy-#{dependency.name}.xml"
 
@@ -48,21 +48,21 @@ namespace :iron do
     task :generate do
       puts "Generating ivy files for projects"
       @anvil.projects.each do |project|
-        builder = IvyBuilder.new project
+        builder = IvyConfiguration.builder_for project
         builder.write_to "ivy-#{project.name}.xml"
       end
     end
 
     desc 'Retrieves all project dependencies from ivy repository and modify project csproj to reference them'
     task :retrieve do
-      builder = IvyBuilder.new(SolutionProject.new(@anvil.solution.name, all_dependencies))
+      builder = IvyConfiguration.builder_for(SolutionProject.new(@anvil.solution.name, all_dependencies))
       xml = "ivy-#{@anvil.solution.name}.xml"
       builder.write_to xml
 
       sh builder.retrieve xml
 
       @anvil.projects.each do |project|
-        builder = IvyBuilder.new project
+        builder = IvyConfiguration.builder_for project
 
         builder.modify_csproj
       end
@@ -72,7 +72,7 @@ namespace :iron do
     task :publish => [:generate] do
       @anvil.dll_projects.topological_sort.each do |project|
         xml = "ivy-#{project.name}.xml"
-        builder = IvyBuilder.new project
+        builder = IvyConfiguration.builder_for project
 
         FileSystem.write! :name => xml, :path => '.',
           :content => builder.generate_xml(project.dependencies_with_projects @anvil.projects)

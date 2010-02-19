@@ -1,0 +1,45 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'rake'
+
+folder = ENV['IRON_HAMMER_HOME'] || File.join(ENV['USERPROFILE'], '.IronHammer')
+
+unless ENV['IRON_HAMMER_HOME']
+  puts "IRON_HAMMER_HOME environment variable not found! Generating default config on #{folder}"
+  puts "You'll need to download apache ivy from http://ant.apache.org/ivy/download.cgi"
+  puts "and copy ivy-x.x.x.jar to #{folder}\\ivy.jar"
+  puts "You can also edit #{folder}\\rakefile.rb and change any settings you want"
+
+  FileUtils.mkpath folder
+  sh "setx IRON_HAMMER_HOME \"#{folder}\""
+  File.open(File.join(folder, 'rakefile.rb'), 'w') do |f|
+    f.write <<EOF
+require 'rubygems'
+
+#VISUAL_STUDIO_PATH = ENV['VISUAL_STUDIO_PATH'] || 'C:\\Program Files\\Microsoft Visual Studio 9.0\\Common7\\IDE'
+IVY_JAR = "#{ENV['IRON_HAMMER_HOME']}\\ivy.jar"
+IVY_SETTINGS = "#{ENV['IRON_HAMMER_HOME']}\\ivysettings.xml"
+#ORGANISATION = 'Your company'
+
+require 'iron_hammer/tasks'
+EOF
+  end
+  File.open(File.join(folder, 'ivysettings.xml'), 'w') do |f|
+    f.write <<EOF
+<ivysettings>
+  <settings defaultResolver="default" />
+  <caches defaultCacheDir="#{folder}/Ivy/Cache"/>
+  <resolvers>
+    <filesystem name="default">
+      <ivy pattern="#{folder}/Ivy/Repository/[organisation]/[module]/ivys/ivy-[revision].xml"/>
+      <artifact pattern="#{folder}/Ivy/Repository/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/>
+    </filesystem>
+  </resolvers>
+</ivysettings>
+EOF
+  end
+end
+
+sh "rake -f \"#{folder}\\rakefile.rb\" iron:ivy:#{ARGV.join ' '}"
+

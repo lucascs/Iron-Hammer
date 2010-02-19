@@ -1,3 +1,7 @@
+=== 1.0.7 2010-02-19
+* 1 major
+  * binaries for ivy (batch and shell script)
+
 === 1.0.6 2010-02-19
 * 1 major
   * added support to retrieving versions with different specifity level

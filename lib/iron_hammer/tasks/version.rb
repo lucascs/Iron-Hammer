@@ -25,7 +25,7 @@ class ProjectVersion
 
 	def self.greatest_from projects
 	  greatest = parse '1.0.0.0'
-    @anvil.projects.each do |project|
+    projects.each do |project|
       current = parse project.version
       greatest = current if current > greatest
     end
@@ -42,10 +42,10 @@ namespace :iron do
 		desc 'back to 1.0.0.*'
 		task :reset do
 			@anvil.projects.each do |project|
-				old_version = ProjectVersion.parse project.version
-				old_version.major = 1
-				old_version.minor = 0
-				old_version.revision = 0
+				new_version = ProjectVersion.parse project.version
+				new_version.major = 1
+				new_version.minor = 0
+				new_version.revision = 0
 				project.version = v.to_s
 			end
 		end
@@ -65,8 +65,8 @@ namespace :iron do
     desc 'updates version of AssemblyInfo based on BUILD_NUMBER environment variable'
     task :update_build do
       @anvil.projects.each do |project|
-        old_version = project.version
-        project.version = old_version.gsub /\.\d+$/, ".#{build_number}"
+        new_version = project.version
+        project.version = new_version.gsub /\.\d+$/, ".#{build_number}"
       end
     end
 
@@ -77,34 +77,41 @@ namespace :iron do
 		namespace :bump do
 			desc 'bumps the major version'
 			task :major do
-			  old_version = ProjectVersion.greatest_from @anvil.projects
-			  old_version.major += 1
-			  old_version.minor = 0
-			  old_version.revision = 0
+			  new_version = ProjectVersion.greatest_from @anvil.projects
+			  new_version.major += 1
+			  new_version.minor = 0
+			  new_version.revision = 0
 
 				@anvil.projects.each do |project|
-				  project.version = old_version.to_s
+				  change_version project, new_version
 				end
+			end
+
+			def change_version project, version
+			  from = project.version
+			  to = version.to_s
+			  puts "Changing version of #{project.name} from #{from} to #{to}"
+			  project.version = version.to_s
 			end
 
 			desc 'bumps the minor version'
 			task :minor do
-			  old_version = ProjectVersion.greatest_from @anvil.projects
-			  old_version.minor += 1
-			  old_version.revision = 0
+			  new_version = ProjectVersion.greatest_from @anvil.projects
+			  new_version.minor += 1
+			  new_version.revision = 0
 
 				@anvil.projects.each do |project|
-				  project.version = old_version.to_s
+				  change_version project, new_version
 				end
 			end
 
 			desc 'bumps the revision version'
 			task :revision do
-			  old_version = ProjectVersion.greatest_from @anvil.projects
-			  old_version.revision += 1
+			  new_version = ProjectVersion.greatest_from @anvil.projects
+			  new_version.revision += 1
 
 				@anvil.projects.each do |project|
-				  project.version = old_version.to_s
+				  change_version project, new_version
 				end
 			end
 		end

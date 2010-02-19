@@ -51,7 +51,7 @@ module IronHammer
         "java -jar #{@config.ivy_jar}
           -ivy #{ivy_file}
           -settings #{@config.ivy_settings}
-          -retrieve Libraries/[artifact]-[revision].[ext]".gsub(/\s+/, ' ')
+          -retrieve Libraries/[revision]/[artifact].[ext]".gsub(/\s+/, ' ')
       end
 
       def publish ivy_file
@@ -74,14 +74,14 @@ module IronHammer
         references = doc.get_elements(ProjectFile::REFERENCE_PATH)
         references.each do |reference|
           artifact = artifact_for reference
-          artifact.scan(/-(.*)\.(dll|exe)/) do |version, extension|
+          artifact.scan(/Libraries\/(.*)\/(.*)/) do |version, extension|
             includes = reference.attribute('Include').value
             includes.gsub!(/Version=(.*?)(,|$)/, "Version=#{version}\\2")
             reference.add_attribute('Include', includes)
           end
           reference.elements['SpecificVersion'] = REXML::Element.new('SpecificVersion').add_text('false')
           reference.elements['HintPath'] = REXML::Element.new('HintPath').
-                add_text([relative, 'Libraries', "#{artifact}"].flatten.patheticalize)
+                add_text([relative, "#{artifact.gsub(/\//, '\\')}"].flatten.patheticalize)
         end
 
         FileSystem.write! :path => @project.path, :name => @project.csproj, :content => doc.to_s
@@ -94,8 +94,7 @@ module IronHammer
       private
       def artifact_for reference
         dependency = Dependency.from_reference reference
-        libraries_dir = Dir.new('Libraries')
-        libraries_dir.find {|f| f.match "^#{dependency.name}-(.*)\\.(dll|exe)"}
+        Dir["Libraries/**/#{dependency.name}.{dll,exe}"].last
       end
     end
   end

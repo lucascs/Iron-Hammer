@@ -9,9 +9,9 @@ module IronHammer
 
       it 'should assume the default path to .net framework when it is not informed' do
         default_path_to_net_framework = [
-          ENV['SystemRoot'] || IronHammer::Defaults::SYSTEM_ROOT, 
-          'Microsoft.NET', 
-          'Framework', 
+          ENV['SystemRoot'] || IronHammer::Defaults::SYSTEM_ROOT,
+          'Microsoft.NET',
+          'Framework',
           'v3.5'
         ].patheticalize
         @basic_environment.framework_path.should be_eql(default_path_to_net_framework)
@@ -23,17 +23,17 @@ module IronHammer
 
       it 'should point to the default path to visual studio tools when none is provided' do
         default_path_to_vs_tools = [
-          ENV['ProgramFiles'] || IronHammer::Defaults::PROGRAM_FILES, 
-          'Microsoft Visual Studio 2008', 
-          'Common7', 
+          ENV['ProgramFiles'] || IronHammer::Defaults::PROGRAM_FILES,
+          'Microsoft Visual Studio 9.0',
+          'Common7',
           'IDE'
         ].patheticalize
-        @basic_environment.visual_studio_path.should be_eql(default_path_to_vs_tools) 
+        @basic_environment.visual_studio_path.should be_eql(default_path_to_vs_tools)
       end
 
       it 'should point to the provided path to visual studio tools when it is informed' do
         DotNetEnvironment.new(:visual_studio_path => 'PathToVisual').
-          visual_studio_path.should be_eql('PathToVisual') 
+          visual_studio_path.should be_eql('PathToVisual')
       end
 
       it 'should provide a path to the msbuild binary based on the framework path' do
@@ -50,3 +50,4 @@ module IronHammer
     end
   end
 end
+

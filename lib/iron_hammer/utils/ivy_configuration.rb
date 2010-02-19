@@ -23,7 +23,7 @@ module IronHammer
         @organisation = defined?(ORGANISATION)? ORGANISATION : 'org'
         @ivy_jar = defined?(IVY_JAR)? IVY_JAR : 'ivy.jar'
         @ivy_settings = defined?(IVY_SETTINGS)? IVY_SETTINGS : 'ivysettings.xml'
-        @retrieve_version = ENV['retrieve.version'] || 'latest.build'
+        @retrieve_version = ENV['retrieve_version'] || 'latest.build'
       end
 
     end unless defined? IvyConfiguration

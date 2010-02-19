@@ -131,10 +131,7 @@ module IronHammer
           FileSystem.write! :name => 'abc.csproj', :path => @dir, :content => ProjectFileData.with_dependencies
           FileSystem.write! :name => 'abc.csproj', :path => File.join(@dir, 'def'), :content => ProjectFileData.with_dependencies
 
-          lib_dir = mock(Dir)
-          lib_dir.stub!(:find).and_return "abc-1.2.3.4.dll"
-
-          Dir.stub!(:new).with('Libraries').and_return(lib_dir)
+          Dir.stub!('[]').and_return(['Libraries/1.2.3.4/abc.dll'])
 
           @ivy = IvyConfiguration.builder_for @project
         end
@@ -151,7 +148,7 @@ module IronHammer
           doc.get_elements('//Reference[starts_with(@Include, "System")]/HintPath').should be_empty
         end
 
-        it "should not modify system references" do
+        it "should modify Version" do
           @ivy.modify_csproj
           xml = FileSystem.read_file(@dir, 'abc.csproj')
 
@@ -167,7 +164,7 @@ module IronHammer
           doc.each_element('//Reference[not(starts_with(@Include, "System"))]') do |reference|
             hint_path = reference.elements['HintPath']
             hint_path.should_not be_nil
-            hint_path.text.should match /^\.\.\\Libraries/
+            hint_path.text.should match /^\.\.\\Libraries\\1.2.3.4\\abc.dll/
           end
         end
 
@@ -180,7 +177,7 @@ module IronHammer
           doc.each_element('//Reference[not(starts_with(@Include, "System"))]') do |reference|
             hint_path = reference.elements['HintPath']
             hint_path.should_not be_nil
-            hint_path.text.should match /^\.\.\\\.\.\\Libraries/
+            hint_path.text.should match /^\.\.\\\.\.\\Libraries\\1.2.3.4\\abc.dll/
           end
         end
       end

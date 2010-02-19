@@ -1,7 +1,8 @@
 PostInstall.txt
 README.rdoc
 Rakefile
-lib/iron_hammer.rb
+bin/ivy
+bin/bump
 lib/iron_hammer.rb
 lib/iron_hammer/anvil.rb
 lib/iron_hammer/default_binaries_behavior.rb
