@@ -1,3 +1,12 @@
+=== 1.0.6 2010-02-19
+* 1 major
+  * added support to retrieving versions with different specifity level
+
+=== 1.0.5 2010-02-19
+* 2 major
+  * now ivy retrieves the dependencies including the version on the filename
+  * added tasks for bumping the major, minor and revision version per solution
+
 === 1.0.2 2010-02-09
 * 2 major
   * filtering unit and integration tests

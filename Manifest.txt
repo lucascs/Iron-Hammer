@@ -31,10 +31,12 @@ lib/iron_hammer/tasks.rb
 lib/iron_hammer/tasks/analyze.rb
 lib/iron_hammer/tasks/ivy.rb
 lib/iron_hammer/tasks/test.rb
+lib/iron_hammer/tasks/version.rb
 lib/iron_hammer/utils/code_analyzers_environment.rb
 lib/iron_hammer/utils/dot_net_environment.rb
 lib/iron_hammer/utils/file_system.rb
 lib/iron_hammer/utils/ivy_builder.rb
+lib/iron_hammer/utils/ivy_configuration.rb
 lib/iron_hammer/utils/topological_sort.rb
 lib/iron_hammer/utils/windows.rb
 lib/iron_hammer/utils/zipper.rb

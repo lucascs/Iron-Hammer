@@ -4,12 +4,18 @@ require 'rexml/document'
 module IronHammer
   module Utils
     class IvyBuilder
-
-      def initialize project
-        @project = project
-        @organisation = defined?(ORGANISATION)? ORGANISATION : 'org'
-        @ivy_jar = defined?(IVY_JAR)? IVY_JAR : 'ivy.jar'
-        @ivy_settings = defined?(IVY_SETTINGS)? IVY_SETTINGS : 'ivysettings.xml'
+      VERSION_PATTERN = /^(\d+)\.(\d+)\.(\d+)\.(\d+)$/
+      VERSION_REPLACE = {
+        'latest' => '+',
+        'latest.major' => '+',
+        'latest.minor' => '\\1.+',
+        'latest.revision' => '\\1.\\2.+',
+        'latest.build' => '\\1.\\2.\\3.+',
+        'specific' => '\\1.\\2.\\3.\\4'
+      }
+      def initialize params={}
+        @project = params[:project] || raise('You must specify a project')
+        @config = params[:config] || raise('You must specify a config')
       end
 
       def to_s
@@ -20,7 +26,7 @@ module IronHammer
         xml = Builder::XmlMarkup.new(:indent => 2)
         xml.tag! 'ivy-module', :version => '2.0' do
           name = @project.assembly_name
-          xml.info :organisation => @organisation, :module => name
+          xml.info :organisation => @config.organisation, :module => name
           xml.publications do
             @project.artifacts.each do |artifact|
               names = artifact.split '.'
@@ -32,8 +38,8 @@ module IronHammer
 
           xml.dependencies do
             dependencies.each do |dependency|
-              rev = dependency.version.gsub /\.\d+$/, '.+'
-              xml.dependency :org => @organisation, :name => dependency.name, :rev => rev do
+              rev = dependency.version.gsub VERSION_PATTERN, VERSION_REPLACE[@config.retrieve_version]
+              xml.dependency :org => @config.organisation, :name => dependency.name, :rev => rev do
                 xml.artifact :type => dependency.extension, :name => dependency.name
               end
             end
@@ -42,16 +48,16 @@ module IronHammer
       end
 
       def retrieve ivy_file
-        "java -jar #{@ivy_jar}
+        "java -jar #{@config.ivy_jar}
           -ivy #{ivy_file}
-          -settings #{@ivy_settings}
-          -retrieve Libraries/[artifact]-[version].[ext]".gsub(/\s+/, ' ')
+          -settings #{@config.ivy_settings}
+          -retrieve Libraries/[artifact]-[revision].[ext]".gsub(/\s+/, ' ')
       end
 
       def publish ivy_file
-        "java -jar #{@ivy_jar}
+        "java -jar #{@config.ivy_jar}
           -ivy #{ivy_file}
-          -settings #{@ivy_settings}
+          -settings #{@config.ivy_settings}
           -publish default
           -publishpattern #{@project.path_to_binaries}/[artifact].[ext]
           -revision #{@project.version}

@@ -1,4 +1,5 @@
 require 'iron_hammer/utils/ivy_builder'
+require 'iron_hammer/utils/ivy_configuration'
 require 'rexml/document'
 
 module IronHammer
@@ -8,7 +9,7 @@ module IronHammer
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
         project.stub!(:assembly_name).and_return "MyProjectArtifact"
-        @ivy = IvyBuilder.new project
+        @ivy = IvyConfiguration.builder_for project
 
         xml = @ivy.to_s
         xml.should match /<info .*\/>/
@@ -22,7 +23,7 @@ module IronHammer
         project.stub!(:assembly_name).and_return 'MyProject'
         project.stub!(:artifacts).and_return ["My.Project.Artifact.dll"]
 
-        @ivy = IvyBuilder.new project
+        @ivy = IvyConfiguration.builder_for project
 
         xml = @ivy.to_s
         xml.should match /<publications>.*<\/publications>/ms
@@ -34,17 +35,40 @@ module IronHammer
       it "should include project dependencies" do
         project = mock(GenericProject)
         project.stub!(:name).and_return "MyProject"
-        project.stub!(:dependencies).and_return [Dependency.new(:name => "My Dependency", :version => "1.2.3")]
+        project.stub!(:dependencies).and_return [Dependency.new(:name => "My Dependency", :version => "1.2.3.4")]
         project.stub!(:assembly_name).and_return "MyProjectArtifact"
 
-        @ivy = IvyBuilder.new project
+        @ivy = IvyConfiguration.builder_for project
 
         xml = @ivy.to_s
         xml.should match /<dependencies>.*<\/dependencies>/ms
         xml.should match /<dependency .*>.*<\/dependency>/ms
         xml.should match /org="org"/
         xml.should match /name="My Dependency"/
-        xml.should match /rev="1.2.+"/
+        xml.should match /rev="1\.2\.3\.\+"/
+      end
+
+      it "should include correct revision pattern" do
+        project = mock(GenericProject)
+        project.stub!(:name).and_return "MyProject"
+        project.stub!(:dependencies).and_return [Dependency.new(:name => "My Dependency", :version => "1.2.3.4")]
+        project.stub!(:assembly_name).and_return "MyProjectArtifact"
+
+        config = IvyConfiguration.instance
+        @ivy = IvyBuilder.new :config => config, :project => project
+
+        config.retrieve_version = 'latest'
+        @ivy.to_s.should match /rev="\+"/
+        config.retrieve_version = 'latest.major'
+        @ivy.to_s.should match /rev="\+"/
+        config.retrieve_version = 'latest.minor'
+        @ivy.to_s.should match /rev="1\.\+"/
+        config.retrieve_version = 'latest.revision'
+        @ivy.to_s.should match /rev="1\.2\.\+"/
+        config.retrieve_version = 'latest.build'
+        @ivy.to_s.should match /rev="1\.2\.3\.\+"/
+        config.retrieve_version = 'specific'
+        @ivy.to_s.should match /rev="1\.2\.3\.4"/
       end
 
       it "should include project dependencies artifact" do
@@ -53,7 +77,7 @@ module IronHammer
         project.stub!(:dependencies).and_return [Dependency.new(:name => "My Dependency", :version => "1.2.3", :extension => "exe")]
         project.stub!(:assembly_name).and_return "MyProjectArtifact"
 
-        @ivy = IvyBuilder.new project
+        @ivy = IvyConfiguration.builder_for project
 
         xml = @ivy.to_s
         xml.should match /<artifact .*type="exe".*\/>/
@@ -63,7 +87,7 @@ module IronHammer
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
         project.stub!(:assembly_name).and_return "MyProjectArtifact"
-        @ivy = IvyBuilder.new project
+        @ivy = IvyConfiguration.builder_for project
 
         file = "#{TempHelper::TEMP_FOLDER}/ivy.xml"
         @ivy.write_to file
@@ -76,7 +100,7 @@ module IronHammer
       it "should generate retrieve command" do
         project = GenericProject.new :name => "MyProject"
         project.stub!(:dependencies).and_return []
-        @ivy = IvyBuilder.new project
+        @ivy = IvyConfiguration.builder_for project
 
         command = @ivy.retrieve "ivy.xml"
 
@@ -89,7 +113,7 @@ module IronHammer
         project.stub!(:dependencies).and_return []
         project.stub!(:path_to_binaries).and_return "binaries/here"
         project.stub!(:version).and_return '1.0.0.0'
-        @ivy = IvyBuilder.new project
+        @ivy = IvyConfiguration.builder_for project
 
         command = @ivy.publish "ivy.xml"
 
@@ -112,7 +136,7 @@ module IronHammer
 
           Dir.stub!(:new).with('Libraries').and_return(lib_dir)
 
-          @ivy = IvyBuilder.new @project
+          @ivy = IvyConfiguration.builder_for @project
         end
 
         after :each do
