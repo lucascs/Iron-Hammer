@@ -7,3 +7,8 @@ require 'iron_hammer/configuration'
 
 sh "rake -f \"#{IronHammer::Configuration.home}\\rakefile.rb\" iron:version:bump:#{ARGV.join ' '}"
 
+if ARGV.empty?
+  puts "You must specify a target. Available targets (remove iron:version:bump prefix):"
+  sh "rake -f \"#{IronHammer::Configuration.home}\\rakefile.rb\" -T iron:version:bump"
+end
+

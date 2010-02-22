@@ -5,5 +5,10 @@ require 'rake'
 require 'iron_hammer/configuration'
 
 
-sh "rake -f \"#{IronHammer::Configuration.home}\\rakefile.rb\" iron:#{ARGV.join ' '}"
+sh "rake -f \"#{IronHammer::Configuration.home}\\rakefile.rb\" iron:#{target}" unless ARGV.empty?
+
+if ARGV.empty?
+  puts "You must specify a target. Available targets (remove iron: prefix):"
+  sh "rake -f \"#{IronHammer::Configuration.home}\\rakefile.rb\" -T iron"
+end
 
