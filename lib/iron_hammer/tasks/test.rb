@@ -11,7 +11,7 @@ namespace :iron do
 
     desc 'Runs the integration tests'
     task :integration => [:build] do
-      command = @hammer.test *@anvil.integration_test_projects
+      command = @hammer.test *@anvil.test_projects
       puts "There are no integration tests to run" unless command
       sh command if command
     end
