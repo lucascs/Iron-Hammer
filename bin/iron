@@ -5,5 +5,5 @@ require 'rake'
 require 'iron_hammer/configuration'
 
 
-sh "rake -f \"#{IronHammer::Configuration.home}\\rakefile.rb\" iron:ivy:#{ARGV.join ' '}"
+sh "rake -f \"#{IronHammer::Configuration.home}\\rakefile.rb\" iron:#{ARGV.join ' '}"
 

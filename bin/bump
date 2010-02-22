@@ -2,8 +2,8 @@
 
 require 'rubygems'
 require 'rake'
+require 'iron_hammer/configuration'
 
-folder = ENV['IRON_HAMMER_HOME'] || File.join(ENV['USERPROFILE'], '.IronHammer')
 
-sh "rake -f \"#{folder}\\rakefile.rb\" iron:version:bump:#{ARGV.join ' '}"
+sh "rake -f \"#{IronHammer::Configuration.home}\\rakefile.rb\" iron:version:bump:#{ARGV.join ' '}"
 

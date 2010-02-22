@@ -3,8 +3,10 @@ README.rdoc
 Rakefile
 bin/ivy
 bin/bump
+bin/iron
 lib/iron_hammer.rb
 lib/iron_hammer/anvil.rb
+lib/iron_hammer/configuration.rb
 lib/iron_hammer/default_binaries_behavior.rb
 lib/iron_hammer/default_configuration_behavior.rb
 lib/iron_hammer/default_deliverables_behavior.rb
