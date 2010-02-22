@@ -4,11 +4,13 @@ module IronHammer
       attr_accessor :name
       attr_accessor :version
       attr_accessor :extension
+      attr_accessor :specific
 
       def initialize params = {}
         @name = params[:name] || raise(ArgumentError.new('you must specify a name'))
         @version = params[:version]
         @extension = params[:extension] || 'dll'
+        @specific = params[:specific] || false
       end
 
       def == other
@@ -26,7 +28,9 @@ module IronHammer
         version = match[1] if match
         raise "Cannot parse version on include: #{includes}" unless version
         extension = get_extension reference
-        Dependency.new :name => name, :version => version, :extension => extension
+        specific_el = reference.elements['SpecificVersion']
+        specific = (specific_el && specific_el.text == 'true') || false
+        Dependency.new :name => name, :version => version, :extension => extension, :specific => specific
       end
 
       def self.from_project project

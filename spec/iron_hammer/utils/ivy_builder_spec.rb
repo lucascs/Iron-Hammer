@@ -48,6 +48,22 @@ module IronHammer
         xml.should match /rev="1\.2\.3\.\+"/
       end
 
+      it "should include project dependencies with specific version" do
+        project = mock(GenericProject)
+        project.stub!(:name).and_return "MyProject"
+        project.stub!(:dependencies).and_return [Dependency.new(:name => "My Dependency", :version => "1.2.3.4", :specific => true)]
+        project.stub!(:assembly_name).and_return "MyProjectArtifact"
+
+        @ivy = IvyConfiguration.builder_for project
+
+        xml = @ivy.to_s
+        xml.should match /<dependencies>.*<\/dependencies>/ms
+        xml.should match /<dependency .*>.*<\/dependency>/ms
+        xml.should match /org="org"/
+        xml.should match /name="My Dependency"/
+        xml.should match /rev="1\.2\.3\.4"/
+      end
+
       it "should include correct revision pattern" do
         project = mock(GenericProject)
         project.stub!(:name).and_return "MyProject"
@@ -131,7 +147,7 @@ module IronHammer
           FileSystem.write! :name => 'abc.csproj', :path => @dir, :content => ProjectFileData.with_dependencies
           FileSystem.write! :name => 'abc.csproj', :path => File.join(@dir, 'def'), :content => ProjectFileData.with_dependencies
 
-          Dir.stub!('[]').and_return(['Libraries/1.2.3.4/abc.dll'])
+          Dir.stub!('[]').and_return(['Libraries/abc-1.2.3.4.dll'])
 
           @ivy = IvyConfiguration.builder_for @project
         end
@@ -164,7 +180,7 @@ module IronHammer
           doc.each_element('//Reference[not(starts_with(@Include, "System"))]') do |reference|
             hint_path = reference.elements['HintPath']
             hint_path.should_not be_nil
-            hint_path.text.should match /^\.\.\\Libraries\\1.2.3.4\\abc.dll/
+            hint_path.text.should match /^\.\.\\Libraries\\abc.dll/
           end
         end
 
@@ -177,7 +193,7 @@ module IronHammer
           doc.each_element('//Reference[not(starts_with(@Include, "System"))]') do |reference|
             hint_path = reference.elements['HintPath']
             hint_path.should_not be_nil
-            hint_path.text.should match /^\.\.\\\.\.\\Libraries\\1.2.3.4\\abc.dll/
+            hint_path.text.should match /^\.\.\\\.\.\\Libraries\\abc.dll/
           end
         end
       end

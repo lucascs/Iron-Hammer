@@ -66,6 +66,7 @@ namespace :iron do
 
         builder.modify_csproj
       end
+      IvyBuilder.rename_artifacts
     end
 
     desc 'Publishes project assemblies to ivy repository (only dll projects)'

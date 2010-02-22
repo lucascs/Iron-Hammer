@@ -1,6 +1,12 @@
+=== 1.0.8 2010-02-22
+* 1 major
+  * binaries for version bumping
+* 1 bugfix
+  * changing ivy retrieve strategy
+
 === 1.0.7 2010-02-19
 * 1 major
-  * binaries for ivy (batch and shell script)
+  * binaries for ivy (ruby script)
 
 === 1.0.6 2010-02-19
 * 1 major

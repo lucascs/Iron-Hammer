@@ -63,6 +63,20 @@ module IronHammer
         dependency = Dependency.from_reference @reference
         dependency.extension.should == 'exe'
       end
+
+      it "should mark dependency as specific if reference have specific version = true" do
+        @reference = REXML::Document.new('<Reference Include="anyName, Version=1.2.3.4"><SpecificVersion>true</SpecificVersion></Reference>').root
+
+        dependency = Dependency.from_reference @reference
+        dependency.specific.should == true
+      end
+
+      it "should not mark dependency as specific if reference have specific version = false" do
+        @reference = REXML::Document.new('<Reference Include="anyName, Version=1.2.3.4"><SpecificVersion>false</SpecificVersion></Reference>').root
+
+        dependency = Dependency.from_reference @reference
+        dependency.specific.should == false
+      end
     end
   end
 end

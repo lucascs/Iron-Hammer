@@ -38,7 +38,8 @@ module IronHammer
 
           xml.dependencies do
             dependencies.each do |dependency|
-              rev = dependency.version.gsub VERSION_PATTERN, VERSION_REPLACE[@config.retrieve_version]
+              rev = dependency.version
+              rev = rev.gsub VERSION_PATTERN, VERSION_REPLACE[@config.retrieve_version] unless dependency.specific
               xml.dependency :org => @config.organisation, :name => dependency.name, :rev => rev do
                 xml.artifact :type => dependency.extension, :name => dependency.name
               end
@@ -51,7 +52,7 @@ module IronHammer
         "java -jar #{@config.ivy_jar}
           -ivy #{ivy_file}
           -settings #{@config.ivy_settings}
-          -retrieve Libraries/[revision]/[artifact].[ext]".gsub(/\s+/, ' ')
+          -retrieve Libraries/[artifact]-[revision].[ext]".gsub(/\s+/, ' ')
       end
 
       def publish ivy_file
@@ -74,17 +75,27 @@ module IronHammer
         references = doc.get_elements(ProjectFile::REFERENCE_PATH)
         references.each do |reference|
           artifact = artifact_for reference
-          artifact.scan(/Libraries\/(.*)\/(.*)/) do |version, extension|
+          artifact.scan(/Libraries\/(.*)-([\d\.]*)\.(.*)/) do |name, version, extension|
             includes = reference.attribute('Include').value
             includes.gsub!(/Version=(.*?)(,|$)/, "Version=#{version}\\2")
             reference.add_attribute('Include', includes)
+
+            artifact = "Libraries\\#{name}.#{extension}"
           end
           reference.elements['SpecificVersion'] = REXML::Element.new('SpecificVersion').add_text('false')
           reference.elements['HintPath'] = REXML::Element.new('HintPath').
-                add_text([relative, "#{artifact.gsub(/\//, '\\')}"].flatten.patheticalize)
+                add_text([relative, "#{artifact}"].flatten.patheticalize)
         end
 
         FileSystem.write! :path => @project.path, :name => @project.csproj, :content => doc.to_s
+      end
+
+      def self.rename_artifacts
+        Dir["Libraries/*.{dll,exe}"].each do |file|
+          file.scan(/Libraries\/(.*)-([\d\.]*)\.(.*)/) do |name, version, extension|
+              FileUtils.mv(file, "Libraries\\#{name}.#{extension}")
+          end
+        end
       end
 
       def relative
@@ -94,7 +105,10 @@ module IronHammer
       private
       def artifact_for reference
         dependency = Dependency.from_reference reference
-        Dir["Libraries/**/#{dependency.name}.{dll,exe}"].last
+        pattern = "Libraries/#{dependency.name}-*.{dll,exe}"
+        files = Dir[pattern]
+        raise "No file found with name like: #{pattern}" if files.empty?
+        files.last
       end
     end
   end
