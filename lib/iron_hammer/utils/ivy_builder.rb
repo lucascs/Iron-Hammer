@@ -82,7 +82,7 @@ module IronHammer
 
             artifact = "Libraries\\#{name}.#{extension}"
           end
-          reference.elements['SpecificVersion'] = REXML::Element.new('SpecificVersion').add_text('false')
+          reference.elements['SpecificVersion'] = REXML::Element.new('SpecificVersion').add_text('false') unless reference.elements['SpecificVersion']
           reference.elements['HintPath'] = REXML::Element.new('HintPath').
                 add_text([relative, "#{artifact}"].flatten.patheticalize)
         end

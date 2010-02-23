@@ -1,3 +1,8 @@
+=== 1.0.10 2010-02-22
+* 2 bugfix
+  * iron:test:integration now runs all tests (because of TestResults.trx)
+  * use existing SpecificVersion if any
+
 === 1.0.9 2010-02-22
 * 1 major
   * binaries for raketasks (iron)

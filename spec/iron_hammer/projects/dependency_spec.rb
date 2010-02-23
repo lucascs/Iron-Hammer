@@ -71,6 +71,13 @@ module IronHammer
         dependency.specific.should == true
       end
 
+      it "should mark dependency as specific if reference have specific version = True" do
+        @reference = REXML::Document.new('<Reference Include="anyName, Version=1.2.3.4"><SpecificVersion>True</SpecificVersion></Reference>').root
+
+        dependency = Dependency.from_reference @reference
+        dependency.specific.should == true
+      end
+
       it "should not mark dependency as specific if reference have specific version = false" do
         @reference = REXML::Document.new('<Reference Include="anyName, Version=1.2.3.4"><SpecificVersion>false</SpecificVersion></Reference>').root
 

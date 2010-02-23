@@ -29,7 +29,7 @@ module IronHammer
         raise "Cannot parse version on include: #{includes}" unless version
         extension = get_extension reference
         specific_el = reference.elements['SpecificVersion']
-        specific = (specific_el && specific_el.text == 'true') || false
+        specific = (specific_el && specific_el.text.downcase == 'true') || false
         Dependency.new :name => name, :version => version, :extension => extension, :specific => specific
       end
 

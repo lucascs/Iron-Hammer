@@ -164,6 +164,23 @@ module IronHammer
           doc.get_elements('//Reference[starts_with(@Include, "System")]/HintPath').should be_empty
         end
 
+        it "should not modify SpecificVersion if it exists" do
+          @ivy.modify_csproj
+          xml = FileSystem.read_file(@dir, 'abc.csproj')
+
+          doc = REXML::Document.new xml
+          doc.elements['//Reference[starts_with(@Include, "Castle.DynamicProxy")]/SpecificVersion'].text.should == 'True'
+        end
+
+        it "should add SpecificVersion as false if it doesn't exist" do
+          @ivy.modify_csproj
+          xml = FileSystem.read_file(@dir, 'abc.csproj')
+
+          doc = REXML::Document.new xml
+          doc.elements['//Reference[starts_with(@Include, "ICSharpCode.SharpZipLib")]/SpecificVersion'].text.should == 'false'
+        end
+
+
         it "should modify Version" do
           @ivy.modify_csproj
           xml = FileSystem.read_file(@dir, 'abc.csproj')
