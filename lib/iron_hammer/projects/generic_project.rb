@@ -55,7 +55,7 @@ module IronHammer
 
       def dependencies_with_projects projects
         selected = projects.select {|p| p.is_a?(DllProject) && project_references.include?(p.name)}
-        dependencies + selected.map {|p| Dependency.from_project p}
+        dependencies + selected.map {|p| Dependency.from_project p}.select {|p| !p.nil?}
       end
 
       def package params={}

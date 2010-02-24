@@ -1,3 +1,7 @@
+=== 1.0.11 2010-02-24
+* 1 bugfix
+  * removing projects with no artifacts
+
 === 1.0.10 2010-02-22
 * 2 bugfix
   * iron:test:integration now runs all tests (because of TestResults.trx)

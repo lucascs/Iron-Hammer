@@ -34,8 +34,10 @@ module IronHammer
       end
 
       def self.from_project project
-        Dependency.new :name => project.assembly_name, :version => project.version,
-          :extension => project.artifacts.first.split('.').last
+        unless project.artifacts.empty?
+          Dependency.new :name => project.assembly_name, :version => project.version,
+            :extension => project.artifacts.first.split('.').last
+        end
       end
       private
       def self.get_extension reference

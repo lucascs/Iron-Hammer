@@ -130,6 +130,20 @@ module IronHammer
 
           dependencies.should be_empty
         end
+        it 'should not include projects with no artifacts' do
+          file = mock(ProjectFile)
+          @project.stub!(:file).and_return file
+          file.stub!(:project_dependencies).and_return ['OtherProject']
+
+          @project.stub!(:dependencies).and_return []
+
+          other = DllProject.new :name => 'OtherProject'
+          other.stub!(:artifacts).and_return []
+
+          dependencies = @project.dependencies_with_projects [other]
+
+          dependencies.should be_empty
+        end
       end
 
       it 'should be able to get csproj name' do
