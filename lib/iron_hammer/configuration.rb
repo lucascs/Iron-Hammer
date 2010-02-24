@@ -50,11 +50,11 @@ EOF
       <<EOF
 <ivysettings>
   <settings defaultResolver="default" />
-  <caches defaultCacheDir="#{folder}/Ivy/Cache"/>
+  <caches defaultCacheDir="#{@home}/Ivy/Cache"/>
   <resolvers>
     <filesystem name="default">
-      <ivy pattern="#{folder}/Ivy/Repository/[organisation]/[module]/ivys/ivy-[revision].xml"/>
-      <artifact pattern="#{folder}/Ivy/Repository/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/>
+      <ivy pattern="#{@home}/Ivy/Repository/[organisation]/[module]/ivys/ivy-[revision].xml"/>
+      <artifact pattern="#{@home}/Ivy/Repository/[organisation]/[module]/[type]s/[artifact]-[revision].[ext]"/>
     </filesystem>
   </resolvers>
 </ivysettings>

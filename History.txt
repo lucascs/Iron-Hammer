@@ -1,3 +1,7 @@
+=== 1.0.12 2010-02-24
+* 1 bugfix
+  * configuration.rb was referencing folder variable
+
 === 1.0.11 2010-02-24
 * 1 bugfix
   * removing projects with no artifacts
