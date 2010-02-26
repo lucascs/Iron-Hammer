@@ -1,3 +1,7 @@
+=== 1.1.0 2010-02-26
+* 1 major
+  * new task for generating coverage report (Emma style)
+
 === 1.0.12 2010-02-24
 * 1 bugfix
   * configuration.rb was referencing folder variable
