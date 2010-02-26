@@ -21,11 +21,15 @@ module IronHammer
       end
     end
 
-    def build solution
+    def msbuild args
       msbuild       = @dot_net_environment.msbuild
+      "#{msbuild} #{args}"
+    end
+
+    def build solution
       configuration = @configuration
       solution      = solution.solution
-      "#{msbuild} /p:Configuration=#{configuration} #{solution} /t:Rebuild"
+      msbuild "/p:Configuration=#{configuration} #{solution} /t:Rebuild"
     end
 
     def test *projects
